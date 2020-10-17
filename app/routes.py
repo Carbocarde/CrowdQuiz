@@ -3,8 +3,8 @@ from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from app import app, db
-from app.models import User, Question
-from app.forms import LoginForm, RegistrationForm, EditProfileForm, ResetPasswordRequestForm
+from app.models import User, Question, Answer
+from app.forms import LoginForm, RegistrationForm, EditProfileForm, ResetPasswordRequestForm, NewQuestionForm
 from app.email import send_password_reset_email
 
 @app.route('/')
@@ -111,3 +111,48 @@ def reset_password(token):
         flash('Your password has been reset.')
         return redirect(url_for('login'))
     return render_template('reset_password.html', form=form)
+
+@app.route('/subject/<subject>/new_question', methods=['GET', 'POST'])
+def new_question(subject):
+    form = NewQuestionForm()
+
+    if form.validate_on_submit():
+        new_question = Question()
+
+        new_question = Question(body=form.question.data)
+        db.session.add(new_question)
+
+        correct_answer = Answer(body=form.correct_answer.data, correct=True, question=new_question)
+
+        db.session.add(correct_answer)
+
+        incorrect_answer_1 = Answer(body=form.incorrect_answer_1.data, correct=False, question=new_question)
+
+        db.session.add(incorrect_answer_1)
+
+        incorrect_answer_2 = Answer(body=form.incorrect_answer_2.data, correct=False, question=new_question)
+
+        db.session.add(incorrect_answer_2)
+
+        incorrect_answer_3 = Answer(body=form.incorrect_answer_3.data, correct=False, question=new_question)
+
+        db.session.add(incorrect_answer_3)
+
+        db.session.add(new_question)
+        db.session.commit()
+
+    return render_template(
+        'new_question.html', form=form
+    )
+
+@app.route('/question/<question_id>', methods=['GET'])
+def show_question(question_id):
+    """Show the details of a question."""
+    question = Question.query.filter_by(id=question_id).first()
+    answers = Answer.query.filter_by(question_id=question_id)
+
+    return render_template(
+        'question.html',
+        question=question,
+        answers=answers
+    )

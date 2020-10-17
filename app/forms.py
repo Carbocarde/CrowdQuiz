@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, FieldList, FormField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
-from app.models import User
+from app.models import User, Answer, Question
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
@@ -50,3 +50,22 @@ class ResetPasswordForm(FlaskForm):
     password2 = PasswordField(
         'Repeat Password', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Request Password Reset')
+
+"""
+class AnswerForm(FlaskForm):
+    # Subform
+    answer_text = StringField('Incorrect Answer', validators=[DataRequired()])
+    correct_answer = BooleanField("Valid/Correct Answer")
+"""
+
+class NewQuestionForm(FlaskForm):
+    """Main question form"""
+
+    question = StringField('Question', validators=[DataRequired()])
+
+    correct_answer = StringField('Correct Answer', validators=[DataRequired()])
+    incorrect_answer_1 = StringField('Incorrect Answer', validators=[DataRequired()])
+    incorrect_answer_2 = StringField('Incorrect Answer', validators=[DataRequired()])
+    incorrect_answer_3 = StringField('Incorrect Answer', validators=[DataRequired()])
+
+    submit = SubmitField('Submit New Question')

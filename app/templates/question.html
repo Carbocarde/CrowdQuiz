@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+        <h1> {{ question.body }} <h1>
+        <br>
+        {% for answer in answers %}
+            {% if answer.correct %}
+            <h3> {{ answer.body }}</h3>
+            <br>
+            {% else %}
+            <h4> {{ answer.body }}</h4>
+            <br>
+            {% endif %}
+        {% endfor %}
+{% endblock %}
