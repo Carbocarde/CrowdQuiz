@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block content %}
+{% block app_content %}
         <h1>Hi, {{ current_user.username }}!</h1>
         {% for post in posts %}
         <div><p>{{ question.author.username }} added question: <b>{{ question.body }}</b></p></div>
