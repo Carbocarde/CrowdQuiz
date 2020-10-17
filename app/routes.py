@@ -119,7 +119,7 @@ def new_question(subject):
     if form.validate_on_submit():
         new_question = Question()
 
-        new_question = Question(body=form.question.data)
+        new_question = Question(body=form.question.data, author=current_user)
         db.session.add(new_question)
 
         correct_answer = Answer(body=form.correct_answer.data, correct=True, question=new_question)

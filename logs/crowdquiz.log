@@ -105,3 +105,4 @@ jinja2.exceptions.TemplateNotFound: question.html
 2020-10-17 16:45:38,755 INFO: Microblog startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:50]
 2020-10-17 16:47:52,037 INFO: Microblog startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:50]
 2020-10-17 16:49:51,092 INFO: Microblog startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:50]
+2020-10-17 16:50:03,007 INFO: Microblog startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:50]

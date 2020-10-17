@@ -2,6 +2,7 @@
 
 {% block app_content %}
         <h1> {{ question.body }} <h1>
+        <h2> {{ question.author }} </h2>
         <br>
         {% for answer in answers %}
             {% if answer.correct %}
