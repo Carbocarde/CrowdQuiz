@@ -2,9 +2,10 @@
 {% from 'bootstrap/form.html' import render_form, render_field %}
 
 {% block app_content %}
-        <h1> {{ question.body }} <h1>
+<div class="jumbotron mt-3">
+    <h1 class="display-4">{{ question.body }}</h1>
         {% if topics %}
-            <h3> Subtopics:
+            <h3>
             {% for topic in topics %}
                 <span class="badge badge-secondary">{{ topic.body }}</span>
             {% endfor %}
@@ -17,4 +18,5 @@
                 {{ render_form(form) }}
             </div>
         </div>
+    </div>
 {% endblock %}

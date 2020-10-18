@@ -1,11 +1,12 @@
 <div class="card m-3" style="width: 18rem;">
   <div class="card-body">
-    <h5 class="card-title">{{ question.body }}</h5>
+    <h3 class="card-title">{{ question.body }}</h3>
     {% for subject in subjects %}
         {% if subject.id == question.subject %}
         <span class="badge badge-secondary mb-3">{{ subject.body }}</span>
         {% endif %}
     {% endfor %}
+    <br>
     <a href="{{ '/delete_question/%s' % question.id }}" class="btn btn-outline-primary">Delete Question</a>
   </div>
 </div>

@@ -96,9 +96,6 @@ class DeleteQuestionForm(FlaskForm):
 
 class ReviewQuestionForm(FlaskForm):
 
-    fair = BooleanField('Fair Question')
-
-    new_topic = StringField('Add and Assign New Subtopic')
-
-    submit = SubmitField('Submit Evaluation')
-    skip = SubmitField('Skip Question')
+    fair = SubmitField('Fair Question')
+    unfair = SubmitField('Unfair Question')
+    skip = SubmitField('Skip')

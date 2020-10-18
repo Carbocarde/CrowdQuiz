@@ -11,12 +11,14 @@ from sqlalchemy.sql import except_
 
 @app.route('/')
 @app.route('/index')
-@login_required
 def index():
     subject = Subject.query.limit(25).all()
     topics = Topic.query.all()
 
-    return render_template('index.html', title='Home', subjects=subject, topics=topics, )
+    questionCount = db.session.query(func.count(Question.id), func.avg(Question.evaluations), Subject)\
+        .select_from(Subject).outerjoin(Question).group_by(Subject.id)
+
+    return render_template('index.html', title='Home', subjects=subject, topics=topics, subjectcounts=questionCount)
 
 @app.route('/user/<username>')
 @login_required
@@ -236,6 +238,7 @@ def delete_question(question_id):
 @app.route('/subject/<subject_id>/evaluate', methods=['GET', 'POST'])
 @login_required
 def evaluate_questions(subject_id):
+    wasSkipped=False
     question = Question.query.filter_by(subject=subject_id).with_entities(Question.id).except_(QuestionEval.query.with_entities(QuestionEval.question_id).filter_by(user_id=current_user.id)).order_by(func.random()).first()
     if (question == None):
         wasSkipped=True
@@ -258,7 +261,7 @@ def evaluate_questions(subject_id):
     # form.topics.choices = topics
 
     if form.validate_on_submit():
-        if form.submit.data:
+        if form.fair.data or form.unfair.data:
             if wasSkipped:
                 evaluation = QuestionEval.query.filter_by(user_id=current_user.id).filter_by(question_id=question.id).first()
                 evaluation.fair = form.fair.data

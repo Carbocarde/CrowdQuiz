@@ -2,13 +2,21 @@
 
 {% block app_content %}
 
+    {% if current_user.is_authenticated %}
     <div class="jumbotron mt-3">
         <h1 class="display-4">Hey {{ current_user.name.capitalize() }}!</h1>
         <p class="lead">Let's get quizzing! Get started by clicking one of the subjects below!</p>
     </div>
+    {% else %}
+    <div class="jumbotron mt-3">
+        <h1 class="display-4">Hey there!</h1>
+        <p class="lead">Let's get you quizzing! Click the button below to start!</p>
+        <a class="btn btn-primary" href="{{ url_for('login') }}"> Log in/Register </a>
+    </div>
+    {% endif %}
     <div class="row">
-        {% for subject in subjects %}
+        {% for subjectcount in subjectcounts %}
             {% include '_subject.html' %}
         {% endfor %}
     </div>
-{% endblock %}
+{% endblock app_content %}
