@@ -1,8 +1,14 @@
 {% extends "base.html" %}
 
 {% block app_content %}
-        <h1>Hey {{ current_user.username }}! Let's get quizzing!</h1>
+
+    <div class="jumbotron mt-3">
+        <h1 class="display-4">Hey {{ current_user.name.capitalize() }}!</h1>
+        <p class="lead">Let's get quizzing! Get started by clicking one of the subjects below!</p>
+    </div>
+    <div class="row">
         {% for subject in subjects %}
             {% include '_subject.html' %}
         {% endfor %}
+    </div>
 {% endblock %}

@@ -1,4 +1,4 @@
-2020-10-18 04:10:59,425 ERROR: Exception on /subject/1/evaluate/ [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+2020-10-18 15:03:02,086 ERROR: Exception on /subject/2/new_question [POST] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
 Traceback (most recent call last):
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
     response = self.full_dispatch_request()
@@ -14,14 +14,21 @@ Traceback (most recent call last):
     return self.view_functions[rule.endpoint](**req.view_args)
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
     return func(*args, **kwargs)
-  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 243, in evaluate_questions
-    topics = QuestionTopics.query.filter_by(question_id=question.id)
-AttributeError: 'BaseQuery' object has no attribute 'id'
-2020-10-18 04:12:56,237 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
-2020-10-18 04:15:30,878 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
-2020-10-18 04:17:20,321 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
-2020-10-18 04:28:44,703 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
-2020-10-18 04:29:12,467 ERROR: Exception on /subject/2/evaluate/ [POST] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 122, in new_question
+    if form.validate_on_submit():
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_wtf\form.py", line 100, in validate_on_submit
+    return self.is_submitted() and self.validate()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\wtforms\form.py", line 318, in validate
+    return super(Form, self).validate(extra)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\wtforms\form.py", line 150, in validate
+    if not field.validate(self, extra):
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\wtforms\fields\core.py", line 215, in validate
+    self.pre_validate(form)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\wtforms\fields\core.py", line 543, in pre_validate
+    values = list(c[0] for c in self.choices)
+TypeError: 'NoneType' object is not iterable
+2020-10-18 15:04:58,859 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-18 15:05:00,368 ERROR: Exception on /subject/2/new_question [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
 Traceback (most recent call last):
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
     response = self.full_dispatch_request()
@@ -37,10 +44,7 @@ Traceback (most recent call last):
     return self.view_functions[rule.endpoint](**req.view_args)
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
     return func(*args, **kwargs)
-  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 260, in evaluate_questions
-    question.fairness_score = question.fairness_score + 1
-TypeError: unsupported operand type(s) for +: 'NoneType' and 'int'
-2020-10-18 04:31:52,160 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
-2020-10-18 04:37:18,796 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
-2020-10-18 04:38:11,783 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
-2020-10-18 04:41:19,760 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 160, in new_question
+    form.topics['label'] = 'test'
+TypeError: 'NonValidatingSelectMultipleField' object does not support item assignment
+2020-10-18 15:10:56,266 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]

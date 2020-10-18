@@ -1,23 +1,15 @@
-<table class="table table-hover">
-    <tr>
-        <td>
-            <a class="nav-link active" href= {{ "/subject/%s/" % subject.id }} class="btn btn-outline-secondary btn-lg btn-block">{{ subject.body }}</a>
-            {% for topic in topics %}
-                {% if subject.id == topic.subject %}
-                <span class="badge badge-secondary">{{ topic.body }}</span>
-                {% endif %}
-            {% endfor %}
-            <br>
-            <div>
-                <ul class="nav nav-pills nav-fill">
-                    <li class="nav-item">
-                        <a class="nav-link active" href={{ "/subject/%s/new_question/" % subject.id }}>Contribute new questions!</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href={{ "/subject/%s/evaluate/" % subject.id }}>Contribute by evaluating current questions!</a>
-                    </li>
-                </ul>
-            </div>
-        </td>
-    </tr>
-</table>
+<div class="card m-3" style="width: 18rem;">
+  <div class="card-body">
+    <h5 class="card-title">{{ subject.body }}</h5>
+    <h6 class="card-subtitle mb-2 text-muted">
+        {% for topic in topics %}
+            {% if subject.id == topic.subject %}
+            <span class="badge badge-secondary">{{ topic.body }}</span>
+            {% endif %}
+        {% endfor %}
+    </h6>
+    <p class="card-text">{{ subject.description }}</p>
+    <a href={{ "/subject/%s/new_question" % subject.id }} class="btn btn-outline-secondary mb-2">Contribute Questions!</a>
+    <a href={{ "/subject/%s/evaluate" % subject.id }} class="btn btn-outline-primary">Evaluate Current Questions!</a>
+  </div>
+</div>

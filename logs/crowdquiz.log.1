@@ -1,0 +1,130 @@
+2020-10-18 14:54:45,195 ERROR: Exception on /subject/2/new_question [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+Traceback (most recent call last):
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\_compat.py", line 39, in reraise
+    raise value
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
+    return func(*args, **kwargs)
+  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 123, in new_question
+    topics.label = "Topic(s)"
+AttributeError: 'list' object has no attribute 'label'
+2020-10-18 14:55:05,350 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-18 14:55:07,160 ERROR: Exception on /subject/2/new_question [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+Traceback (most recent call last):
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\_compat.py", line 39, in reraise
+    raise value
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
+    return func(*args, **kwargs)
+  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 165, in new_question
+    'new_question.html', form=form, subject=subject
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\templating.py", line 140, in render_template
+    ctx.app,
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\templating.py", line 120, in _render
+    rv = template.render(context)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\environment.py", line 1090, in render
+    self.environment.handle_exception()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\environment.py", line 832, in handle_exception
+    reraise(*rewrite_traceback_stack(source=source))
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\_compat.py", line 28, in reraise
+    raise value.with_traceback(tb)
+  File "C:\Users\ponei\github\CrowdQuiz\app\templates\new_question.html", line 2, in top-level template code
+    {% from 'bootstrap/form.html' import render_form, render_field %}
+  File "C:\Users\ponei\github\CrowdQuiz\app\templates\base.html", line 1, in top-level template code
+    {% extends 'bootstrap_base.html' %}
+  File "C:\Users\ponei\github\CrowdQuiz\app\templates\bootstrap_base.html", line 1, in top-level template code
+    {% block doc -%}
+  File "C:\Users\ponei\github\CrowdQuiz\app\templates\bootstrap_base.html", line 4, in block "doc"
+    {%- block html %}
+  File "C:\Users\ponei\github\CrowdQuiz\app\templates\bootstrap_base.html", line 22, in block "html"
+    {% block body -%}
+  File "C:\Users\ponei\github\CrowdQuiz\app\templates\bootstrap_base.html", line 25, in block "body"
+    {% block content -%}
+  File "C:\Users\ponei\github\CrowdQuiz\app\templates\base.html", line 53, in block "content"
+    {% block app_content %}{% endblock %}
+  File "C:\Users\ponei\github\CrowdQuiz\app\templates\new_question.html", line 8, in block "app_content"
+    {{ render_form(form) }}
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\runtime.py", line 679, in _invoke
+    rv = self._func(*arguments)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_bootstrap\templates\bootstrap\form.html", line 277, in template
+    {{ render_field(field,
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\runtime.py", line 679, in _invoke
+    rv = self._func(*arguments)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_bootstrap\templates\bootstrap\form.html", line 187, in template
+    {{ field.label(class="form-control-label")|safe }}
+TypeError: 'str' object is not callable
+2020-10-18 14:59:06,781 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-18 14:59:08,778 ERROR: Exception on /subject/2/new_question [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+Traceback (most recent call last):
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\_compat.py", line 39, in reraise
+    raise value
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
+    return func(*args, **kwargs)
+  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 165, in new_question
+    'new_question.html', form=form, subject=subject
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\templating.py", line 140, in render_template
+    ctx.app,
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\templating.py", line 120, in _render
+    rv = template.render(context)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\environment.py", line 1090, in render
+    self.environment.handle_exception()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\environment.py", line 832, in handle_exception
+    reraise(*rewrite_traceback_stack(source=source))
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\_compat.py", line 28, in reraise
+    raise value.with_traceback(tb)
+  File "C:\Users\ponei\github\CrowdQuiz\app\templates\new_question.html", line 2, in top-level template code
+    {% from 'bootstrap/form.html' import render_form, render_field %}
+  File "C:\Users\ponei\github\CrowdQuiz\app\templates\base.html", line 1, in top-level template code
+    {% extends 'bootstrap_base.html' %}
+  File "C:\Users\ponei\github\CrowdQuiz\app\templates\bootstrap_base.html", line 1, in top-level template code
+    {% block doc -%}
+  File "C:\Users\ponei\github\CrowdQuiz\app\templates\bootstrap_base.html", line 4, in block "doc"
+    {%- block html %}
+  File "C:\Users\ponei\github\CrowdQuiz\app\templates\bootstrap_base.html", line 22, in block "html"
+    {% block body -%}
+  File "C:\Users\ponei\github\CrowdQuiz\app\templates\bootstrap_base.html", line 25, in block "body"
+    {% block content -%}
+  File "C:\Users\ponei\github\CrowdQuiz\app\templates\base.html", line 53, in block "content"
+    {% block app_content %}{% endblock %}
+  File "C:\Users\ponei\github\CrowdQuiz\app\templates\new_question.html", line 8, in block "app_content"
+    {{ render_form(form) }}
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\runtime.py", line 679, in _invoke
+    rv = self._func(*arguments)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_bootstrap\templates\bootstrap\form.html", line 277, in template
+    {{ render_field(field,
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\runtime.py", line 679, in _invoke
+    rv = self._func(*arguments)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_bootstrap\templates\bootstrap\form.html", line 187, in template
+    {{ field.label(class="form-control-label")|safe }}
+TypeError: 'str' object is not callable
+2020-10-18 14:59:22,501 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-18 15:02:26,952 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-18 15:02:46,808 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]

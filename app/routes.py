@@ -23,7 +23,8 @@ def index():
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
     questions = Question.query.filter_by(user_id=user.id).order_by(Question.id.desc()).limit(20)
-    return render_template('user.html', user=user, questions=questions)
+    subjects = Subject.query.limit(25)
+    return render_template('user.html', user=user, questions=questions, subjects=subjects)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -53,7 +54,7 @@ def register():
         return redirect(url_for('index'))
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User(username=form.username.data, email=form.email.data)
+        user = User(username=form.username.data, email=form.email.data, name=form.name.data)
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
@@ -67,11 +68,13 @@ def edit_profile():
     form = EditProfileForm(current_user.username)
     if form.validate_on_submit():
         current_user.username = form.username.data
+        current_user.name = form.name.data
         db.session.commit()
         flash('Your changes have been saved.')
-        return redirect(url_for('edit_profile'))
+        return redirect(url_for('user', username=current_user.username))
     elif request.method == 'GET':
         form.username.data = current_user.username
+        form.name.data = current_user.name
     return render_template('edit_profile.html', title='Edit Profile',
                            form=form)
 
@@ -116,8 +119,6 @@ def new_question(subject_id):
     for topic in subject_topics:
         topics.append((topic.id, topic.body))
 
-    form.topics.choices = topics
-
     if form.validate_on_submit():
         new_question = Question()
 
@@ -154,6 +155,9 @@ def new_question(subject_id):
 
         return redirect('/question/' + str(new_question.id))
 
+    else:
+        form.topics.choices = topics
+
     subject = Subject.query.filter_by(id=subject_id).first()
 
     return render_template(
@@ -175,7 +179,7 @@ def show_question(question_id):
         answers=answers
     )
 
-@app.route('/subject/<subject_id>/', methods=['GET', 'POST'])
+@app.route('/subject/<subject_id>', methods=['GET', 'POST'])
 @login_required
 def subject(subject_id):
     subject = Subject.query.filter_by(id=subject_id).first_or_404()
@@ -194,7 +198,7 @@ def subject(subject_id):
         form=form
     )
 
-@app.route('/delete_question/<question_id>/', methods=['GET', 'POST'])
+@app.route('/delete_question/<question_id>', methods=['GET', 'POST'])
 @login_required
 def delete_question(question_id):
     question = Question.query.filter_by(id=question_id).first_or_404()
@@ -229,7 +233,7 @@ def delete_question(question_id):
         form=form
     )
 
-@app.route('/subject/<subject_id>/evaluate/', methods=['GET', 'POST'])
+@app.route('/subject/<subject_id>/evaluate', methods=['GET', 'POST'])
 @login_required
 def evaluate_questions(subject_id):
     question = Question.query.filter_by(subject=subject_id).with_entities(Question.id).except_(QuestionEval.query.with_entities(QuestionEval.question_id).filter_by(user_id=current_user.id)).order_by(func.random()).first()
