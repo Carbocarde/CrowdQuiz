@@ -54,5 +54,3 @@ if not app.debug and not app.testing:
 
     app.logger.setLevel(logging.INFO)
     app.logger.info('CrowdQuiz startup')
-
-    return app
