@@ -4,7 +4,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from app import app, db
 from app.models import User, Question, Answer, Topic, Subject, QuestionTopics
-from app.forms import LoginForm, RegistrationForm, EditProfileForm, ResetPasswordRequestForm, NewQuestionForm, NewTopicForm
+from app.forms import LoginForm, RegistrationForm, EditProfileForm, ResetPasswordRequestForm, NewQuestionForm, NewTopicForm, DeleteQuestionForm
 from app.email import send_password_reset_email
 
 @app.route('/')
@@ -20,7 +20,7 @@ def index():
 @login_required
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
-    questions = User.query.filter_by(user_id=user.id)
+    questions = Question.query.filter_by(user_id=user.id).order_by(Question.id.desc()).limit(20)
     return render_template('user.html', user=user, questions=questions)
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -152,8 +152,10 @@ def new_question(subject_id):
 
         return redirect('/question/' + str(new_question.id))
 
+    subject = Subject.query.filter_by(id=subject_id).first()
+
     return render_template(
-        'new_question.html', form=form
+        'new_question.html', form=form, subject=subject
     )
 
 @app.route('/question/<question_id>', methods=['GET'])
@@ -174,7 +176,7 @@ def show_question(question_id):
 @app.route('/subject/<subject_id>/', methods=['GET', 'POST'])
 @login_required
 def subject(subject_id):
-    subject = Subject.query.filter_by(id=subject_id).first()
+    subject = Subject.query.filter_by(id=subject_id).first_or_404()
     topics = Topic.query.filter_by(subject=subject_id)
 
     form = NewTopicForm()
@@ -187,6 +189,43 @@ def subject(subject_id):
         'subject.html',
         subject=subject,
         topics=topics,
+        form=form
+    )
+
+@app.route('/delete_question/<question_id>/', methods=['GET', 'POST'])
+@login_required
+def delete_question(question_id):
+    question = Question.query.filter_by(id=question_id).first_or_404()
+    if current_user.id != question.user_id:
+        flash('You do not have permission for this page')
+        return redirect(url_for('index'))
+
+    answers = Answer.query.filter_by(question_id=question_id)
+    topics = QuestionTopics.query.filter_by(question_id=question_id)
+    allTopics = []
+
+
+
+    for topic in topics:
+        allTopics.append(Topic.query.filter_by(id=topic.topic_id).first())
+
+    form = DeleteQuestionForm()
+    if form.validate_on_submit():
+        if form.submit.data:
+            db.session.delete(question)
+            QuestionTopics.query.filter_by(question_id=question_id).delete()
+            Answer.query.filter_by(question_id=question_id).delete()
+            db.session.commit()
+            flash('Question Successfully Deleted.')
+            return redirect(url_for('index'))
+        if form.cancel.data:
+            return redirect(url_for('index'))
+
+    return render_template(
+        'delete_question.html',
+        question=question,
+        topics=allTopics,
+        answers=answers,
         form=form
     )
 

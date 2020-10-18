@@ -87,3 +87,7 @@ class NewQuestionForm(FlaskForm):
 class NewTopicForm(FlaskForm):
     topic = StringField('New Subtopic', validators=[DataRequired()])
     submit = SubmitField('Submit New Subtopic')
+
+class DeleteQuestionForm(FlaskForm):
+    cancel = SubmitField('Cancel')
+    submit = SubmitField('Delete Question Permanently')
