@@ -4,7 +4,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from app import app, db
 from app.models import User, Question, Answer, Topic, Subject, QuestionTopics
-from app.forms import LoginForm, RegistrationForm, EditProfileForm, ResetPasswordRequestForm, NewQuestionForm
+from app.forms import LoginForm, RegistrationForm, EditProfileForm, ResetPasswordRequestForm, NewQuestionForm, NewTopicForm
 from app.email import send_password_reset_email
 
 @app.route('/')
@@ -180,3 +180,31 @@ def show_question(question_id):
         question=question,
         answers=answers
     )
+
+@app.route('/subject/<subject_id>/', methods=['GET', 'POST'])
+@login_required
+def subject(subject_id):
+    subject = Subject.query.filter_by(id=subject_id).first()
+    topics = Topic.query.filter_by(subject=subject_id)
+
+    form = NewTopicForm()
+    if form.validate_on_submit():
+        newtopic = Topic(body=form.topic.data, subject=subject_id)
+        db.session.add(newtopic)
+        db.session.commit()
+
+    return render_template(
+        'subject.html',
+        subject=subject,
+        topics=topics,
+        form=form
+    )
+
+'''
+    if (subject == None):
+        return render_template('404.html')'''
+
+'''
+@app.route('/subject/<subject_id>/quiz', methods=['GET', 'POST'])
+@login_required
+def new_question(subject_id):'''

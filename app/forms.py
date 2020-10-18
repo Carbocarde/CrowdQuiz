@@ -83,3 +83,7 @@ class NewQuestionForm(FlaskForm):
     """def __init__(self, topics, *args, **kwargs):
         super(EditProfileForm, self).__init__(*args, **kwargs)
         self.possible_tags = topics"""
+
+class NewTopicForm(FlaskForm):
+    topic = StringField('New Subtopic', validators=[DataRequired()])
+    submit = SubmitField('Submit New Subtopic')
