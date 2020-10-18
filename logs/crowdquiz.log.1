@@ -1,17 +1,4 @@
-2020-10-17 22:06:35,739 ERROR: Exception on /subject/1/ [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
-Traceback (most recent call last):
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1277, in _execute_context
-    cursor, statement, parameters, context
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\engine\default.py", line 593, in do_execute
-    cursor.execute(statement, parameters)
-psycopg2.errors.UndefinedColumn: column topic.subject_id does not exist
-LINE 1: ...T topic.id AS topic_id, topic.body AS topic_body, topic.subj...
-                                                             ^
-HINT:  Perhaps you meant to reference the column "topic.subject".
-
-
-The above exception was the direct cause of the following exception:
-
+2020-10-17 22:14:58,695 ERROR: Exception on /subject/2/ [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
 Traceback (most recent call last):
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
     response = self.full_dispatch_request()
@@ -27,7 +14,7 @@ Traceback (most recent call last):
     return self.view_functions[rule.endpoint](**req.view_args)
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
     return func(*args, **kwargs)
-  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 193, in subject
+  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 199, in subject
     topics=topics
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\templating.py", line 140, in render_template
     ctx.app,
@@ -39,8 +26,8 @@ Traceback (most recent call last):
     reraise(*rewrite_traceback_stack(source=source))
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\_compat.py", line 28, in reraise
     raise value.with_traceback(tb)
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\subject.html", line 1, in top-level template code
-    {% extends "base.html" %}
+  File "C:\Users\ponei\github\CrowdQuiz\app\templates\subject.html", line 2, in top-level template code
+    {% import 'bootstrap/wtf.html' as wtf %}
   File "C:\Users\ponei\github\CrowdQuiz\app\templates\base.html", line 1, in top-level template code
     {% extends 'bootstrap/base.html' %}
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_bootstrap\templates\bootstrap\base.html", line 1, in top-level template code
@@ -53,44 +40,20 @@ Traceback (most recent call last):
     {% block content -%}
   File "C:\Users\ponei\github\CrowdQuiz\app\templates\base.html", line 47, in block "content"
     {% block app_content %}{% endblock %}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\subject.html", line 6, in block "app_content"
-    {% for topic in topics %}
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\query.py", line 3535, in __iter__
-    return self._execute_and_instances(context)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\query.py", line 3560, in _execute_and_instances
-    result = conn.execute(querycontext.statement, self._params)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1011, in execute
-    return meth(self, multiparams, params)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\sql\elements.py", line 298, in _execute_on_connection
-    return connection._execute_clauseelement(self, multiparams, params)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1130, in _execute_clauseelement
-    distilled_params,
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1317, in _execute_context
-    e, statement, parameters, cursor, context
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1511, in _handle_dbapi_exception
-    sqlalchemy_exception, with_traceback=exc_info[2], from_=e
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\util\compat.py", line 182, in raise_
-    raise exception
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1277, in _execute_context
-    cursor, statement, parameters, context
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\engine\default.py", line 593, in do_execute
-    cursor.execute(statement, parameters)
-sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedColumn) column topic.subject_id does not exist
-LINE 1: ...T topic.id AS topic_id, topic.body AS topic_body, topic.subj...
-                                                             ^
-HINT:  Perhaps you meant to reference the column "topic.subject".
-
-[SQL: SELECT topic.id AS topic_id, topic.body AS topic_body, topic.subject_id AS topic_subject_id 
-FROM topic 
-WHERE topic.subject_id = %(subject_id_1)s]
-[parameters: {'subject_id_1': '1'}]
-(Background on this error at: http://sqlalche.me/e/13/f405)
-2020-10-17 22:07:46,974 INFO: Microblog startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:50]
-2020-10-17 22:07:56,230 INFO: Microblog startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:50]
-2020-10-17 22:08:31,465 INFO: Microblog startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:50]
-2020-10-17 22:08:42,678 INFO: Microblog startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:50]
-2020-10-17 22:14:32,774 INFO: Microblog startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:50]
-2020-10-17 22:14:35,367 ERROR: Exception on /subject/2/ [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+  File "C:\Users\ponei\github\CrowdQuiz\app\templates\subject.html", line 13, in block "app_content"
+    {{ wtf.quick_form(form) }}
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\runtime.py", line 679, in _invoke
+    rv = self._func(*arguments)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_bootstrap\templates\bootstrap\wtf.html", line 200, in template
+    {{ form.hidden_tag() }}
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\environment.py", line 471, in getattr
+    return getattr(obj, attribute)
+jinja2.exceptions.UndefinedError: 'form' is undefined
+2020-10-17 22:15:57,166 INFO: Microblog startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:50]
+2020-10-17 22:16:35,433 INFO: Microblog startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:50]
+2020-10-17 22:17:15,110 INFO: Microblog startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:50]
+2020-10-17 22:37:48,494 INFO: Microblog startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:50]
+2020-10-17 22:37:52,867 ERROR: Exception on /index [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
 Traceback (most recent call last):
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
     response = self.full_dispatch_request()
@@ -106,7 +69,66 @@ Traceback (most recent call last):
     return self.view_functions[rule.endpoint](**req.view_args)
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
     return func(*args, **kwargs)
-  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 190, in subject
-    form = NewTopicForm()
-NameError: name 'NewTopicForm' is not defined
-2020-10-17 22:14:56,030 INFO: Microblog startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:50]
+  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 14, in index
+    subject = Subject.query.filter_by(id=subject_id)
+NameError: name 'subject_id' is not defined
+2020-10-17 22:39:20,149 INFO: Microblog startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:50]
+2020-10-17 22:39:23,681 ERROR: Exception on /index [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+Traceback (most recent call last):
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\_compat.py", line 39, in reraise
+    raise value
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
+    return func(*args, **kwargs)
+  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 17, in index
+    return render_template('index.html', title='Home', subjects=subjects, topics=topics)
+NameError: name 'subjects' is not defined
+2020-10-17 22:40:12,914 INFO: Microblog startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:50]
+2020-10-17 22:40:15,652 ERROR: Exception on /index [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+Traceback (most recent call last):
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\_compat.py", line 39, in reraise
+    raise value
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
+    return func(*args, **kwargs)
+  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 14, in index
+    subject = Subject.limit(25).all()
+AttributeError: type object 'Subject' has no attribute 'limit'
+2020-10-17 22:40:38,182 INFO: Microblog startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:50]
+2020-10-17 22:40:42,296 ERROR: Exception on /index [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+Traceback (most recent call last):
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\_compat.py", line 39, in reraise
+    raise value
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
+    return func(*args, **kwargs)
+  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 17, in index
+    return render_template('index.html', title='Home', subjects=subjects, topics=topics)
+NameError: name 'subjects' is not defined

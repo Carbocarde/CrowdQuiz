@@ -11,26 +11,16 @@ from app.email import send_password_reset_email
 @app.route('/index')
 @login_required
 def index():
-    questions = [
-        {
-            'author': {'username': 'Patrick'},
-            'body': 'What\'s an interval order?'
-        },
-        {
-            'author': {'username': 'Susan'},
-            'body': 'When was the battle of Gettysburg?'
-        }
-    ]
-    return render_template('index.html', title='Home', questions=questions)
+    subject = Subject.query.limit(25).all()
+    topics = Topic.query.all()
+
+    return render_template('index.html', title='Home', subjects=subject, topics=topics)
 
 @app.route('/user/<username>')
 @login_required
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
-    questions = [
-        {'author': user, 'body': 'Test post #1'},
-        {'author': user, 'body': 'Test post #2'}
-    ]
+    questions = User.query.filter_by(user_id=user.id)
     return render_template('user.html', user=user, questions=questions)
 
 @app.route('/login', methods=['GET', 'POST'])
