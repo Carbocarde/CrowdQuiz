@@ -48,3 +48,4 @@ Traceback (most recent call last):
     form.topics['label'] = 'test'
 TypeError: 'NonValidatingSelectMultipleField' object does not support item assignment
 2020-10-18 15:10:56,266 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-18 15:21:50,371 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
