@@ -17,6 +17,7 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
     questions = db.relationship('Question', backref='author', lazy='dynamic')
+    contributionPoints = db.Column(db.Integer)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -45,6 +46,8 @@ class QuestionTopics(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     question_id = db.Column(db.Integer, db.ForeignKey('question.id'))
     topic_id = db.Column(db.Integer, db.ForeignKey('topic.id'))
+    connection_score = db.Column(db.Integer)
+    evaluations = db.Column(db.Integer)
 
 class Question(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -54,6 +57,8 @@ class Question(db.Model):
     questions = db.relationship('Answer', backref='question', lazy='dynamic')
     subject = db.Column(db.Integer, db.ForeignKey('subject.id'))
     topics = db.relationship('QuestionTopics', backref='topics', lazy='dynamic')
+    fairness_score = db.Column(db.Integer)
+    evaluations = db.Column(db.Integer)
 
     def __repr__(self):
         return '<Question {}>'.format(self.body)
@@ -80,6 +85,15 @@ class Topic(db.Model):
     subject = db.Column(db.Integer, db.ForeignKey('subject.id'))
     topics = db.relationship('QuestionTopics', backref='questions', lazy='dynamic')
 
-
     def __repr__(self):
         return '<Topic {}>'.format(self.body)
+
+class QuestionEval(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    question_id = db.Column(db.Integer, db.ForeignKey('question.id'))
+    fair = db.Column(db.Boolean)
+    skipped = db.Column(db.Boolean)
+
+    def __repr__(self):
+        return '<Eval {} {}>'.format(question_id, self.fair)

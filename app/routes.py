@@ -3,9 +3,11 @@ from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from app import app, db
-from app.models import User, Question, Answer, Topic, Subject, QuestionTopics
-from app.forms import LoginForm, RegistrationForm, EditProfileForm, ResetPasswordRequestForm, NewQuestionForm, NewTopicForm, DeleteQuestionForm
+from app.models import User, Question, Answer, Topic, Subject, QuestionTopics, QuestionEval
+from app.forms import LoginForm, RegistrationForm, EditProfileForm, ResetPasswordRequestForm, NewQuestionForm, NewTopicForm, DeleteQuestionForm, ReviewQuestionForm
 from app.email import send_password_reset_email
+from sqlalchemy.sql.expression import func
+from sqlalchemy.sql import except_
 
 @app.route('/')
 @app.route('/index')
@@ -14,7 +16,7 @@ def index():
     subject = Subject.query.limit(25).all()
     topics = Topic.query.all()
 
-    return render_template('index.html', title='Home', subjects=subject, topics=topics)
+    return render_template('index.html', title='Home', subjects=subject, topics=topics, )
 
 @app.route('/user/<username>')
 @login_required
@@ -119,7 +121,7 @@ def new_question(subject_id):
     if form.validate_on_submit():
         new_question = Question()
 
-        new_question = Question(body=form.question.data, author=current_user, subject=subject_id)
+        new_question = Question(body=form.question.data, author=current_user, subject=subject_id, fairness_score=1, evaluations=1)
         db.session.add(new_question)
         db.session.commit()
 
@@ -204,8 +206,6 @@ def delete_question(question_id):
     topics = QuestionTopics.query.filter_by(question_id=question_id)
     allTopics = []
 
-
-
     for topic in topics:
         allTopics.append(Topic.query.filter_by(id=topic.topic_id).first())
 
@@ -229,11 +229,67 @@ def delete_question(question_id):
         form=form
     )
 
-'''
-    if (subject == None):
-        return render_template('404.html')'''
-
-'''
-@app.route('/subject/<subject_id>/quiz', methods=['GET', 'POST'])
+@app.route('/subject/<subject_id>/evaluate/', methods=['GET', 'POST'])
 @login_required
-def new_question(subject_id):'''
+def evaluate_questions(subject_id):
+    question = Question.query.filter_by(subject=subject_id).with_entities(Question.id).except_(QuestionEval.query.with_entities(QuestionEval.question_id).filter_by(user_id=current_user.id)).order_by(func.random()).first()
+    if (question == None):
+        wasSkipped=True
+        question = Question.query.filter_by(subject=subject_id).with_entities(Question.id).except_(QuestionEval.query.filter_by(skipped=False).with_entities(QuestionEval.question_id).filter_by(user_id=current_user.id)).order_by(func.random()).first_or_404()
+
+    topics = QuestionTopics.query.filter_by(question_id=question.id)
+    allTopics = []
+
+    question = Question.query.filter_by(id=question.id).first()
+
+    for topic in topics:
+        allTopics.append(Topic.query.filter_by(id=topic.topic_id).first())
+
+    form = ReviewQuestionForm()
+
+    topics = []
+    for topic in allTopics:
+        topics.append((topic.id, topic.body))
+
+    form.topics.choices = topics
+
+    if form.validate_on_submit():
+        if form.submit.data:
+            if wasSkipped:
+                evaluation = QuestionEval.query.filter_by(user_id=current_user.id).filter_by(question_id=question.id).first()
+                evaluation.fair = form.fair.data
+                evaluation.skipped = False
+            else:
+                evaluation = QuestionEval(user_id=current_user.id, question_id=question.id, fair=form.fair.data, skipped=False)
+                db.session.add(evaluation)
+
+            if (question.fairness_score == None):
+                score = 1
+            else:
+                score = question.fairness_score
+
+            if (form.fair.data):
+                question.fairness_score = score + 1
+            else:
+                question.fairness_score = score - 1
+
+            if (question.evaluations == None):
+                evaluations = 1
+            else:
+                evaluations = question.evaluations
+
+            question.evaluations = evaluations + 1
+
+            db.session.commit()
+        if form.skip.data:
+            if not wasSkipped:
+                evaluation = QuestionEval(user_id=current_user.id, question_id=question.id, fair=form.fair.data, skipped=False)
+                db.session.add(evaluation)
+                db.session.commit()
+
+    return render_template(
+        'evaluate_question.html',
+        question=question,
+        topics=allTopics,
+        form=form
+    )

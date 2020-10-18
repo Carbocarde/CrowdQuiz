@@ -1,4 +1,4 @@
-2020-10-17 23:35:13,951 ERROR: Exception on /delete_question/15/ [POST] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+2020-10-18 04:10:59,425 ERROR: Exception on /subject/1/evaluate/ [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
 Traceback (most recent call last):
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
     response = self.full_dispatch_request()
@@ -14,26 +14,14 @@ Traceback (most recent call last):
     return self.view_functions[rule.endpoint](**req.view_args)
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
     return func(*args, **kwargs)
-  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 203, in delete_question
-    if submit:
-NameError: name 'submit' is not defined
-2020-10-17 23:35:31,778 INFO: Microblog startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:50]
-2020-10-17 23:36:19,735 INFO: Microblog startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:50]
-2020-10-17 23:40:13,537 INFO: Microblog startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:50]
-2020-10-17 23:40:59,365 INFO: Microblog startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:50]
-2020-10-17 23:41:32,704 INFO: Microblog startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:50]
-2020-10-17 23:42:37,026 INFO: Microblog startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:50]
-2020-10-17 23:44:45,803 INFO: Microblog startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:50]
-2020-10-17 23:47:32,384 INFO: Microblog startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:50]
-2020-10-17 23:51:40,512 INFO: Microblog startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:50]
-2020-10-17 23:52:04,647 INFO: Microblog startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:50]
-2020-10-17 23:56:48,605 INFO: Microblog startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:50]
-2020-10-17 23:57:29,202 INFO: Microblog startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:50]
-2020-10-17 23:58:28,764 INFO: Microblog startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:50]
-2020-10-17 23:58:49,044 INFO: Microblog startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:50]
-2020-10-18 00:02:04,622 INFO: Microblog startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:50]
-2020-10-18 00:13:03,262 INFO: Microblog startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:50]
-2020-10-18 00:13:07,085 ERROR: Exception on /user/susie [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 243, in evaluate_questions
+    topics = QuestionTopics.query.filter_by(question_id=question.id)
+AttributeError: 'BaseQuery' object has no attribute 'id'
+2020-10-18 04:12:56,237 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-18 04:15:30,878 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-18 04:17:20,321 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-18 04:28:44,703 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-18 04:29:12,467 ERROR: Exception on /subject/2/evaluate/ [POST] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
 Traceback (most recent call last):
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
     response = self.full_dispatch_request()
@@ -49,7 +37,10 @@ Traceback (most recent call last):
     return self.view_functions[rule.endpoint](**req.view_args)
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
     return func(*args, **kwargs)
-  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 23, in user
-    questions = Question.query.filter_by(user_id=user.id).order_by(desc(Question.id)).limit(20)
-NameError: name 'desc' is not defined
-2020-10-18 00:13:37,432 INFO: Microblog startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:50]
+  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 260, in evaluate_questions
+    question.fairness_score = question.fairness_score + 1
+TypeError: unsupported operand type(s) for +: 'NoneType' and 'int'
+2020-10-18 04:31:52,160 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-18 04:37:18,796 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-18 04:38:11,783 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-18 04:41:19,760 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]

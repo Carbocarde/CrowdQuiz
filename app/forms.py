@@ -91,3 +91,14 @@ class NewTopicForm(FlaskForm):
 class DeleteQuestionForm(FlaskForm):
     cancel = SubmitField('Cancel')
     submit = SubmitField('Delete Question Permanently')
+
+class ReviewQuestionForm(FlaskForm):
+
+    fair = BooleanField('Fair Question')
+
+    topics = NonValidatingSelectMultipleField(SelectMultipleField('Topics'))
+
+    new_topic = StringField('Add and Assign New Subtopic')
+
+    submit = SubmitField('Submit Evaluation')
+    skip = SubmitField('Skip Question')
