@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, FieldList, FormField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, FieldList, FormField, SelectMultipleField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
-from app.models import User, Answer, Question
+from app.models import User, Answer, Question, QuestionTopics
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
@@ -58,6 +58,14 @@ class AnswerForm(FlaskForm):
     correct_answer = BooleanField("Valid/Correct Answer")
 """
 
+class NonValidatingSelectMultipleField(SelectMultipleField):
+    """
+    Attempt to make an open ended select multiple field that can accept dynamic
+    choices added by the browser.
+    """
+    def pre_validate(self, form):
+        pass
+
 class NewQuestionForm(FlaskForm):
     """Main question form"""
 
@@ -68,4 +76,10 @@ class NewQuestionForm(FlaskForm):
     incorrect_answer_2 = StringField('Incorrect Answer', validators=[DataRequired()])
     incorrect_answer_3 = StringField('Incorrect Answer', validators=[DataRequired()])
 
+    topics = NonValidatingSelectMultipleField(SelectMultipleField('Topics'))
+
     submit = SubmitField('Submit New Question')
+
+    """def __init__(self, topics, *args, **kwargs):
+        super(EditProfileForm, self).__init__(*args, **kwargs)
+        self.possible_tags = topics"""

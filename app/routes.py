@@ -3,7 +3,7 @@ from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from app import app, db
-from app.models import User, Question, Answer
+from app.models import User, Question, Answer, Topic, Subject, QuestionTopics
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, ResetPasswordRequestForm, NewQuestionForm
 from app.email import send_password_reset_email
 
@@ -112,15 +112,32 @@ def reset_password(token):
         return redirect(url_for('login'))
     return render_template('reset_password.html', form=form)
 
-@app.route('/subject/<subject>/new_question', methods=['GET', 'POST'])
-def new_question(subject):
+@app.route('/subject/<subject_id>/new_question', methods=['GET', 'POST'])
+@login_required
+def new_question(subject_id):
     form = NewQuestionForm()
+
+    subject_topics = Topic.query.filter_by(subject=subject_id)
+
+    topics = []
+
+    for topic in subject_topics:
+        topics.append((topic.id, topic.body))
+
+    form.topics.choices = topics
 
     if form.validate_on_submit():
         new_question = Question()
 
-        new_question = Question(body=form.question.data, author=current_user)
+        new_question = Question(body=form.question.data, author=current_user, subject=subject_id)
         db.session.add(new_question)
+        db.session.commit()
+
+        db.session.refresh(new_question)
+
+        for topic_id in form.topics.data:
+            classification = QuestionTopics(topic_id=topic_id,question_id=new_question.id)
+            db.session.add(classification)
 
         correct_answer = Answer(body=form.correct_answer.data, correct=True, question=new_question)
 
@@ -141,6 +158,10 @@ def new_question(subject):
         db.session.add(new_question)
         db.session.commit()
 
+        print(form.topics.data)
+
+        return redirect('/question/' + str(new_question.id))
+
     return render_template(
         'new_question.html', form=form
     )
@@ -150,6 +171,9 @@ def show_question(question_id):
     """Show the details of a question."""
     question = Question.query.filter_by(id=question_id).first()
     answers = Answer.query.filter_by(question_id=question_id)
+
+    if (question == None):
+        return render_template('404.html')
 
     return render_template(
         'question.html',

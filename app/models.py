@@ -41,12 +41,19 @@ class User(UserMixin, db.Model):
             return
         return User.query.get(id)
 
+class QuestionTopics(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    question_id = db.Column(db.Integer, db.ForeignKey('question.id'))
+    topic_id = db.Column(db.Integer, db.ForeignKey('topic.id'))
+
 class Question(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.String(140))
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     questions = db.relationship('Answer', backref='question', lazy='dynamic')
+    subject = db.Column(db.Integer, db.ForeignKey('subject.id'))
+    topics = db.relationship('QuestionTopics', backref='topics', lazy='dynamic')
 
     def __repr__(self):
         return '<Question {}>'.format(self.body)
@@ -56,3 +63,23 @@ class Answer(db.Model):
     body = db.Column(db.String(140))
     correct = db.Column(db.Boolean)
     question_id = db.Column(db.Integer, db.ForeignKey('question.id'))
+
+    def __repr__(self):
+        return '<Answer {}, Correct: {}>'.format(self.username, self.correct)
+
+class Subject(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    body = db.Column(db.String(140))
+
+    def __repr__(self):
+        return '<Subject: {}>'.format(self.body)
+
+class Topic(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    body = db.Column(db.String(40))
+    subject = db.Column(db.Integer, db.ForeignKey('subject.id'))
+    topics = db.relationship('QuestionTopics', backref='questions', lazy='dynamic')
+
+
+    def __repr__(self):
+        return '<Topic {}>'.format(self.body)
