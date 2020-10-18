@@ -255,7 +255,7 @@ def evaluate_questions(subject_id):
     for topic in allTopics:
         topics.append((topic.id, topic.body))
 
-    form.topics.choices = topics
+    # form.topics.choices = topics
 
     if form.validate_on_submit():
         if form.submit.data:

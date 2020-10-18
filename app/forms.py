@@ -98,8 +98,6 @@ class ReviewQuestionForm(FlaskForm):
 
     fair = BooleanField('Fair Question')
 
-    topics = NonValidatingSelectMultipleField(SelectMultipleField('Topics'))
-
     new_topic = StringField('Add and Assign New Subtopic')
 
     submit = SubmitField('Submit Evaluation')
