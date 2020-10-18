@@ -44,7 +44,7 @@ if not app.debug and not app.testing::
         else:
             if not os.path.exists('logs'):
                 os.mkdir('logs')
-            file_handler = RotatingFileHandler('logs/microblog.log',
+            file_handler = RotatingFileHandler('logs/crowdquiz.log',
                                                maxBytes=10240, backupCount=10)
             file_handler.setFormatter(logging.Formatter(
                 '%(asctime)s %(levelname)s: %(message)s '
