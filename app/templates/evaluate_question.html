@@ -3,9 +3,19 @@
 
 {% block app_content %}
 <div class="jumbotron mt-3">
-    <h1 class="display-4">{{ question.body }}</h1>
+    <h1 class="display-4">Question: {{ question.body }}</h1>
+        <br>
+        <h3> Answers:
+        {% for answer in answers %}
+            {% if answer.correct %}
+                <span class="badge badge-success">{{ answer.body }}</span>
+                {% else %}
+                <span class="badge badge-secondary">{{ answer.body }}</span>
+            {% endif %}
+        {% endfor %}</h2>
+        <br>
         {% if topics %}
-            <h3>
+            <h3> Topics:
             {% for topic in topics %}
                 <span class="badge badge-secondary">{{ topic.body }}</span>
             {% endfor %}

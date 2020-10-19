@@ -244,6 +244,8 @@ def evaluate_questions(subject_id):
         wasSkipped=True
         question = Question.query.filter_by(subject=subject_id).with_entities(Question.id).except_(QuestionEval.query.filter_by(skipped=False).with_entities(QuestionEval.question_id).filter_by(user_id=current_user.id)).order_by(func.random()).first_or_404()
 
+    answers = Answer.query.filter_by(question_id=question.id)
+
     topics = QuestionTopics.query.filter_by(question_id=question.id)
     allTopics = []
 
@@ -298,5 +300,6 @@ def evaluate_questions(subject_id):
         'evaluate_question.html',
         question=question,
         topics=allTopics,
+        answers=answers,
         form=form
     )

@@ -1,4 +1,4 @@
-2020-10-18 20:36:40,474 ERROR: Exception on /index [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+2020-10-18 21:18:57,552 ERROR: Exception on /subject/1/evaluate [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
 Traceback (most recent call last):
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
     response = self.full_dispatch_request()
@@ -12,36 +12,12 @@ Traceback (most recent call last):
     rv = self.dispatch_request()
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1936, in dispatch_request
     return self.view_functions[rule.endpoint](**req.view_args)
-  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 21, in index
-    return render_template('index.html', title='Home', subjects=subject, topics=topics, subjectcounts=questionCount)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\templating.py", line 140, in render_template
-    ctx.app,
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\templating.py", line 120, in _render
-    rv = template.render(context)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\environment.py", line 1090, in render
-    self.environment.handle_exception()
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\environment.py", line 832, in handle_exception
-    reraise(*rewrite_traceback_stack(source=source))
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\_compat.py", line 28, in reraise
-    raise value.with_traceback(tb)
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\index.html", line 1, in top-level template code
-    {% extends "base.html" %}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\base.html", line 1, in top-level template code
-    {% extends 'bootstrap_base.html' %}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\bootstrap_base.html", line 1, in top-level template code
-    {% block doc -%}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\bootstrap_base.html", line 4, in block "doc"
-    {%- block html %}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\bootstrap_base.html", line 22, in block "html"
-    {% block body -%}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\bootstrap_base.html", line 25, in block "body"
-    {% block content -%}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\base.html", line 53, in block "content"
-    {% block app_content %}{% endblock %}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\index.html", line 7, in block "app_content"
-    <h1 class="display-4">Hey {{ current_user.name.capitalize() }}!</h1>
-jinja2.exceptions.UndefinedError: 'None' has no attribute 'capitalize'
-2020-10-18 20:36:43,427 ERROR: Exception on /index [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
+    return func(*args, **kwargs)
+  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 247, in evaluate_questions
+    answers = Answers.query.filter_by(question_id)
+NameError: name 'Answers' is not defined
+2020-10-18 21:19:05,224 ERROR: Exception on /subject/1/evaluate [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
 Traceback (most recent call last):
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
     response = self.full_dispatch_request()
@@ -55,36 +31,13 @@ Traceback (most recent call last):
     rv = self.dispatch_request()
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1936, in dispatch_request
     return self.view_functions[rule.endpoint](**req.view_args)
-  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 21, in index
-    return render_template('index.html', title='Home', subjects=subject, topics=topics, subjectcounts=questionCount)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\templating.py", line 140, in render_template
-    ctx.app,
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\templating.py", line 120, in _render
-    rv = template.render(context)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\environment.py", line 1090, in render
-    self.environment.handle_exception()
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\environment.py", line 832, in handle_exception
-    reraise(*rewrite_traceback_stack(source=source))
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\_compat.py", line 28, in reraise
-    raise value.with_traceback(tb)
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\index.html", line 1, in top-level template code
-    {% extends "base.html" %}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\base.html", line 1, in top-level template code
-    {% extends 'bootstrap_base.html' %}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\bootstrap_base.html", line 1, in top-level template code
-    {% block doc -%}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\bootstrap_base.html", line 4, in block "doc"
-    {%- block html %}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\bootstrap_base.html", line 22, in block "html"
-    {% block body -%}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\bootstrap_base.html", line 25, in block "body"
-    {% block content -%}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\base.html", line 53, in block "content"
-    {% block app_content %}{% endblock %}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\index.html", line 7, in block "app_content"
-    <h1 class="display-4">Hey {{ current_user.name.capitalize() }}!</h1>
-jinja2.exceptions.UndefinedError: 'None' has no attribute 'capitalize'
-2020-10-18 20:37:51,920 ERROR: Exception on /index [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
+    return func(*args, **kwargs)
+  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 247, in evaluate_questions
+    answers = Answers.query.filter_by(question_id)
+NameError: name 'Answers' is not defined
+2020-10-18 21:21:57,356 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-18 21:22:03,427 ERROR: Exception on /subject/1/evaluate [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
 Traceback (most recent call last):
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
     response = self.full_dispatch_request()
@@ -98,32 +51,31 @@ Traceback (most recent call last):
     rv = self.dispatch_request()
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1936, in dispatch_request
     return self.view_functions[rule.endpoint](**req.view_args)
-  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 21, in index
-    return render_template('index.html', title='Home', subjects=subject, topics=topics, subjectcounts=questionCount)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\templating.py", line 140, in render_template
-    ctx.app,
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\templating.py", line 120, in _render
-    rv = template.render(context)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\environment.py", line 1090, in render
-    self.environment.handle_exception()
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\environment.py", line 832, in handle_exception
-    reraise(*rewrite_traceback_stack(source=source))
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\_compat.py", line 28, in reraise
-    raise value.with_traceback(tb)
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\index.html", line 1, in top-level template code
-    {% extends "base.html" %}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\base.html", line 1, in top-level template code
-    {% extends 'bootstrap_base.html' %}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\bootstrap_base.html", line 1, in top-level template code
-    {% block doc -%}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\bootstrap_base.html", line 4, in block "doc"
-    {%- block html %}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\bootstrap_base.html", line 22, in block "html"
-    {% block body -%}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\bootstrap_base.html", line 25, in block "body"
-    {% block content -%}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\base.html", line 53, in block "content"
-    {% block app_content %}{% endblock %}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\index.html", line 7, in block "app_content"
-    <h1 class="display-4">Hey {{ current_user.name.capitalize() }}!</h1>
-jinja2.exceptions.UndefinedError: 'None' has no attribute 'capitalize'
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
+    return func(*args, **kwargs)
+  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 247, in evaluate_questions
+    answers = Answer.query.filter_by(question_id)
+NameError: name 'question_id' is not defined
+2020-10-18 21:25:04,330 ERROR: Exception on /subject/1/evaluate [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+Traceback (most recent call last):
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\_compat.py", line 39, in reraise
+    raise value
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
+    return func(*args, **kwargs)
+  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 247, in evaluate_questions
+    answers = Answer.query.filter_by(question_id)
+NameError: name 'question_id' is not defined
+2020-10-18 21:25:37,105 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-18 21:27:38,188 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-18 21:29:34,577 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-18 21:29:59,053 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
