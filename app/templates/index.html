@@ -3,7 +3,7 @@
 {% block app_content %}
 
     {% if current_user.is_authenticated %}
-    <div class="jumbotron mt-3">
+    <div class="jumbotron">
         <h1 class="display-4">Hey {{ current_user.name.capitalize() }}!</h1>
         <p class="lead">Let's get quizzing! Get started by clicking one of the subjects below!</p>
     </div>
