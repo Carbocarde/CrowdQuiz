@@ -15,7 +15,7 @@
     <div class="progress mb-2">
         <div class="progress-bar bg-secondary" data-toggle="tooltip" data-placement="top" title="Questions 10/20" role="progressbar" style="{{ 'width: {}%'.format(subjectcount[0]*3) }}"></div>
     </div>
-    {% if subjectcount[0] <= 5 or subjectcount[1] > 2 %}
+    {% if subjectcount[0] <= 20 or subjectcount[1] > 2 %}
     <a href="{{ '/subject/%s/new_question' % subjectcount[2].id }}" class="btn btn-outline-secondary mb-2">Contribute Questions!</a>
     {% endif %}
     <div class="progress mb-2">
