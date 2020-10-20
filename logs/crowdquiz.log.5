@@ -1,4 +1,4 @@
-2020-10-18 19:03:40,105 ERROR: Exception on /index [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+2020-10-19 20:05:01,702 ERROR: Exception on /subject/1/quiz [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
 Traceback (most recent call last):
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
     response = self.full_dispatch_request()
@@ -12,8 +12,10 @@ Traceback (most recent call last):
     rv = self.dispatch_request()
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1936, in dispatch_request
     return self.view_functions[rule.endpoint](**req.view_args)
-  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 21, in index
-    return render_template('index.html', title='Home', subjects=subject, topics=topics, count=questionCount)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
+    return func(*args, **kwargs)
+  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 237, in subject_quiz
+    question=question
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\templating.py", line 140, in render_template
     ctx.app,
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\templating.py", line 120, in _render
@@ -24,8 +26,8 @@ Traceback (most recent call last):
     reraise(*rewrite_traceback_stack(source=source))
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\_compat.py", line 28, in reraise
     raise value.with_traceback(tb)
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\index.html", line 1, in top-level template code
-    {% extends "base.html" %}
+  File "C:\Users\ponei\github\CrowdQuiz\app\templates\quiz.html", line 2, in top-level template code
+    {% from 'bootstrap/form.html' import render_form, render_field %}
   File "C:\Users\ponei\github\CrowdQuiz\app\templates\base.html", line 1, in top-level template code
     {% extends 'bootstrap_base.html' %}
   File "C:\Users\ponei\github\CrowdQuiz\app\templates\bootstrap_base.html", line 1, in top-level template code
@@ -38,18 +40,18 @@ Traceback (most recent call last):
     {% block content -%}
   File "C:\Users\ponei\github\CrowdQuiz\app\templates\base.html", line 53, in block "content"
     {% block app_content %}{% endblock %}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\index.html", line 19, in block "app_content"
-    {% include '_subject.html' %}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\_subject.html", line 13, in top-level template code
-    <div class="progress-bar bg-secondary" data-toggle="tooltip" data-placement="top" title="Questions 10/20" role="progressbar" style="{{ 'width: %s\%' % subject.id }}"></div>
-ValueError: incomplete format
-2020-10-18 19:05:18,537 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
-2020-10-18 19:06:02,694 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
-2020-10-18 19:06:15,678 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
-2020-10-18 19:06:36,807 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
-2020-10-18 19:06:48,641 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
-2020-10-18 19:08:36,510 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
-2020-10-18 19:08:37,779 ERROR: Exception on /index [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+  File "C:\Users\ponei\github\CrowdQuiz\app\templates\quiz.html", line 9, in block "app_content"
+    {{ form.answers("multiple") }}
+TypeError: __call__() takes 1 positional argument but 2 were given
+2020-10-19 20:05:58,429 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-19 20:07:45,750 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-19 20:08:54,396 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-19 20:10:04,629 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-19 20:10:22,436 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-19 20:12:53,885 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-19 20:13:03,834 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-19 20:13:20,376 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-19 20:13:21,046 ERROR: Exception on /subject/1/quiz [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
 Traceback (most recent call last):
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
     response = self.full_dispatch_request()
@@ -63,8 +65,10 @@ Traceback (most recent call last):
     rv = self.dispatch_request()
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1936, in dispatch_request
     return self.view_functions[rule.endpoint](**req.view_args)
-  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 21, in index
-    return render_template('index.html', title='Home', subjects=subject, topics=topics, count=questionCount)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
+    return func(*args, **kwargs)
+  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 237, in subject_quiz
+    question=question
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\templating.py", line 140, in render_template
     ctx.app,
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\templating.py", line 120, in _render
@@ -75,8 +79,8 @@ Traceback (most recent call last):
     reraise(*rewrite_traceback_stack(source=source))
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\_compat.py", line 28, in reraise
     raise value.with_traceback(tb)
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\index.html", line 1, in top-level template code
-    {% extends "base.html" %}
+  File "C:\Users\ponei\github\CrowdQuiz\app\templates\quiz.html", line 2, in top-level template code
+    {% from 'bootstrap/form.html' import render_form, render_field %}
   File "C:\Users\ponei\github\CrowdQuiz\app\templates\base.html", line 1, in top-level template code
     {% extends 'bootstrap_base.html' %}
   File "C:\Users\ponei\github\CrowdQuiz\app\templates\bootstrap_base.html", line 1, in top-level template code
@@ -89,16 +93,9 @@ Traceback (most recent call last):
     {% block content -%}
   File "C:\Users\ponei\github\CrowdQuiz\app\templates\base.html", line 53, in block "content"
     {% block app_content %}{% endblock %}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\index.html", line 19, in block "app_content"
-    {% include '_subject.html' %}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\_subject.html", line 3, in top-level template code
-    <h3 class="card-title">{{ subjectcount[1].body }}</h3>
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\environment.py", line 452, in getitem
-    return obj[argument]
-jinja2.exceptions.UndefinedError: 'subjectcount' is undefined
-2020-10-18 19:08:56,171 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
-2020-10-18 19:10:15,564 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
-2020-10-18 19:10:30,570 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
-2020-10-18 19:10:40,832 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
-2020-10-18 19:12:00,481 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
-2020-10-18 19:12:19,567 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+  File "C:\Users\ponei\github\CrowdQuiz\app\templates\quiz.html", line 11, in block "app_content"
+    {{ form.submit() }}
+jinja2.exceptions.UndefinedError: 'app.forms.QuizQuestion object' has no attribute 'submit'
+2020-10-19 20:13:41,108 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-19 20:14:00,350 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-19 20:15:02,757 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]

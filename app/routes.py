@@ -4,10 +4,11 @@ from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from app import app, db
 from app.models import User, Question, Answer, Topic, Subject, QuestionTopics, QuestionEval
-from app.forms import LoginForm, RegistrationForm, EditProfileForm, ResetPasswordRequestForm, NewQuestionForm, NewTopicForm, DeleteQuestionForm, ReviewQuestionForm
+from app.forms import LoginForm, RegistrationForm, EditProfileForm, ResetPasswordRequestForm, NewQuestionForm, NewTopicForm, DeleteQuestionForm, ReviewQuestionForm, QuizQuestion
 from app.email import send_password_reset_email
 from sqlalchemy.sql.expression import func
 from sqlalchemy.sql import except_
+import random
 
 @app.route('/')
 @app.route('/index')
@@ -112,14 +113,9 @@ def reset_password(token):
 @app.route('/subject/<subject_id>/new_question', methods=['GET', 'POST'])
 @login_required
 def new_question(subject_id):
-    form = NewQuestionForm()
+    form = NewQuestionForm(subject_id)
 
-    subject_topics = Topic.query.filter_by(subject=subject_id)
-
-    topics = []
-
-    for topic in subject_topics:
-        topics.append((topic.id, topic.body))
+    form.topics.query = Topic.query.filter_by(subject=subject_id).all()
 
     if form.validate_on_submit():
         new_question = Question()
@@ -127,38 +123,25 @@ def new_question(subject_id):
         new_question = Question(body=form.question.data, author=current_user, subject=subject_id, fairness_score=1, evaluations=1)
         db.session.add(new_question)
         db.session.commit()
-
         db.session.refresh(new_question)
 
-        for topic_id in form.topics.data:
+        for topic in form.topics.data:
+            topic_id = topic.id
             classification = QuestionTopics(topic_id=topic_id,question_id=new_question.id)
             db.session.add(classification)
 
-        correct_answer = Answer(body=form.correct_answer.data, correct=True, question=new_question)
+        answers = [None]*4
+        answers[0] = Answer(body=form.correct_answer.data, correct=True, question=new_question)
+        answers[1] = Answer(body=form.incorrect_answer_1.data, correct=False, question=new_question)
+        answers[2] = Answer(body=form.incorrect_answer_2.data, correct=False, question=new_question)
+        answers[3] = Answer(body=form.incorrect_answer_3.data, correct=False, question=new_question)
 
-        db.session.add(correct_answer)
+        for answer in answers:
+            db.session.add(answer)
 
-        incorrect_answer_1 = Answer(body=form.incorrect_answer_1.data, correct=False, question=new_question)
-
-        db.session.add(incorrect_answer_1)
-
-        incorrect_answer_2 = Answer(body=form.incorrect_answer_2.data, correct=False, question=new_question)
-
-        db.session.add(incorrect_answer_2)
-
-        incorrect_answer_3 = Answer(body=form.incorrect_answer_3.data, correct=False, question=new_question)
-
-        db.session.add(incorrect_answer_3)
-
-        db.session.add(new_question)
         db.session.commit()
 
-        print(form.topics.data)
-
         return redirect('/question/' + str(new_question.id))
-
-    else:
-        form.topics.choices = topics
 
     subject = Subject.query.filter_by(id=subject_id).first()
 
@@ -234,6 +217,29 @@ def delete_question(question_id):
         answers=answers,
         form=form
     )
+
+@app.route('/subject/<subject_id>/quiz', methods=['GET', 'POST'])
+@login_required
+def subject_quiz(subject_id):
+    form = QuizQuestion()
+
+    question = Question.query.filter_by(subject=subject_id).order_by(func.random()).first()
+
+    # get answers
+    correct_answer = Answer.query.filter_by(question_id=question.id).filter_by(correct=True).order_by(func.random()).limit(1)
+    incorrect_answers = Answer.query.filter_by(question_id=question.id).filter_by(correct=False).order_by(func.random()).limit(3)
+
+    form.answers.query = correct_answer.union(incorrect_answers).order_by(func.random()).all()
+
+    if form.submit.data:
+        print(form.answers.data)
+
+    return render_template(
+        'quiz.html',
+        form=form,
+        question=question
+    )
+
 
 @app.route('/subject/<subject_id>/evaluate', methods=['GET', 'POST'])
 @login_required

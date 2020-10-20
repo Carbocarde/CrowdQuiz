@@ -1,4 +1,4 @@
-2020-10-18 18:29:31,510 ERROR: Exception on /index [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+2020-10-19 19:26:23,503 ERROR: Exception on /subject/1/quiz [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
 Traceback (most recent call last):
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
     response = self.full_dispatch_request()
@@ -12,8 +12,10 @@ Traceback (most recent call last):
     rv = self.dispatch_request()
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1936, in dispatch_request
     return self.view_functions[rule.endpoint](**req.view_args)
-  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 18, in index
-    return render_template('index.html', title='Home', subjects=subject, topics=topics)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
+    return func(*args, **kwargs)
+  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 237, in subject_quiz
+    question=question
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\templating.py", line 140, in render_template
     ctx.app,
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\templating.py", line 120, in _render
@@ -24,8 +26,8 @@ Traceback (most recent call last):
     reraise(*rewrite_traceback_stack(source=source))
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\_compat.py", line 28, in reraise
     raise value.with_traceback(tb)
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\index.html", line 1, in top-level template code
-    {% extends "base.html" %}
+  File "C:\Users\ponei\github\CrowdQuiz\app\templates\quiz.html", line 2, in top-level template code
+    {% from 'bootstrap/form.html' import render_form, render_field %}
   File "C:\Users\ponei\github\CrowdQuiz\app\templates\base.html", line 1, in top-level template code
     {% extends 'bootstrap_base.html' %}
   File "C:\Users\ponei\github\CrowdQuiz\app\templates\bootstrap_base.html", line 1, in top-level template code
@@ -38,12 +40,32 @@ Traceback (most recent call last):
     {% block content -%}
   File "C:\Users\ponei\github\CrowdQuiz\app\templates\base.html", line 53, in block "content"
     {% block app_content %}{% endblock %}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\index.html", line 6, in block "app_content"
-    <h1 class="display-4">Hey {{ current_user.name.capitalize() }}!</h1>
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\environment.py", line 471, in getattr
-    return getattr(obj, attribute)
-jinja2.exceptions.UndefinedError: 'flask_login.mixins.AnonymousUserMixin object' has no attribute 'name'
-2020-10-18 18:29:44,321 ERROR: Exception on /index [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+  File "C:\Users\ponei\github\CrowdQuiz\app\templates\quiz.html", line 9, in block "app_content"
+    {{ render_form(form) }}
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\runtime.py", line 679, in _invoke
+    rv = self._func(*arguments)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_bootstrap\templates\bootstrap\form.html", line 277, in template
+    {{ render_field(field,
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\runtime.py", line 679, in _invoke
+    rv = self._func(*arguments)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_bootstrap\templates\bootstrap\form.html", line 198, in template
+    {{ field(class="form-control%s" % extra_classes, **kwargs)|safe }}
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\wtforms\fields\core.py", line 160, in __call__
+    return self.meta.render_field(self, kwargs)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\wtforms\meta.py", line 56, in render_field
+    return field.widget(field, **render_kw)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\wtforms\widgets\core.py", line 97, in __call__
+    for subfield in field:
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\wtforms\fields\core.py", line 456, in __iter__
+    for i, (value, label, checked) in enumerate(self.iter_choices()):
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\wtforms\ext\sqlalchemy\fields.py", line 107, in iter_choices
+    for pk, obj in self._get_object_list():
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\wtforms\ext\sqlalchemy\fields.py", line 98, in _get_object_list
+    query = self.query or self.query_factory()
+TypeError: 'NoneType' object is not callable
+2020-10-19 19:26:54,706 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-19 19:27:46,995 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-19 19:27:48,553 ERROR: Exception on /subject/1/quiz [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
 Traceback (most recent call last):
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
     response = self.full_dispatch_request()
@@ -57,8 +79,10 @@ Traceback (most recent call last):
     rv = self.dispatch_request()
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1936, in dispatch_request
     return self.view_functions[rule.endpoint](**req.view_args)
-  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 18, in index
-    return render_template('index.html', title='Home', subjects=subject, topics=topics)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
+    return func(*args, **kwargs)
+  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 237, in subject_quiz
+    question=question
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\templating.py", line 140, in render_template
     ctx.app,
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\templating.py", line 120, in _render
@@ -69,8 +93,8 @@ Traceback (most recent call last):
     reraise(*rewrite_traceback_stack(source=source))
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\_compat.py", line 28, in reraise
     raise value.with_traceback(tb)
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\index.html", line 1, in top-level template code
-    {% extends "base.html" %}
+  File "C:\Users\ponei\github\CrowdQuiz\app\templates\quiz.html", line 2, in top-level template code
+    {% from 'bootstrap/form.html' import render_form, render_field %}
   File "C:\Users\ponei\github\CrowdQuiz\app\templates\base.html", line 1, in top-level template code
     {% extends 'bootstrap_base.html' %}
   File "C:\Users\ponei\github\CrowdQuiz\app\templates\bootstrap_base.html", line 1, in top-level template code
@@ -83,56 +107,29 @@ Traceback (most recent call last):
     {% block content -%}
   File "C:\Users\ponei\github\CrowdQuiz\app\templates\base.html", line 53, in block "content"
     {% block app_content %}{% endblock %}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\index.html", line 6, in block "app_content"
-    <h1 class="display-4">Hey {{ current_user.name.capitalize() }}!</h1>
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\environment.py", line 471, in getattr
-    return getattr(obj, attribute)
-jinja2.exceptions.UndefinedError: 'flask_login.mixins.AnonymousUserMixin object' has no attribute 'name'
-2020-10-18 18:30:50,302 ERROR: Exception on /index [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
-Traceback (most recent call last):
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
-    response = self.full_dispatch_request()
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1952, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1821, in handle_user_exception
-    reraise(exc_type, exc_value, tb)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\_compat.py", line 39, in reraise
-    raise value
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1950, in full_dispatch_request
-    rv = self.dispatch_request()
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1936, in dispatch_request
-    return self.view_functions[rule.endpoint](**req.view_args)
-  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 18, in index
-    return render_template('index.html', title='Home', subjects=subject, topics=topics)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\templating.py", line 140, in render_template
-    ctx.app,
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\templating.py", line 120, in _render
-    rv = template.render(context)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\environment.py", line 1090, in render
-    self.environment.handle_exception()
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\environment.py", line 832, in handle_exception
-    reraise(*rewrite_traceback_stack(source=source))
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\_compat.py", line 28, in reraise
-    raise value.with_traceback(tb)
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\index.html", line 1, in top-level template code
-    {% extends "base.html" %}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\base.html", line 1, in top-level template code
-    {% extends 'bootstrap_base.html' %}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\bootstrap_base.html", line 1, in top-level template code
-    {% block doc -%}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\bootstrap_base.html", line 4, in block "doc"
-    {%- block html %}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\bootstrap_base.html", line 22, in block "html"
-    {% block body -%}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\bootstrap_base.html", line 25, in block "body"
-    {% block content -%}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\base.html", line 53, in block "content"
-    {% block app_content %}{% endblock %}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\index.html", line 6, in block "app_content"
-    <div class="jumbotron mt-3">
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\environment.py", line 471, in getattr
-    return getattr(obj, attribute)
-jinja2.exceptions.UndefinedError: 'flask_login.mixins.AnonymousUserMixin object' has no attribute 'name'
-2020-10-18 18:30:53,186 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
-2020-10-18 18:31:17,827 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
-2020-10-18 18:32:16,027 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+  File "C:\Users\ponei\github\CrowdQuiz\app\templates\quiz.html", line 9, in block "app_content"
+    {{ render_form(form) }}
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\runtime.py", line 679, in _invoke
+    rv = self._func(*arguments)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_bootstrap\templates\bootstrap\form.html", line 277, in template
+    {{ render_field(field,
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\runtime.py", line 679, in _invoke
+    rv = self._func(*arguments)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_bootstrap\templates\bootstrap\form.html", line 198, in template
+    {{ field(class="form-control%s" % extra_classes, **kwargs)|safe }}
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\wtforms\fields\core.py", line 160, in __call__
+    return self.meta.render_field(self, kwargs)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\wtforms\meta.py", line 56, in render_field
+    return field.widget(field, **render_kw)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\wtforms\widgets\core.py", line 97, in __call__
+    for subfield in field:
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\wtforms\fields\core.py", line 456, in __iter__
+    for i, (value, label, checked) in enumerate(self.iter_choices()):
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\wtforms\ext\sqlalchemy\fields.py", line 107, in iter_choices
+    for pk, obj in self._get_object_list():
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\wtforms\ext\sqlalchemy\fields.py", line 98, in _get_object_list
+    query = self.query or self.query_factory()
+TypeError: 'NoneType' object is not callable
+2020-10-19 19:27:59,128 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-19 19:31:23,360 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-19 19:32:33,811 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]

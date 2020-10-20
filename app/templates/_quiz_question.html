@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+<div class="card m-3" style="width: 18rem;">
+  <div class="card-body">
+    <h3 class="card-title">{{ question.body }}</h3>
+    <h6 class="border-bottom border-gray pb-2 mb-0 card-subtitle text-muted">Answers</h6>
+    {% for answer in answers %}
+        {% if answer.correct %}
+        <span class="badge badge-success">{{ answer.body }}</span>
+        {% else %}
+        <span class="badge badge-secondary">{{ answer.body }}</span>
+        {% endif %}
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

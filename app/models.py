@@ -71,7 +71,10 @@ class Answer(db.Model):
     question_id = db.Column(db.Integer, db.ForeignKey('question.id'))
 
     def __repr__(self):
-        return '<Answer {}, Correct: {}>'.format(self.username, self.correct)
+        return '<Answer {}, Correct: {}>'.format(self.body, self.correct)
+
+    def __str__(self):
+        return '{}'.format(self.body)
 
 class Subject(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -89,6 +92,9 @@ class Topic(db.Model):
 
     def __repr__(self):
         return '<Topic {}>'.format(self.body)
+
+    def __str__(self):
+        return '{}'.format(self.body)
 
 class QuestionEval(db.Model):
     id = db.Column(db.Integer, primary_key=True)

@@ -1,7 +1,9 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, FieldList, FormField, SelectMultipleField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, FieldList, FormField, SelectMultipleField, widgets
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Regexp
-from app.models import User, Answer, Question, QuestionTopics
+from app.models import User, Answer, Question, QuestionTopics, Topic
+from wtforms.ext.sqlalchemy.fields import QuerySelectMultipleField, QuerySelectField
+from functools import partial
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
@@ -60,13 +62,6 @@ class AnswerForm(FlaskForm):
     correct_answer = BooleanField("Valid/Correct Answer")
 """
 
-class NonValidatingSelectMultipleField(SelectMultipleField):
-    """
-    Attempt to make an open ended select multiple field that can accept dynamic
-    choices added by the browser.
-    """
-    def pre_validate(self, form):
-        pass
 
 class NewQuestionForm(FlaskForm):
     """Main question form"""
@@ -78,13 +73,18 @@ class NewQuestionForm(FlaskForm):
     incorrect_answer_2 = StringField('Incorrect Answer', validators=[DataRequired()])
     incorrect_answer_3 = StringField('Incorrect Answer', validators=[DataRequired()])
 
-    topics = NonValidatingSelectMultipleField(SelectMultipleField('Topics'))
+    topics = QuerySelectMultipleField()
 
     submit = SubmitField('Submit New Question')
 
-    """def __init__(self, topics, *args, **kwargs):
-        super(EditProfileForm, self).__init__(*args, **kwargs)
-        self.possible_tags = topics"""
+    def __init__(self, subject, *args, **kwargs):
+        super(NewQuestionForm, self).__init__(*args, **kwargs)
+        self.subject = subject
+
+    def validate_question(self, question):
+        question = Question.query.filter_by(subject=self.subject).filter_by(body=self.question.data).first()
+        if question is not None:
+            raise ValidationError('Identical subject question found! Please try entering a different question')
 
 class NewTopicForm(FlaskForm):
     topic = StringField('New Subtopic', validators=[DataRequired()])
@@ -93,6 +93,24 @@ class NewTopicForm(FlaskForm):
 class DeleteQuestionForm(FlaskForm):
     cancel = SubmitField('Cancel')
     submit = SubmitField('Delete Question Permanently')
+
+QueryRadioField = partial(
+    QuerySelectField,
+    widget=widgets.ListWidget(prefix_label=False),
+    option_widget=widgets.RadioInput(),
+)
+
+QueryCheckboxField = partial(
+    QuerySelectMultipleField,
+    widget=widgets.ListWidget(prefix_label=False),
+    option_widget=widgets.CheckboxInput(),
+)
+
+class QuizQuestion(FlaskForm):
+    answers = QueryRadioField("",
+        render_kw={"class":"btn-group-vertical"})
+    submit = SubmitField('Submit Answer',
+        render_kw={"class":"btn btn-primary"})
 
 class ReviewQuestionForm(FlaskForm):
 
