@@ -169,6 +169,7 @@ def show_question(question_id):
 def subject(subject_id):
     subject = Subject.query.filter_by(id=subject_id).first_or_404()
     topics = Topic.query.filter_by(subject=subject_id)
+    questions = Question.query.filter_by(subject=subject_id)
 
     form = NewTopicForm()
     if form.validate_on_submit():
@@ -180,6 +181,7 @@ def subject(subject_id):
         'subject.html',
         subject=subject,
         topics=topics,
+        questions=questions,
         form=form
     )
 

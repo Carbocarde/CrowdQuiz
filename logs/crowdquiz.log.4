@@ -1,4 +1,4 @@
-2020-10-19 20:16:48,762 ERROR: Exception on /subject/1/quiz [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+2020-10-19 20:27:09,145 ERROR: Exception on /subject/1/quiz [POST] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
 Traceback (most recent call last):
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
     response = self.full_dispatch_request()
@@ -14,7 +14,7 @@ Traceback (most recent call last):
     return self.view_functions[rule.endpoint](**req.view_args)
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
     return func(*args, **kwargs)
-  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 237, in subject_quiz
+  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 241, in subject_quiz
     question=question
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\templating.py", line 140, in render_template
     ctx.app,
@@ -40,7 +40,7 @@ Traceback (most recent call last):
     {% block content -%}
   File "C:\Users\ponei\github\CrowdQuiz\app\templates\base.html", line 53, in block "content"
     {% block app_content %}{% endblock %}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\quiz.html", line 10, in block "app_content"
+  File "C:\Users\ponei\github\CrowdQuiz\app\templates\quiz.html", line 11, in block "app_content"
     {{ form.answers() }}
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\wtforms\fields\core.py", line 160, in __call__
     return self.meta.render_field(self, kwargs)
@@ -55,9 +55,12 @@ Traceback (most recent call last):
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\wtforms\ext\sqlalchemy\fields.py", line 98, in _get_object_list
     query = self.query or self.query_factory()
 TypeError: 'NoneType' object is not callable
-2020-10-19 20:16:54,892 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
-2020-10-19 20:17:24,200 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
-2020-10-19 20:17:34,111 ERROR: Exception on /subject/5/new_question [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+2020-10-19 20:30:43,186 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-19 20:30:54,814 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-19 20:31:10,445 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-19 20:31:17,531 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-19 20:31:30,602 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-19 20:33:47,651 ERROR: Exception on /subject/1/new_question [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
 Traceback (most recent call last):
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
     response = self.full_dispatch_request()
@@ -120,4 +123,10 @@ Traceback (most recent call last):
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\wtforms\ext\sqlalchemy\fields.py", line 98, in _get_object_list
     query = self.query or self.query_factory()
 TypeError: 'NoneType' object is not callable
-2020-10-19 20:20:14,755 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-19 20:38:21,931 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-19 20:38:42,354 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-19 20:41:33,281 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-19 20:43:48,690 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-19 20:44:13,099 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-19 20:44:33,151 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-19 20:44:59,933 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]

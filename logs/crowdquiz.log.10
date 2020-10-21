@@ -1,4 +1,4 @@
-2020-10-19 19:07:47,705 ERROR: Exception on /subject/5/quiz [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+2020-10-19 19:32:35,053 ERROR: Exception on /subject/1/quiz [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
 Traceback (most recent call last):
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
     response = self.full_dispatch_request()
@@ -14,28 +14,8 @@ Traceback (most recent call last):
     return self.view_functions[rule.endpoint](**req.view_args)
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
     return func(*args, **kwargs)
-  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 231, in subject_quiz
-    answers.append(answer)
-NameError: name 'answers' is not defined
-2020-10-19 19:08:44,616 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
-2020-10-19 19:08:46,215 ERROR: Exception on /subject/5/new_question [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
-Traceback (most recent call last):
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
-    response = self.full_dispatch_request()
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1952, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1821, in handle_user_exception
-    reraise(exc_type, exc_value, tb)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\_compat.py", line 39, in reraise
-    raise value
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1950, in full_dispatch_request
-    rv = self.dispatch_request()
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1936, in dispatch_request
-    return self.view_functions[rule.endpoint](**req.view_args)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
-    return func(*args, **kwargs)
-  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 149, in new_question
-    'new_question.html', form=form, subject=subject
+  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 237, in subject_quiz
+    question=question
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\templating.py", line 140, in render_template
     ctx.app,
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\templating.py", line 120, in _render
@@ -46,7 +26,7 @@ Traceback (most recent call last):
     reraise(*rewrite_traceback_stack(source=source))
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\_compat.py", line 28, in reraise
     raise value.with_traceback(tb)
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\new_question.html", line 2, in top-level template code
+  File "C:\Users\ponei\github\CrowdQuiz\app\templates\quiz.html", line 2, in top-level template code
     {% from 'bootstrap/form.html' import render_form, render_field %}
   File "C:\Users\ponei\github\CrowdQuiz\app\templates\base.html", line 1, in top-level template code
     {% extends 'bootstrap_base.html' %}
@@ -60,7 +40,7 @@ Traceback (most recent call last):
     {% block content -%}
   File "C:\Users\ponei\github\CrowdQuiz\app\templates\base.html", line 53, in block "content"
     {% block app_content %}{% endblock %}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\new_question.html", line 10, in block "app_content"
+  File "C:\Users\ponei\github\CrowdQuiz\app\templates\quiz.html", line 9, in block "app_content"
     {{ render_form(form) }}
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\runtime.py", line 679, in _invoke
     rv = self._func(*arguments)
@@ -74,14 +54,21 @@ Traceback (most recent call last):
     return self.meta.render_field(self, kwargs)
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\wtforms\meta.py", line 56, in render_field
     return field.widget(field, **render_kw)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\wtforms\widgets\core.py", line 300, in __call__
-    for val, label, selected in field.iter_choices():
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\wtforms\ext\sqlalchemy\fields.py", line 172, in iter_choices
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\wtforms\widgets\core.py", line 97, in __call__
+    for subfield in field:
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\wtforms\fields\core.py", line 456, in __iter__
+    for i, (value, label, checked) in enumerate(self.iter_choices()):
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\wtforms\ext\sqlalchemy\fields.py", line 107, in iter_choices
     for pk, obj in self._get_object_list():
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\wtforms\ext\sqlalchemy\fields.py", line 98, in _get_object_list
     query = self.query or self.query_factory()
 TypeError: 'NoneType' object is not callable
-2020-10-19 19:08:53,809 ERROR: Exception on /subject/1/quiz [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+2020-10-19 19:34:36,258 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-19 19:35:18,068 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-19 19:37:14,329 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-19 19:39:05,643 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-19 19:39:47,067 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-19 19:39:48,642 ERROR: Exception on /subject/1/quiz [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
 Traceback (most recent call last):
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
     response = self.full_dispatch_request()
@@ -97,8 +84,8 @@ Traceback (most recent call last):
     return self.view_functions[rule.endpoint](**req.view_args)
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
     return func(*args, **kwargs)
-  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 244, in subject_quiz
-    form=form
+  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 237, in subject_quiz
+    question=question
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\templating.py", line 140, in render_template
     ctx.app,
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\templating.py", line 120, in _render
@@ -109,8 +96,8 @@ Traceback (most recent call last):
     reraise(*rewrite_traceback_stack(source=source))
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\_compat.py", line 28, in reraise
     raise value.with_traceback(tb)
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\quiz.html", line 1, in top-level template code
-    {% extends "base.html" %}
+  File "C:\Users\ponei\github\CrowdQuiz\app\templates\quiz.html", line 2, in top-level template code
+    {% from 'bootstrap/form.html' import render_form, render_field %}
   File "C:\Users\ponei\github\CrowdQuiz\app\templates\base.html", line 1, in top-level template code
     {% extends 'bootstrap_base.html' %}
   File "C:\Users\ponei\github\CrowdQuiz\app\templates\bootstrap_base.html", line 1, in top-level template code
@@ -123,7 +110,9 @@ Traceback (most recent call last):
     {% block content -%}
   File "C:\Users\ponei\github\CrowdQuiz\app\templates\base.html", line 53, in block "content"
     {% block app_content %}{% endblock %}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\quiz.html", line 8, in block "app_content"
-    {{ render_form(form) }}
-jinja2.exceptions.UndefinedError: 'render_form' is undefined
-2020-10-19 19:09:20,971 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+  File "C:\Users\ponei\github\CrowdQuiz\app\templates\quiz.html", line 9, in block "app_content"
+    {{ render_form(form, li_style="none") }}
+TypeError: macro 'render_form' takes no keyword argument 'li_style'
+2020-10-19 19:41:47,656 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-19 19:42:15,017 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-19 19:43:35,468 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]

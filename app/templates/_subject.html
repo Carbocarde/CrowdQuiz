@@ -1,6 +1,7 @@
 <div class="card m-3" style="width: 18rem;">
   <div class="card-body">
-    <h3 class="card-title">{{ subjectcount[2].body }}</h3>
+    <a href="{{ '/subject/%s' % subjectcount[2].id }}" class="text-dark">
+    <h3 class="card-title">{{ subjectcount[2].body }}</h3></a>
     <h6 class="card-subtitle mb-2 text-muted">
         {% for topic in topics %}
             {% if subjectcount[2].id == topic.subject %}

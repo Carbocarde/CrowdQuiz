@@ -2,15 +2,39 @@
 {% from 'bootstrap/form.html' import render_form, render_field %}
 
 {% block app_content %}
-        <h1> {{ subject.body }} <h1>
+<div class="jumbotron mt-3">
+    <h1 class="display-4"> {{ subject.body }} </h1>
         <h3> Subtopics: </h3>
         {% for topic in topics %}
             <span class="badge badge-secondary">{{ topic.body }}</span>
         {% endfor %}
         <br>
+        {% if current_user.admin %}
+        <br>
+        <h3 class = "text-danger"> ADMIN VIEW ONLY-- </h3>
         <div class="row">
             <div class="col-md-4">
                 {{ render_form(form) }}
             </div>
         </div>
+        <h3 class = "text-danger"> --ADMIN VIEW ONLY </h3>
+        {% endif %}
+</div>
+        <br>
+        {% if questions %}
+            <div class="my-3 p-3 bg-white rounded shadow-sm">
+                <h6 class="border-bottom border-gray pb-2 mb-0">Questions in {{ subject.body }}:</h6>
+                <div class="row">
+                {% for question in questions %}
+                <div class="card m-3" style="width: 18rem;">
+                  <div class="card-body">
+                    <h3 class="card-title">{{ question.body }}</h3>
+                    <br>
+                    <a href="{{ '/question/%s' % question.id }}" class="btn btn-outline-primary stretched-link">View Question</a>
+                  </div>
+                </div>
+                {% endfor %}
+                </div>
+            </div>
+        {% endif %}
 {% endblock %}
