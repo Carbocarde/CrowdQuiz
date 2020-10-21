@@ -14,23 +14,23 @@
     {% endif %}
 
     <div class="progress mb-2">
-        <div class="progress-bar bg-secondary" data-toggle="tooltip" data-placement="top" title="Questions 10/20" role="progressbar" style="{{ 'width: {}%'.format(subjectcount[0]*3) }}"></div>
+        <div class="progress-bar bg-secondary" data-toggle="tooltip" data-placement="top" title="Question Completion Percentage" role="progressbar" style="{{ 'width: {}%'.format(subjectcount[0]*3) }}"></div>
     </div>
     {% if subjectcount[0] <= 20 or subjectcount[1] > 2 %}
     <a href="{{ '/subject/%s/new_question' % subjectcount[2].id }}" class="btn btn-outline-secondary mb-2">Contribute Questions!</a>
     {% endif %}
     <div class="progress mb-2">
         {% if subjectcount[1] %}
-        <div class="progress-bar" data-toggle="tooltip" data-placement="top" title="Questions 10/20" role="progressbar" style="{{ 'width: {}%'.format((subjectcount[1]*20)//1) }}"></div>
+        <div class="progress-bar" data-toggle="tooltip" data-placement="top" title="Question Evaluation Completion Percentage" role="progressbar" style="{{ 'width: {}%'.format((subjectcount[1]*20)//1) }}"></div>
         {% else %}
-        <div class="progress-bar" data-toggle="tooltip" data-placement="top" title="Questions 10/20" role="progressbar" style="{{ 'width: {}%'.format(0) }}"></div>
+        <div class="progress-bar" data-toggle="tooltip" data-placement="top" title="Question Evaluation Completion Percentage" role="progressbar" style="{{ 'width: {}%'.format(0) }}"></div>
         {% endif %}
     </div>
     {% if subjectcount[0] > 5 and subjectcount[1] < 5 %}
     <a href="{{ '/subject/%s/evaluate' % subjectcount[2].id }}" class="btn btn-outline-primary mb-2">Evaluate Current Questions!</a>
     {% endif %}
     <div class="progress mb-2">
-        <div class="progress-bar bg-success" data-toggle="tooltip" data-placement="top" title="Questions 10/20" role="progressbar" style="width: 2%"></div>
+        <div class="progress-bar bg-success" data-toggle="tooltip" data-placement="top" title="Quiz Unlock Percent" role="progressbar" style="{{ 'width: {}%'.format(subjectcount[0]*4) }}"></div>
     </div>
     {% if subjectcount[0] > 25 %}
     <a href="{{ '/subject/%s/quiz' % subjectcount[2].id }}" class="btn btn-outline-success">Quiz Yourself!</a>
