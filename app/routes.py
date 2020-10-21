@@ -4,7 +4,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from app import app, db
 from app.models import User, Question, Answer, Topic, Subject, QuestionTopics, QuestionEval
-from app.forms import LoginForm, RegistrationForm, EditProfileForm, ResetPasswordRequestForm, NewQuestionForm, NewTopicForm, DeleteQuestionForm, ReviewQuestionForm, QuizQuestion, NewSubjectForm
+from app.forms import LoginForm, RegistrationForm, EditProfileForm, ResetPasswordRequestForm, ResetPasswordForm, NewQuestionForm, NewTopicForm, DeleteQuestionForm, ReviewQuestionForm, QuizQuestion, NewSubjectForm
 from app.email import send_password_reset_email
 from sqlalchemy.sql.expression import func
 from sqlalchemy.sql import except_
