@@ -16,6 +16,17 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 login = LoginManager(app)
 login.login_view = 'login'
+
+app.config.update(dict(
+    DEBUG = True,
+    MAIL_SERVER = 'smtp.gmail.com',
+    MAIL_PORT = 587,
+    MAIL_USE_TLS = True,
+    MAIL_USE_SSL = False,
+    MAIL_USERNAME = 'noreply.crowdquiz@gmail.com',
+    MAIL_PASSWORD = 'To7Y2et8zfIgif3Q',
+))
+
 mail = Mail(app)
 bootstrap = Bootstrap(app)
 
