@@ -81,6 +81,8 @@ class Subject(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.String(140))
     description = db.Column(db.String(140))
+    approved = db.Column(db.Boolean)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __repr__(self):
         return '<Subject: {}>'.format(self.body)

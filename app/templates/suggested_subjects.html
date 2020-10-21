@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+
+{% if current_user.is_authenticated %}
+<div class="jumbotron">
+    <h1 class="display-4">Suggested Subjects</h1>
+    <p class="lead">Click one of the subjects below to follow it, or suggest your own!</p>
+    <a class="btn btn-primary" href="{{ url_for('suggest_new_subject') }}"> Suggest New Subject </a>
+</div>
+{% else %}
+<div class="jumbotron mt-3">
+    <h1 class="display-4">Suggested Subjects</h1>
+    <p class="lead">Login to start following subjects or suggesting new ones!</p>
+    <a class="btn btn-primary" href="{{ url_for('login') }}"> Log in/Register </a>
+</div>
+{% endif %}
+<div class="row">
+    {% for subject in subjects %}
+        {% include '_suggested_subject.html' %}
+    {% endfor %}
+</div>
+{% endblock app_content %}

@@ -4,7 +4,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from app import app, db
 from app.models import User, Question, Answer, Topic, Subject, QuestionTopics, QuestionEval
-from app.forms import LoginForm, RegistrationForm, EditProfileForm, ResetPasswordRequestForm, NewQuestionForm, NewTopicForm, DeleteQuestionForm, ReviewQuestionForm, QuizQuestion
+from app.forms import LoginForm, RegistrationForm, EditProfileForm, ResetPasswordRequestForm, NewQuestionForm, NewTopicForm, DeleteQuestionForm, ReviewQuestionForm, QuizQuestion, NewSubjectForm
 from app.email import send_password_reset_email
 from sqlalchemy.sql.expression import func
 from sqlalchemy.sql import except_
@@ -13,11 +13,11 @@ import random
 @app.route('/')
 @app.route('/index')
 def index():
-    subject = Subject.query.limit(25).all()
+    subject = Subject.query.filter_by(approved=True).limit(25).all()
     topics = Topic.query.all()
 
     questionCount = db.session.query(func.count(Question.id), func.avg(Question.evaluations), Subject)\
-        .select_from(Subject).outerjoin(Question).group_by(Subject.id)
+        .select_from(Subject).filter_by(approved=True).outerjoin(Question).group_by(Subject.id)
 
     return render_template('index.html', title='Home', subjects=subject, topics=topics, subjectcounts=questionCount)
 
@@ -121,6 +121,26 @@ def reset_password(token):
         flash('Your password has been reset.')
         return redirect(url_for('login'))
     return render_template('reset_password.html', form=form)
+
+@app.route('/suggest_subject')
+def suggested_subjects():
+    subjects = Subject.query.filter_by(approved=False).limit(25).all()
+
+    return render_template('suggested_subjects.html', subjects=subjects)
+
+@app.route('/suggest_subject/new', methods=['GET', 'POST'])
+def suggest_new_subject():
+    form = NewSubjectForm()
+
+    if form.validate_on_submit():
+        new_subject = Subject(approved=False, body=form.subject.data, description=form.description.data, user_id=current_user.id)
+        db.session.add(new_subject)
+        db.session.commit()
+
+        return redirect(url_for('suggested_subjects'))
+
+    return render_template('suggest_new_subject.html', form=form)
+
 
 @app.route('/subject/<subject_id>/new_question', methods=['GET', 'POST'])
 @login_required

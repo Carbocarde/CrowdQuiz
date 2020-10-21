@@ -86,6 +86,21 @@ class NewQuestionForm(FlaskForm):
         if question is not None:
             raise ValidationError('Identical subject question found! Please try entering a different question')
 
+class NewSubjectForm(FlaskForm):
+    subject = StringField('Subject', validators=[DataRequired()])
+
+    description = StringField('Description', validators=[DataRequired()])
+
+    topics = StringField('Initial Subtopic', validators=[DataRequired()])
+
+    submit = SubmitField('Submit New Question')
+
+    def validate_question(self, question):
+        subjectduplicate = Subject.query.filter_by(body=self.subject).filter_by(body=self.question.data).first()
+        if subjectduplicate is not None:
+            raise ValidationError('Identical subject found! Please try entering a different subject or go follow that subject!')
+
+
 class NewTopicForm(FlaskForm):
     topic = StringField('New Subtopic', validators=[DataRequired()])
     submit = SubmitField('Submit New Subtopic')
