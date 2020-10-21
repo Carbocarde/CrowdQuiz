@@ -1,4 +1,4 @@
-2020-10-19 20:05:01,702 ERROR: Exception on /subject/1/quiz [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+2020-10-19 20:16:48,762 ERROR: Exception on /subject/1/quiz [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
 Traceback (most recent call last):
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
     response = self.full_dispatch_request()
@@ -40,18 +40,24 @@ Traceback (most recent call last):
     {% block content -%}
   File "C:\Users\ponei\github\CrowdQuiz\app\templates\base.html", line 53, in block "content"
     {% block app_content %}{% endblock %}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\quiz.html", line 9, in block "app_content"
-    {{ form.answers("multiple") }}
-TypeError: __call__() takes 1 positional argument but 2 were given
-2020-10-19 20:05:58,429 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
-2020-10-19 20:07:45,750 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
-2020-10-19 20:08:54,396 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
-2020-10-19 20:10:04,629 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
-2020-10-19 20:10:22,436 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
-2020-10-19 20:12:53,885 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
-2020-10-19 20:13:03,834 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
-2020-10-19 20:13:20,376 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
-2020-10-19 20:13:21,046 ERROR: Exception on /subject/1/quiz [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+  File "C:\Users\ponei\github\CrowdQuiz\app\templates\quiz.html", line 10, in block "app_content"
+    {{ form.answers() }}
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\wtforms\fields\core.py", line 160, in __call__
+    return self.meta.render_field(self, kwargs)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\wtforms\meta.py", line 56, in render_field
+    return field.widget(field, **render_kw)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\wtforms\widgets\core.py", line 97, in __call__
+    for subfield in field:
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\wtforms\fields\core.py", line 456, in __iter__
+    for i, (value, label, checked) in enumerate(self.iter_choices()):
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\wtforms\ext\sqlalchemy\fields.py", line 107, in iter_choices
+    for pk, obj in self._get_object_list():
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\wtforms\ext\sqlalchemy\fields.py", line 98, in _get_object_list
+    query = self.query or self.query_factory()
+TypeError: 'NoneType' object is not callable
+2020-10-19 20:16:54,892 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-19 20:17:24,200 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-19 20:17:34,111 ERROR: Exception on /subject/5/new_question [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
 Traceback (most recent call last):
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
     response = self.full_dispatch_request()
@@ -67,8 +73,8 @@ Traceback (most recent call last):
     return self.view_functions[rule.endpoint](**req.view_args)
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
     return func(*args, **kwargs)
-  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 237, in subject_quiz
-    question=question
+  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 149, in new_question
+    'new_question.html', form=form, subject=subject
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\templating.py", line 140, in render_template
     ctx.app,
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\templating.py", line 120, in _render
@@ -79,7 +85,7 @@ Traceback (most recent call last):
     reraise(*rewrite_traceback_stack(source=source))
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\_compat.py", line 28, in reraise
     raise value.with_traceback(tb)
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\quiz.html", line 2, in top-level template code
+  File "C:\Users\ponei\github\CrowdQuiz\app\templates\new_question.html", line 2, in top-level template code
     {% from 'bootstrap/form.html' import render_form, render_field %}
   File "C:\Users\ponei\github\CrowdQuiz\app\templates\base.html", line 1, in top-level template code
     {% extends 'bootstrap_base.html' %}
@@ -93,9 +99,25 @@ Traceback (most recent call last):
     {% block content -%}
   File "C:\Users\ponei\github\CrowdQuiz\app\templates\base.html", line 53, in block "content"
     {% block app_content %}{% endblock %}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\quiz.html", line 11, in block "app_content"
-    {{ form.submit() }}
-jinja2.exceptions.UndefinedError: 'app.forms.QuizQuestion object' has no attribute 'submit'
-2020-10-19 20:13:41,108 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
-2020-10-19 20:14:00,350 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
-2020-10-19 20:15:02,757 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+  File "C:\Users\ponei\github\CrowdQuiz\app\templates\new_question.html", line 10, in block "app_content"
+    {{ render_form(form) }}
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\runtime.py", line 679, in _invoke
+    rv = self._func(*arguments)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_bootstrap\templates\bootstrap\form.html", line 277, in template
+    {{ render_field(field,
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\runtime.py", line 679, in _invoke
+    rv = self._func(*arguments)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_bootstrap\templates\bootstrap\form.html", line 198, in template
+    {{ field(class="form-control%s" % extra_classes, **kwargs)|safe }}
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\wtforms\fields\core.py", line 160, in __call__
+    return self.meta.render_field(self, kwargs)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\wtforms\meta.py", line 56, in render_field
+    return field.widget(field, **render_kw)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\wtforms\widgets\core.py", line 300, in __call__
+    for val, label, selected in field.iter_choices():
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\wtforms\ext\sqlalchemy\fields.py", line 172, in iter_choices
+    for pk, obj in self._get_object_list():
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\wtforms\ext\sqlalchemy\fields.py", line 98, in _get_object_list
+    query = self.query or self.query_factory()
+TypeError: 'NoneType' object is not callable
+2020-10-19 20:20:14,755 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]

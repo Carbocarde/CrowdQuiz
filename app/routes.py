@@ -189,7 +189,7 @@ def subject(subject_id):
 @login_required
 def delete_question(question_id):
     question = Question.query.filter_by(id=question_id).first_or_404()
-    if current_user.id != question.user_id:
+    if not (current_user.id == question.user_id or current_user.admin):
         flash('You do not have permission for this page')
         return redirect(url_for('index'))
 

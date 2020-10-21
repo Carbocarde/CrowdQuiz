@@ -1,4 +1,4 @@
-2020-10-19 19:43:41,936 ERROR: Exception on /subject/1/quiz [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+2020-10-19 20:05:01,702 ERROR: Exception on /subject/1/quiz [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
 Traceback (most recent call last):
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
     response = self.full_dispatch_request()
@@ -41,14 +41,17 @@ Traceback (most recent call last):
   File "C:\Users\ponei\github\CrowdQuiz\app\templates\base.html", line 53, in block "content"
     {% block app_content %}{% endblock %}
   File "C:\Users\ponei\github\CrowdQuiz\app\templates\quiz.html", line 9, in block "app_content"
-    {{ render_form(form, class_='btn') }}
-TypeError: macro 'render_form' takes no keyword argument 'class_'
-2020-10-19 19:44:19,629 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
-2020-10-19 19:47:00,762 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
-2020-10-19 19:59:04,225 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
-2020-10-19 20:00:23,021 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
-2020-10-19 20:00:49,963 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
-2020-10-19 20:00:51,683 ERROR: Exception on /subject/1/quiz [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+    {{ form.answers("multiple") }}
+TypeError: __call__() takes 1 positional argument but 2 were given
+2020-10-19 20:05:58,429 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-19 20:07:45,750 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-19 20:08:54,396 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-19 20:10:04,629 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-19 20:10:22,436 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-19 20:12:53,885 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-19 20:13:03,834 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-19 20:13:20,376 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-19 20:13:21,046 ERROR: Exception on /subject/1/quiz [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
 Traceback (most recent call last):
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
     response = self.full_dispatch_request()
@@ -90,11 +93,9 @@ Traceback (most recent call last):
     {% block content -%}
   File "C:\Users\ponei\github\CrowdQuiz\app\templates\base.html", line 53, in block "content"
     {% block app_content %}{% endblock %}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\quiz.html", line 9, in block "app_content"
-    {{ form.answers() }}
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\wtforms\fields\core.py", line 160, in __call__
-    return self.meta.render_field(self, kwargs)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\wtforms\meta.py", line 55, in render_field
-    render_kw = dict(other_kw, **render_kw)
-ValueError: dictionary update sequence element #0 has length 8; 2 is required
-2020-10-19 20:04:58,643 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+  File "C:\Users\ponei\github\CrowdQuiz\app\templates\quiz.html", line 11, in block "app_content"
+    {{ form.submit() }}
+jinja2.exceptions.UndefinedError: 'app.forms.QuizQuestion object' has no attribute 'submit'
+2020-10-19 20:13:41,108 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-19 20:14:00,350 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
+2020-10-19 20:15:02,757 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:56]
