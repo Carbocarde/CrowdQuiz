@@ -21,6 +21,18 @@ def index():
 
     return render_template('index.html', title='Home', subjects=subject, topics=topics, subjectcounts=questionCount)
 
+@app.route('/admin')
+@login_required
+def admin():
+    questions = Question.query.order_by(Question.timestamp).limit(20)
+    subjects = Subject.query.limit(25)
+    topics = Topic.query.all()
+
+    questionCount = db.session.query(func.count(Question.id), func.avg(Question.evaluations), Subject)\
+        .select_from(Subject).outerjoin(Question).group_by(Subject.id)
+
+    return render_template('admin.html', title='Admin Dashboard', subjects=subject, topics=topics, subjectcounts=questionCount, questions=questions)
+
 @app.route('/user/<username>')
 @login_required
 def user(username):
