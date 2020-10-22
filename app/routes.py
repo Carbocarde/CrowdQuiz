@@ -3,7 +3,7 @@ from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from app import app, db
-from app.models import User, Question, Answer, Topic, Subject, QuestionTopics, QuestionEval
+from app.models import User, Question, Answer, Topic, QuestionTopics, QuestionEval
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, ResetPasswordRequestForm, ResetPasswordForm, NewQuestionForm, NewTopicForm, DeleteQuestionForm, ReviewQuestionForm, QuizQuestion, NewSubjectForm
 from app.email import send_password_reset_email
 from sqlalchemy.sql.expression import func
@@ -147,12 +147,12 @@ def suggest_new_subject():
 def new_question(subject_id):
     form = NewQuestionForm(subject_id)
 
-    form.topics.query = Topic.query.filter_by(subject=subject_id).all()
+    form.topics.query = Topic.query.filter_by(subject_id=subject_id).all()
 
     if form.validate_on_submit():
         new_question = Question()
 
-        new_question = Question(body=form.question.data, author=current_user, subject=subject_id, fairness_score=1, evaluations=1)
+        new_question = Question(body=form.question.data, author=current_user, subject_id=subject_id, fairness_score=1, evaluations=1)
         db.session.add(new_question)
         db.session.commit()
         db.session.refresh(new_question)
@@ -178,7 +178,7 @@ def new_question(subject_id):
     subject = Subject.query.filter_by(id=subject_id).first()
 
     return render_template(
-        'new_question.html', form=form, subject=subject
+        'new_question.html', form=form, subject_id=subject
     )
 
 @app.route('/question/<question_id>', methods=['GET'])
@@ -200,18 +200,18 @@ def show_question(question_id):
 @login_required
 def subject(subject_id):
     subject = Subject.query.filter_by(id=subject_id).first_or_404()
-    topics = Topic.query.filter_by(subject=subject_id)
-    questions = Question.query.filter_by(subject=subject_id)
+    topics = Topic.query.filter_by(subject_id=subject_id)
+    questions = Question.query.filter_by(subject_id=subject_id)
 
     form = NewTopicForm()
     if form.validate_on_submit():
-        newtopic = Topic(body=form.topic.data, subject=subject_id)
+        newtopic = Topic(body=form.topic.data, subject_id=subject_id)
         db.session.add(newtopic)
         db.session.commit()
 
     return render_template(
         'subject.html',
-        subject=subject,
+        subject_id=subject,
         topics=topics,
         questions=questions,
         form=form
@@ -257,7 +257,7 @@ def delete_question(question_id):
 def subject_quiz(subject_id):
     form = QuizQuestion()
 
-    question = Question.query.filter_by(subject=subject_id).order_by(func.random()).first()
+    question = Question.query.filter_by(subject_id=subject_id).order_by(func.random()).first()
 
     # get answers
     correct_answer = Answer.query.filter_by(question_id=question.id).filter_by(correct=True).order_by(func.random()).limit(1)
@@ -279,10 +279,10 @@ def subject_quiz(subject_id):
 @login_required
 def evaluate_questions(subject_id):
     wasSkipped=False
-    question = Question.query.filter_by(subject=subject_id).with_entities(Question.id).except_(QuestionEval.query.with_entities(QuestionEval.question_id).filter_by(user_id=current_user.id)).order_by(func.random()).first()
+    question = Question.query.filter_by(subject_id=subject_id).with_entities(Question.id).except_(QuestionEval.query.with_entities(QuestionEval.question_id).filter_by(user_id=current_user.id)).order_by(func.random()).first()
     if (question == None):
         wasSkipped=True
-        question = Question.query.filter_by(subject=subject_id).with_entities(Question.id).except_(QuestionEval.query.filter_by(skipped=False).with_entities(QuestionEval.question_id).filter_by(user_id=current_user.id)).order_by(func.random()).first_or_404()
+        question = Question.query.filter_by(subject_id=subject_id).with_entities(Question.id).except_(QuestionEval.query.filter_by(skipped=False).with_entities(QuestionEval.question_id).filter_by(user_id=current_user.id)).order_by(func.random()).first_or_404()
 
     answers = Answer.query.filter_by(question_id=question.id)
 
