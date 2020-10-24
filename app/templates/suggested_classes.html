@@ -5,14 +5,23 @@
 {% if current_user.is_authenticated %}
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item active" aria-current="page">{{ current_user.school.body }}</li>
+        <li class="breadcrumb-item"><a href="/">{{ current_user.school.body }}</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Proposed Classes</li>
     </ol>
 </nav>
+
 <div class="jumbotron">
-    <h1 class="display-4">Hey {{ current_user.name.capitalize() }}!</h1>
-    <p class="lead">Let's get quizzing! Get started by clicking one of the subjects below!</p>
+    <h1 class="display-4">Suggested Classes for {{ current_user.school.body }}</h1>
+    <p class="lead">Click "enroll" on one of the subjects below to get notified when it gets added!</p>
 </div>
 {% else %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Proposed Classes</li>
+    </ol>
+</nav>
+
 <div class="jumbotron mt-3">
     <h1 class="display-4">Hey there!</h1>
     <p class="lead">Let's get you quizzing! Click the button below to start!</p>
@@ -48,12 +57,13 @@
 
 <div class="card mt-3">
     <div class="card-header">
-        Suggest New Classes
+        Suggest New Class
     </div>
     <div class="card-body">
         <h5 class="card-title">Can't find the class you're looking for?</h5>
-        <p class="card-text">Browse suggested classes or suggest your own</p>
-        <a href="{{ url_for('suggested_classes') }}" class="btn btn-primary">Browse Proposed Classes</a>
+        <p class="card-text">Suggest a new class</p>
+        <a href="{{ url_for('propose_class') }}" class="btn btn-primary">Propose class</a>
     </div>
 </div>
+
 {% endblock app_content %}

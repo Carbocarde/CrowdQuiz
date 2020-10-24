@@ -1,9 +1,10 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, FieldList, FormField, SelectMultipleField, widgets
-from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Regexp
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, FieldList, FormField, SelectMultipleField, widgets, DecimalField, FileField
+from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Regexp, NumberRange, Length
 from app.models import User, Answer, Question, QuestionTopics, Topic
 from wtforms.ext.sqlalchemy.fields import QuerySelectMultipleField, QuerySelectField
 from functools import partial
+from wtforms.widgets import TextArea
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
@@ -18,6 +19,7 @@ class RegistrationForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     password2 = PasswordField(
         'Repeat Password', validators=[DataRequired(), EqualTo('password')])
+    school = QuerySelectField()
     submit = SubmitField('Register')
 
     def validate_username(self, username):
@@ -29,6 +31,25 @@ class RegistrationForm(FlaskForm):
         user = User.query.filter_by(email=email.data).first()
         if user is not None:
             raise ValidationError('Please use a different email address.')
+
+class EditExamStructureForm(FlaskForm):
+    exams = DecimalField('Number of Exams (Excluding Final Exam)', validators=[DataRequired("Please enter a number"), NumberRange(min=0, message='Please enter a non-negative number')])
+    quizzes = DecimalField('Number of Quizzes', validators=[DataRequired("Please enter a number"), NumberRange(min=0, message='Please enter a non-negative number')])
+    final_exam = BooleanField('Final Exam?')
+    final_exam_cumulative = BooleanField('Final Exam Cumulative?')
+    #syllabus = FileField('Syllabus Exam Structure Screenshot (optional)')
+
+    submit = SubmitField('Submit')
+
+class ProposeClassForm(FlaskForm):
+    title = StringField('Class Name', validators=[DataRequired(), Length(max=40)])
+    description = StringField('Class Description', widget=TextArea(), validators=[DataRequired(), Length(max=140)])
+
+    submit = SubmitField('Submit')
+
+class EvaluateQuestionForm(FlaskForm):
+    fair = BooleanField('Fair Question')
+    accurate_topics = BooleanField('Correct topics')
 
 class EditProfileForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])

@@ -7,20 +7,17 @@
     <h1 class="display-4">Hey Admin {{ current_user.name.capitalize() }}!</h1>
     <p class="lead">Welcome to the Admin Dashboard!</p>
 </div>
-<div class="row">
-    {% for subjectcount in subjectcounts %}
-        {% include '_subject.html' %}
-    {% endfor %}
-</div>
 <br>
-    {% if questions %}
         <div class="my-3 p-3 bg-white rounded shadow-sm">
             <h6 class="border-bottom border-gray pb-2 mb-0">Recently Added Questions</h6>
             <div class="row">
-            {% for question in questions %}
+            {% for question, topics in question_topics %}
             <div class="card m-3" style="width: 18rem;">
               <div class="card-body">
                 <h3 class="card-title">{{ question.body }}</h3>
+                {% for topic in topics %}
+                    <span class="badge badge-secondary">{{ topic.body }}</span>
+                {% endfor %}
                 <h5 class="card-subtitle">{{ question.author }}</h5>
                 <br>
                 <a href="{{ '/question/%s' % question.id }}" class="btn btn-outline-primary stretched-link">View Question</a>
@@ -29,7 +26,6 @@
             {% endfor %}
             </div>
         </div>
-    {% endif %}
 {% else %}
 <div class="jumbotron mt-3">
     <h1 class="display-4">Hi there!</h1>

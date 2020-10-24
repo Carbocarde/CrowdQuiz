@@ -11,6 +11,28 @@
         {% endif %}
     </div>
 
+    {% if enrolled %}
+        <div class="my-3 p-3 bg-white rounded shadow-sm">
+            <h6 class="border-bottom border-gray pb-2 mb-0">Enrolled Classes:</h6>
+            <div class="row">
+            {% for class, exams in class_exams %}
+                {% include '_class.html' %}
+            {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+
+    {% if unenrolled %}
+        <div class="my-3 p-3 bg-white rounded shadow-sm">
+            <h6 class="border-bottom border-gray pb-2 mb-0">Waitlisted Classes (pending approval):</h6>
+            <div class="row">
+            {% for class, exams in unenrolled_class_exams %}
+                {% include '_class.html' %}
+            {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+
     {% if questions %}
         <div class="my-3 p-3 bg-white rounded shadow-sm">
             <h6 class="border-bottom border-gray pb-2 mb-0">Questions you contributed:</h6>

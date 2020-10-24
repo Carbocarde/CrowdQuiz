@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% from 'bootstrap/form.html' import render_form, render_field %}
+
+{% block app_content %}
+    {% if topic %}
+    <div class="jumbotron mt-3">
+        <h2 class="display-5">Contributing to topic: {{ topic.body }}!</h2>
+        <h2 class="card-subtitle mb-2 text-muted">
+            <span class="badge badge-secondary">{{ exam.exam_class.body }}</span>
+            <span class="badge badge-secondary">{{ exam.body }}</span>
+        </h2>
+    </div>
+    {% else %}
+    <div class="jumbotron mt-3">
+        <h2 class="display-5">Contributing to {{ exam.body }}!</h2>
+        <h2 class="card-subtitle mb-2 text-muted">
+            <span class="badge badge-secondary">{{ exam.exam_class.body }}</span>
+        </h2>
+    </div>
+    {% endif %}
+
+    {% for form, question, topics in evaluation_forms %}
+        {% include '_evaluate_question.html' %}
+    {% endfor %}
+
+
+
+{% endblock %}

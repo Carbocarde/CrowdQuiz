@@ -1,0 +1,27 @@
+<div class="card m-3" style="width: 18rem;">
+  <div class="card-body d-flex flex-column">
+    <a href="{{ '/class/%s/' % class.id }}" class="text-dark">
+    <h3 class="card-title">{{ class.body }}</h3></a>
+    <h6 class="card-subtitle mb-2 text-muted">
+        {% if exams %}
+            {% for exam in exams %}
+                <span class="badge badge-secondary">{{ exam.body }}</span>
+            {% endfor %}
+        {% else %}
+            <span class="badge badge-secondary">{{ class.school.body }}</span>
+        {% endif %}
+    </h6>
+
+    <div class="mt-auto"></div>
+    {% if class.description %}
+        <p class="card-text">{{ class.description }}</p>
+    {% endif %}
+
+    {% if not enrolled %}
+        <a href="{{ '/class/%s/enroll/' % class.id }}" class="btn btn-outline-secondary mb-2">Enroll & View</a>
+    {% else %}
+        <a href="{{ '/class/%s/' % class.id }}" class="btn btn-outline-secondary mb-2 stretched-link">View</a>
+    {% endif %}
+
+  </div>
+</div>

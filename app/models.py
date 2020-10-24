@@ -59,6 +59,7 @@ class Question(db.Model):
     question_type = db.Column(db.String(1))
 
     question_answer = db.relationship('QuestionAnswer', backref='question', lazy='dynamic')
+    question_topic = db.relationship('QuestionTopics', backref='question', lazy='dynamic')
 
     def __repr__(self):
         return '<Question {}>'.format(self.body)
@@ -75,6 +76,8 @@ class QuestionEval(db.Model):
         return '<Eval {} {}>'.format(question_id, self.fair)
 
 class QuestionAnswer(db.Model):
+    __tablename__ = 'questionanswer'
+
     id = db.Column(db.Integer, primary_key=True)
     question_id = db.Column(db.Integer, db.ForeignKey('question.id'))
     answer_id = db.Column(db.Integer, db.ForeignKey('answer.id'))
@@ -85,6 +88,8 @@ class QuestionAnswer(db.Model):
 
     correctness_score = db.Column(db.Integer)
     correctness_votes = db.Column(db.Integer)
+
+    question_answer_argument = db.relationship('QuestionAnswerArgument', backref='question_answer', lazy='dynamic')
 
 class Answer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -109,20 +114,26 @@ class AnswerReport(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 class QuestionAnswerArgument(db.Model):
+    __tablename__ = 'questionanswerargument'
+
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    question_answer = db.relationship('QuestionAnswer', backref='answer_argument', lazy='dynamic')
+    question_answer_id = db.Column(db.Integer, db.ForeignKey('questionanswer.id'))
 
     body = db.Column(db.String(140))
 
     argument_votes = db.Column(db.Integer)
     argument_evaluations = db.Column(db.Integer)
 
+    question_answer_argument_argument_report = db.relationship('QuestionAnswerArgumentReport', backref='argument', lazy='dynamic')
+
 # For when an argument is reported
 class QuestionAnswerArgumentReport(db.Model):
+    __tablename__ = 'questionanswerargumentreport'
+
     id = db.Column(db.Integer, primary_key=True)
-    answer_id = db.Column(db.Integer, db.ForeignKey('answer.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    question_answer_argument_id = db.Column(db.Integer, db.ForeignKey('questionanswerargument.id'))
 
 class TFQuestionAttempt(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -142,6 +153,8 @@ class MCQuestionAttempt(db.Model):
     question_id = db.Column(db.Integer, db.ForeignKey('question.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
+    mc_question_choice = db.relationship('MCQuestionChoice', backref='mc_question_attempt', lazy='dynamic')
+
 class MCQuestionChoice(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
@@ -149,8 +162,6 @@ class MCQuestionChoice(db.Model):
     answer_id = db.Column(db.Integer, db.ForeignKey('answer.id'))
 
     selected = db.Column(db.Boolean)
-
-    mc_question_attempt = db.relationship('MCQuestionAttempt', backref='mc_question_attempt', lazy='dynamic')
 
 class OpenEndedQuestionAttempt(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -176,6 +187,7 @@ class Topic(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
     body = db.Column(db.String(40))
+    description = db.Column(db.String(140))
 
     question_topic = db.relationship('QuestionTopics', backref='topic', lazy='dynamic')
     exam_topic = db.relationship('ExamTopics', backref='topic', lazy='dynamic')
@@ -215,7 +227,8 @@ class Class(db.Model):
     body = db.Column(db.String(64))
     description = db.Column(db.String(140))
 
-    enrollment = db.relationship('Enrollment', backref='class', lazy='dynamic')
+    enrollment = db.relationship('Enrollment', backref='enrolled_class', lazy='dynamic')
+    exam = db.relationship('Exam', backref='exam_class', lazy='dynamic')
 
     def __repr__(self):
         return '<Subject: {}>'.format(self.body)
@@ -224,6 +237,12 @@ class School(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
     body = db.Column(db.String(64))
+
+    user = db.relationship('User', backref='school', lazy='dynamic')
+    school_class = db.relationship('Class', backref='school', lazy='dynamic')
+
+    def __str__(self):
+        return '{}'.format(self.body)
 
 class Enrollment(db.Model):
     id = db.Column(db.Integer, primary_key=True)

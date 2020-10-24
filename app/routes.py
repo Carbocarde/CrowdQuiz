@@ -3,43 +3,12 @@ from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from app import app, db
-from app.models import User, Question, Answer, Topic, QuestionTopics, QuestionEval
-from app.forms import LoginForm, RegistrationForm, EditProfileForm, ResetPasswordRequestForm, ResetPasswordForm, NewQuestionForm, NewTopicForm, DeleteQuestionForm, ReviewQuestionForm, QuizQuestion, NewSubjectForm
+from app.models import User, Question, Answer, Topic, QuestionTopics, QuestionEval, School, Class, Exam, ExamTopics, Enrollment
+from app.forms import LoginForm, RegistrationForm, EditProfileForm, ResetPasswordRequestForm, ResetPasswordForm, NewQuestionForm, NewTopicForm, DeleteQuestionForm, ReviewQuestionForm, QuizQuestion, NewSubjectForm, EditExamStructureForm, EvaluateQuestionForm, ProposeClassForm
 from app.email import send_password_reset_email
 from sqlalchemy.sql.expression import func
 from sqlalchemy.sql import except_
 import random
-
-@app.route('/')
-@app.route('/index')
-def index():
-    subject = Subject.query.filter_by(approved=True).limit(25).all()
-    topics = Topic.query.all()
-
-    questionCount = db.session.query(func.count(Question.id), func.avg(Question.evaluations), Subject)\
-        .select_from(Subject).filter_by(approved=True).outerjoin(Question).group_by(Subject.id)
-
-    return render_template('index.html', title='Home', subjects=subject, topics=topics, subjectcounts=questionCount)
-
-@app.route('/admin')
-@login_required
-def admin():
-    questions = Question.query.order_by(Question.timestamp).limit(20)
-    subjects = Subject.query.limit(25)
-    topics = Topic.query.all()
-
-    questionCount = db.session.query(func.count(Question.id), func.avg(Question.evaluations), Subject)\
-        .select_from(Subject).outerjoin(Question).group_by(Subject.id)
-
-    return render_template('admin.html', title='Admin Dashboard', subjects=subject, topics=topics, subjectcounts=questionCount, questions=questions)
-
-@app.route('/user/<username>')
-@login_required
-def user(username):
-    user = User.query.filter_by(username=username).first_or_404()
-    questions = Question.query.filter_by(user_id=user.id).order_by(Question.id.desc()).limit(20)
-    subjects = Subject.query.limit(25)
-    return render_template('user.html', user=user, questions=questions, subjects=subjects)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -67,15 +36,222 @@ def logout():
 def register():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
+
     form = RegistrationForm()
+    form.school.query = School.query.all()
     if form.validate_on_submit():
-        user = User(username=form.username.data, email=form.email.data, name=form.name.data)
+        user = User(username=form.username.data, email=form.email.data, name=form.name.data, admin=False)
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
         flash('Congratulations, you are now a registered user!')
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
+
+@app.route('/')
+@app.route('/index')
+@app.route('/home')
+def index():
+    exams = []
+    enrolled = []
+    enrolled_classes = []
+    unenrolled_exams = []
+    unenrolled = []
+    unenrolled_classes = []
+
+    unenrolled_count = 0
+    enrolled_count = 0
+
+    if current_user.is_authenticated:
+        classes = Class.query.filter_by(school_id=current_user.school_id, approved=True).limit(25);
+
+        for class_element in classes:
+            if db.session.query(Enrollment.id).filter_by(class_id=class_element.id, user_id=current_user.id).scalar() is not None:
+                exams.append(Exam.query.filter_by(class_id = class_element.id).limit(9))
+                enrolled.append(True)
+                enrolled_classes.append(class_element)
+                enrolled_count += 1
+            else:
+                unenrolled_exams.append(Exam.query.filter_by(class_id = class_element.id).limit(9))
+                unenrolled.append(False)
+                unenrolled_classes.append(class_element)
+                unenrolled_count += 1
+
+    else:
+        classes = Class.query.filter_by(approved=True).limit(25);
+
+        for class_element in classes:
+            unenrolled_exams.append(Exam.query.filter_by(class_id = class_element.id).limit(9))
+            unenrolled.append(False)
+            unenrolled_classes.append(class_element)
+            unenrolled_count += 1
+
+    return render_template('index.html', title='Home', enrolled_classes = enrolled_count, unenrolled_classes = unenrolled_count, enrolled_class_exams=zip(enrolled_classes, exams, enrolled), unenrolled_class_exams=zip(unenrolled_classes, unenrolled_exams, unenrolled))
+
+@app.route('/suggested_classes/')
+@login_required
+def suggested_classes():
+    exams = []
+    enrolled = []
+    enrolled_classes = []
+    unenrolled_exams = []
+    unenrolled = []
+    unenrolled_classes = []
+
+    unenrolled_count = 0
+    enrolled_count = 0
+
+    if current_user.is_authenticated:
+        classes = Class.query.filter_by(school_id=current_user.school_id, approved=False).limit(25);
+
+        for class_element in classes:
+            if db.session.query(Enrollment.id).filter_by(class_id=class_element.id, user_id=current_user.id).scalar() is not None:
+                exams.append(Exam.query.filter_by(class_id = class_element.id).limit(9))
+                enrolled.append(True)
+                enrolled_classes.append(class_element)
+                enrolled_count += 1
+            else:
+                unenrolled_exams.append(Exam.query.filter_by(class_id = class_element.id).limit(9))
+                unenrolled.append(False)
+                unenrolled_classes.append(class_element)
+                unenrolled_count += 1
+
+    else:
+        classes = Class.query.filter_by(approved=False).limit(25);
+
+        for class_element in classes:
+            unenrolled_exams.append(Exam.query.filter_by(class_id = class_element.id).limit(9))
+            unenrolled.append(False)
+            unenrolled_classes.append(class_element)
+            unenrolled_count += 1
+
+    return render_template('suggested_classes.html', title='Proposed Classes', enrolled_classes = enrolled_count, unenrolled_classes = unenrolled_count, enrolled_class_exams=zip(enrolled_classes, exams, enrolled), unenrolled_class_exams=zip(unenrolled_classes, unenrolled_exams, unenrolled))
+
+@app.route('/suggested_classes/propose_class', methods=['GET', 'POST'])
+@login_required
+def propose_class():
+    form = ProposeClassForm()
+
+    if form.validate_on_submit():
+        new_class = Class(approved=False, body=form.title.data, description=form.description.data, user_id=current_user.id, school_id=current_user.school_id)
+        db.session.add(new_class)
+        db.session.commit()
+
+        return redirect(url_for('suggested_classes'))
+
+    return render_template('suggest_class.html', form=form)
+
+@app.route('/class/<class_id>/')
+@login_required
+def class_(class_id):
+    class_element = Class.query.filter_by(id=class_id).first_or_404();
+
+    exams = Exam.query.filter_by(class_id = class_id)
+
+    exam_topics = []
+    for exam in exams:
+        exam_topics.append(ExamTopics.query.filter_by(exam_id=exam.id).limit(9))
+
+    return render_template('class.html', title=class_element.body, class_element=class_element, exam_topics_all=zip(exams, exam_topics))
+
+@app.route('/class/<class_id>/suggest_exam_structure/', methods=['GET', 'POST'])
+@login_required
+def suggested_exam_structure(class_id):
+
+    class_element = Class.query.filter_by(id=class_id).first_or_404();
+
+    form = EditExamStructureForm();
+    if form.validate_on_submit():
+        flash('Your suggestion has been recieved!')
+        return redirect(url_for('class_', class_id=class_id))
+
+    return render_template('suggest_exam_structure.html', title='Proposed Exams', class_element=class_element, form=form)
+
+@app.route('/class/<class_id>/enroll/')
+@login_required
+def enroll(class_id):
+    class_element = Class.query.filter_by(id=class_id).first_or_404();
+
+    evaluation = Enrollment(user_id=current_user.id, class_id=class_id)
+    db.session.add(evaluation)
+    db.session.commit()
+
+    return redirect(url_for('class_', class_id=class_id))
+
+@app.route('/class/<class_id>/exam/<exam_id>/')
+@login_required
+def exam(class_id, exam_id):
+    exam = Exam.query.filter_by(id = exam_id).first_or_404()
+
+    exam_topics = ExamTopics.query.filter_by(exam_id=exam.id).limit(25)
+
+    question_count = []
+    for exam_topic in exam_topics:
+        question_count.append(db.session.query(QuestionTopics.query.filter_by(topic_id=exam_topic.topic.id).subquery()).count())
+
+    return render_template('exam.html', title="Exam", exam=exam, exam_topic_question_counts=zip(exam_topics, question_count))
+
+@app.route('/class/<class_id>/exam/<exam_id>/contribute/', defaults={'topic_id': None})
+@app.route('/class/<class_id>/exam/<exam_id>/topic/<topic_id>/contribute/')
+@login_required
+def contribute(class_id, exam_id, topic_id):
+
+    exam = Exam.query.filter_by(id=exam_id).first_or_404()
+
+    topic = None
+
+    if topic_id is not None:
+        topic = Topic.query.filter_by(id=topic_id).first_or_404()
+        question_topics = QuestionTopics.query.filter_by(topic_id=topic_id)
+
+    forms = []
+    questions = []
+    topics = []
+
+    for question_topic in question_topics:
+        print("ok")
+        questions.append(question_topic.question)
+        topics = QuestionTopics.query.filter_by(question_id = question_topic.question.id)
+        forms.append(EvaluateQuestionForm())
+
+    return render_template('contribute.html', title="Contribute", exam=exam, topic=topic, evaluation_forms=zip(forms, questions, topics))
+
+@app.route('/admin')
+@login_required
+def admin():
+    if not current_user.admin:
+        return render_template('404.html')
+
+    questions = Question.query.order_by(Question.timestamp).limit(20)
+
+    topics = []
+    for question in questions:
+        topics.append(QuestionTopics.query.filter_by(question_id = question.id))
+
+    return render_template('admin.html', title='Admin Dashboard', question_topics=zip(questions,topics))
+
+@app.route('/user/<username>')
+@login_required
+def user(username):
+    user = User.query.filter_by(username=username).first_or_404()
+    questions = Question.query.filter_by(user_id=user.id).order_by(Question.id.desc()).limit(20)
+    enrollments = Enrollment.query.filter_by(user_id=user.id).limit(20)
+
+    exams = []
+    classes = []
+
+    unenrolled_exams = []
+    unenrolled_classes = []
+    for enrollment in enrollments:
+        if enrollment.enrolled_class.approved:
+            classes.append(enrollment.enrolled_class)
+            exams.append(Exam.query.filter_by(class_id=enrollment.class_id))
+        else:
+            unenrolled_classes.append(enrollment.enrolled_class)
+            unenrolled_exams.append(Exam.query.filter_by(class_id=enrollment.class_id))
+
+
+    return render_template('user.html', user=user, questions=questions, class_exams=zip(classes, exams), enrolled=(len(exams) > 0), unenrolled_class_exams=zip(unenrolled_classes, unenrolled_exams), unenrolled=(len(exams) > 0))
 
 @app.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
@@ -121,26 +297,6 @@ def reset_password(token):
         flash('Your password has been reset.')
         return redirect(url_for('login'))
     return render_template('reset_password.html', form=form)
-
-@app.route('/suggest_subject')
-def suggested_subjects():
-    subjects = Subject.query.filter_by(approved=False).limit(25).all()
-
-    return render_template('suggested_subjects.html', subjects=subjects)
-
-@app.route('/suggest_subject/new', methods=['GET', 'POST'])
-def suggest_new_subject():
-    form = NewSubjectForm()
-
-    if form.validate_on_submit():
-        new_subject = Subject(approved=False, body=form.subject.data, description=form.description.data, user_id=current_user.id)
-        db.session.add(new_subject)
-        db.session.commit()
-
-        return redirect(url_for('suggested_subjects'))
-
-    return render_template('suggest_new_subject.html', form=form)
-
 
 @app.route('/subject/<subject_id>/new_question', methods=['GET', 'POST'])
 @login_required

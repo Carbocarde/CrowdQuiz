@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: ad07a17db4d2
+Revision ID: e99d9bf2b317
 Revises: 
-Create Date: 2020-10-22 01:29:21.323018
+Create Date: 2020-10-23 12:15:46.266984
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'ad07a17db4d2'
+revision = 'e99d9bf2b317'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -80,6 +80,12 @@ def upgrade():
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
+    op.create_table('question_answer_argument_report',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('user_id', sa.Integer(), nullable=True),
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
     op.create_table('answer_report',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('answer_id', sa.Integer(), nullable=True),
@@ -133,14 +139,6 @@ def upgrade():
     sa.Column('correctness_votes', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['answer_id'], ['answer.id'], ),
     sa.ForeignKeyConstraint(['question_id'], ['question.id'], ),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_table('question_answer_argument_report',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('answer_id', sa.Integer(), nullable=True),
-    sa.Column('user_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['answer_id'], ['answer.id'], ),
-    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('question_eval',
@@ -202,13 +200,13 @@ def downgrade():
     op.drop_table('tf_question_attempt')
     op.drop_table('question_topics')
     op.drop_table('question_eval')
-    op.drop_table('question_answer_argument_report')
     op.drop_table('question_answer')
     op.drop_table('open_ended_question_attempt')
     op.drop_table('mcquestionattempt')
     op.drop_table('exam')
     op.drop_table('enrollment')
     op.drop_table('answer_report')
+    op.drop_table('question_answer_argument_report')
     op.drop_table('question_answer_argument')
     op.drop_table('question')
     op.drop_table('class')

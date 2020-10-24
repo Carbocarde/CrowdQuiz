@@ -1,0 +1,20 @@
+<div class="card m-3" style="width: 18rem;">
+    <div class="card-body">
+        <a href="{{ 'topic/%s/' % exam_topic.topic.id }}" class="text-dark">
+            <h3 class="card-title">{{ exam_topic.topic.body }}</h3>
+        </a>
+        <h6 class="card-subtitle mb-2 text-muted">
+            <span class="badge badge-secondary">Questions: {{ question_count }}</span>
+        </h6>
+
+        {% if exam_topic.topic.description %}
+            <p class="card-text">{{ exam_topic.topic.description }}</p>
+        {% endif %}
+
+        <div class="progress mb-2 mt-auto">
+            <div class="progress-bar bg-secondary" data-toggle="tooltip" data-placement="top" title="Unlock Completion Percentage" role="progressbar" style="{{ 'width: {}%'.format(16) }}"></div>
+        </div>
+        <p class="card-subtitle text-muted">Topics can be unlocked by contributing 1 question, and evaluating 2 questions from others!</p>
+        <a href="{{ 'topic/%s/contribute/' % exam_topic.topic.id}}" class="btn btn-outline-primary mb-2">Unlock this topic</a>
+    </div>
+</div>

@@ -25,7 +25,9 @@
     {% block content -%}
     {%- endblock content %}
 
-    {% block scripts %}{%- endblock scripts %}
+    {% block scripts %}
+        {{ bootstrap.load_js() }}
+    {%- endblock scripts %}
     {%- endblock body %}
   </body>
 {%- endblock html %}
