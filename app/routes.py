@@ -40,7 +40,7 @@ def register():
     form = RegistrationForm()
     form.school.query = School.query.all()
     if form.validate_on_submit():
-        user = User(username=form.username.data, email=form.email.data, name=form.name.data, admin=False)
+        user = User(username=form.username.data, email=form.email.data, name=form.name.data, admin=False, school_id=form.school.data.id)
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
