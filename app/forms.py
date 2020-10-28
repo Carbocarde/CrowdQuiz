@@ -55,9 +55,25 @@ class ProposeTopicForm(FlaskForm):
 
     submit = SubmitField('Submit')
 
-class EvaluateQuestionForm(FlaskForm):
+class EvaluateQuestionSubForm(FlaskForm):
     fair = BooleanField('Fair Question')
     accurate_topics = BooleanField('Correct topics')
+
+class NewQuestionSubForm(FlaskForm):
+    """Main question form"""
+
+    question = StringField('Question', validators=[DataRequired()])
+
+    correct_answer = StringField('Correct Answer', validators=[DataRequired()])
+    incorrect_answer_1 = StringField('Incorrect Answer', validators=[DataRequired()])
+    incorrect_answer_2 = StringField('Incorrect Answer', validators=[DataRequired()])
+    incorrect_answer_3 = StringField('Incorrect Answer', validators=[DataRequired()])
+
+    #topics = QuerySelectMultipleField()
+
+class ContributeForm(FlaskForm):
+    evaluate_entries = FieldList(FormField(EvaluateQuestionSubForm), min_entries=2)
+    new_question = FieldList(FormField(NewQuestionSubForm), min_entries=2)
 
 class EditProfileForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])

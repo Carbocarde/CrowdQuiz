@@ -1,4 +1,16 @@
-2020-10-27 20:55:07,625 ERROR: Exception on /register [POST] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+2020-10-27 21:04:54,725 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:06:07,789 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:06:19,326 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:06:50,991 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:07:55,301 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:08:03,622 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:10:44,394 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:10:46,992 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:11:32,531 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:16:16,836 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:20:33,980 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:23:16,982 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:23:25,559 ERROR: Exception on /class/2/suggest_exam_structure/ [POST] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
 Traceback (most recent call last):
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
     response = self.full_dispatch_request()
@@ -12,46 +24,13 @@ Traceback (most recent call last):
     rv = self.dispatch_request()
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1936, in dispatch_request
     return self.view_functions[rule.endpoint](**req.view_args)
-  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 44, in register
-    school = School.query.filter_by(body=form.school.data).first()
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\query.py", line 1923, in filter_by
-    for key, value in kwargs.items()
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\query.py", line 1923, in <listcomp>
-    for key, value in kwargs.items()
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\sql\operators.py", line 365, in __eq__
-    return self.operate(eq, other)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\attributes.py", line 219, in operate
-    return op(self.comparator, *other, **kwargs)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\sql\operators.py", line 365, in __eq__
-    return self.operate(eq, other)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\properties.py", line 367, in operate
-    return op(self.__clause_element__(), *other, **kwargs)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\sql\annotation.py", line 104, in __eq__
-    return self.__element.__class__.__eq__(self, other)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\sql\operators.py", line 365, in __eq__
-    return self.operate(eq, other)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\sql\elements.py", line 762, in operate
-    return op(self.comparator, *other, **kwargs)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\sql\operators.py", line 365, in __eq__
-    return self.operate(eq, other)
-  File "<string>", line 1, in <lambda>
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\sql\type_api.py", line 67, in operate
-    return o[0](self.expr, op, *(other + o[1:]), **kwargs)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\sql\default_comparator.py", line 105, in _boolean_compare
-    obj = _check_literal(expr, op, obj)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\sql\default_comparator.py", line 373, in _check_literal
-    return expr._bind_param(operator, other, type_=bindparam_type)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\sql\elements.py", line 4264, in _bind_param
-    unique=True,
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\sql\elements.py", line 1234, in __init__
-    _compared_to_operator, value
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\sql\type_api.py", line 578, in coerce_compared_value
-    _coerced_type = _resolve_value_to_type(value)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\sql\sqltypes.py", line 3046, in _resolve_value_to_type
-    "Object %r is not legal as a SQL literal value" % value
-sqlalchemy.exc.ArgumentError: Object <School 1> is not legal as a SQL literal value
-2020-10-27 20:55:34,915 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
-2020-10-27 20:55:36,677 ERROR: Exception on /register [POST] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
+    return func(*args, **kwargs)
+  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 165, in suggested_exam_structure
+    exam_structure = ExamStructureSuggestion(body=form.comment.data, exams=form.exams.data, quizzes=form.quizzes.data, final_exam=form.final_exam.data, final_exam_cumulative=form.final_exam_cumulative.data, user_id=current_user.id, class_id=class_id)
+NameError: name 'ExamStructureSuggestion' is not defined
+2020-10-27 21:23:45,273 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:23:47,199 ERROR: Exception on /class/2/suggest_exam_structure/ [POST] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
 Traceback (most recent call last):
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
     response = self.full_dispatch_request()
@@ -65,58 +44,64 @@ Traceback (most recent call last):
     rv = self.dispatch_request()
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1936, in dispatch_request
     return self.view_functions[rule.endpoint](**req.view_args)
-  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 44, in register
-    school = School.query.filter_by(body=form.school.data).first()
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\query.py", line 1923, in filter_by
-    for key, value in kwargs.items()
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\query.py", line 1923, in <listcomp>
-    for key, value in kwargs.items()
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\sql\operators.py", line 365, in __eq__
-    return self.operate(eq, other)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\attributes.py", line 219, in operate
-    return op(self.comparator, *other, **kwargs)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\sql\operators.py", line 365, in __eq__
-    return self.operate(eq, other)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\properties.py", line 367, in operate
-    return op(self.__clause_element__(), *other, **kwargs)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\sql\annotation.py", line 104, in __eq__
-    return self.__element.__class__.__eq__(self, other)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\sql\operators.py", line 365, in __eq__
-    return self.operate(eq, other)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\sql\elements.py", line 762, in operate
-    return op(self.comparator, *other, **kwargs)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\sql\operators.py", line 365, in __eq__
-    return self.operate(eq, other)
-  File "<string>", line 1, in <lambda>
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\sql\type_api.py", line 67, in operate
-    return o[0](self.expr, op, *(other + o[1:]), **kwargs)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\sql\default_comparator.py", line 105, in _boolean_compare
-    obj = _check_literal(expr, op, obj)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\sql\default_comparator.py", line 373, in _check_literal
-    return expr._bind_param(operator, other, type_=bindparam_type)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\sql\elements.py", line 4264, in _bind_param
-    unique=True,
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\sql\elements.py", line 1234, in __init__
-    _compared_to_operator, value
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\sql\type_api.py", line 578, in coerce_compared_value
-    _coerced_type = _resolve_value_to_type(value)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\sql\sqltypes.py", line 3046, in _resolve_value_to_type
-    "Object %r is not legal as a SQL literal value" % value
-sqlalchemy.exc.ArgumentError: Object <School 1> is not legal as a SQL literal value
-2020-10-27 20:56:07,884 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
-2020-10-27 20:58:20,618 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
-2020-10-27 20:58:32,641 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
-2020-10-27 20:58:50,525 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
-2020-10-27 20:59:07,144 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
-2020-10-27 20:59:21,852 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
-2020-10-27 21:00:19,224 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
-2020-10-27 21:00:33,384 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
-2020-10-27 21:01:21,057 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
-2020-10-27 21:01:42,266 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
-2020-10-27 21:01:54,815 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
-2020-10-27 21:02:16,915 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
-2020-10-27 21:02:19,698 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
-2020-10-27 21:03:12,701 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
-2020-10-27 21:03:21,348 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
-2020-10-27 21:04:21,995 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
-2020-10-27 21:04:36,028 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
+    return func(*args, **kwargs)
+  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 165, in suggested_exam_structure
+    exam_structure = ExamStructureSuggestion(body=form.comment.data, exams=form.exams.data, quizzes=form.quizzes.data, final_exam=form.final_exam.data, final_exam_cumulative=form.final_exam_cumulative.data, user_id=current_user.id, class_id=class_id)
+  File "<string>", line 4, in __init__
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\state.py", line 433, in _initialize_instance
+    manager.dispatch.init_failure(self, args, kwargs)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\util\langhelpers.py", line 70, in __exit__
+    with_traceback=exc_tb,
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\util\compat.py", line 182, in raise_
+    raise exception
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\state.py", line 430, in _initialize_instance
+    return manager.original_init(*mixed[1:], **kwargs)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\ext\declarative\base.py", line 840, in _declarative_constructor
+    "%r is an invalid keyword argument for %s" % (k, cls_.__name__)
+TypeError: 'exams' is an invalid keyword argument for ExamStructureSuggestion
+2020-10-27 21:24:33,635 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:24:40,207 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:24:44,087 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:24:47,293 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:24:49,327 ERROR: Exception on /class/2/suggest_exam_structure/ [POST] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+Traceback (most recent call last):
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\_compat.py", line 39, in reraise
+    raise value
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
+    return func(*args, **kwargs)
+  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 165, in suggested_exam_structure
+    exam_structure = ExamStructureSuggestion(body=form.comment.data, exams=form.exams.data, quizzes=form.quizzes.data, final_exam=form.final_exam.data, final_exam_cumulative=form.final_exam_cumulative.data, user_id=current_user.id, class_id=class_id)
+  File "<string>", line 4, in __init__
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\state.py", line 433, in _initialize_instance
+    manager.dispatch.init_failure(self, args, kwargs)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\util\langhelpers.py", line 70, in __exit__
+    with_traceback=exc_tb,
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\util\compat.py", line 182, in raise_
+    raise exception
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\state.py", line 430, in _initialize_instance
+    return manager.original_init(*mixed[1:], **kwargs)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\ext\declarative\base.py", line 840, in _declarative_constructor
+    "%r is an invalid keyword argument for %s" % (k, cls_.__name__)
+TypeError: 'exams' is an invalid keyword argument for ExamStructureSuggestion
+2020-10-27 21:25:27,891 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:35:23,330 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:37:18,698 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:42:23,147 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:42:26,865 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:42:29,897 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:42:35,307 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:48:16,623 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:49:06,187 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:52:24,709 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:52:45,961 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]

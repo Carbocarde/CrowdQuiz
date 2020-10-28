@@ -19,6 +19,15 @@
     </div>
     {% endif %}
 
+    <div class="jumbotron mt-3">
+        <h1 class="display-4">Make Contribution</h1>
+        <div class="row">
+            <div class="col-md-4">
+                {{ render_form(form) }}
+            </div>
+        </div>
+    </div>
+
     {% for form, question, topics in evaluation_forms %}
         {% include '_evaluate_question.html' %}
     {% endfor %}
