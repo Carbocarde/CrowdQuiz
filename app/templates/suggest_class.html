@@ -3,10 +3,14 @@
 
 {% block app_content %}
 <div class="card">
-    <div class="card-body d-flex flex-column">
-        <h3 class="card-title">Propose a new Class</h3>
+    <div class="card-body flex-column">
+        <h3 class="card-title">Propose a new class for {{ current_user.school.body }}</h3>
         <p class="card-subtitle text-muted">It will be approved after review and a small vote!</p>
-        <div class="row mt-auto">
+        <br>
+        <p class="card-text">Example:</p>
+        <div class="alert alert-primary" role="alert">SOC 1101 - Sociology - The study of the development, structure, and functioning of human society.</div>
+        <br>
+        <div class="row">
             <div class="col">
                 {{ render_form(form) }}
             </div>

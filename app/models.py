@@ -24,6 +24,7 @@ class User(UserMixin, db.Model):
     question_user = db.relationship('Question', backref='author', lazy='dynamic')
     answers_user = db.relationship('Answer', backref='author', lazy='dynamic')
     enrollment = db.relationship('Enrollment', backref='author', lazy='dynamic')
+    exam_structure_suggestion = db.relationship('ExamStructureSuggestion', backref='author', lazy='dynamic')
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -205,6 +206,9 @@ class Exam(db.Model):
 
     body = db.Column(db.String(40))
 
+    exam_number = db.Column(db.Integer)
+    cumulative = db.Column(db.Boolean)
+
     exam_topic = db.relationship('ExamTopics', backref='exam', lazy='dynamic')
 
 class ExamTopics(db.Model):
@@ -225,10 +229,12 @@ class Class(db.Model):
 
     approved = db.Column(db.Boolean)
     body = db.Column(db.String(64))
+    readable = db.Column(db.String(64))
     description = db.Column(db.String(140))
 
     enrollment = db.relationship('Enrollment', backref='enrolled_class', lazy='dynamic')
     exam = db.relationship('Exam', backref='exam_class', lazy='dynamic')
+    exam_structure_suggestion = db.relationship('ExamStructureSuggestion', backref='exam_class', lazy='dynamic')
 
     def __repr__(self):
         return '<Subject: {}>'.format(self.body)
@@ -249,3 +255,19 @@ class Enrollment(db.Model):
 
     class_id = db.Column(db.Integer, db.ForeignKey('class.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+class ExamStructureSuggestion(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+
+    class_id = db.Column(db.Integer, db.ForeignKey('class.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+    exam_count = db.Column(db.Integer)
+    quiz_count = db.Column(db.Integer)
+
+    final_exam = db.Column(db.Boolean)
+    final_exam_cumulative = db.Column(db.Boolean)
+
+    body = db.Column(db.String(140))
+
+    approved = db.Column(db.Boolean)

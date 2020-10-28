@@ -4,8 +4,11 @@
 {% block app_content %}
 <div class="card">
     <div class="card-body flex-column">
-        <h3 class="card-title">Propose an exam structure for {{ class_element.body }}</h3>
+        <h3 class="card-title">Propose a new topic for {{ exam.exam_class.body }} {{exam.body}}</h3>
         <p class="card-subtitle text-muted">It will be approved after review and a small vote!</p>
+        <br>
+        <p class="card-text">Example:</p>
+        <div class="alert alert-primary" role="alert">Social Construction of Reality</div>
         <br>
         <div class="row">
             <div class="col">

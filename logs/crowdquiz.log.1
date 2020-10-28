@@ -1,0 +1,130 @@
+2020-10-27 22:34:42,096 ERROR: Exception on /class/2/exam/1/suggested_topics/ [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+Traceback (most recent call last):
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\base.py", line 406, in _entity_descriptor
+    return getattr(entity, key)
+AttributeError: type object 'ExamTopics' has no attribute 'approved'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\_compat.py", line 39, in reraise
+    raise value
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
+    return func(*args, **kwargs)
+  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 180, in suggested_topics
+    exam_topics = ExamTopics.query.filter_by(exam_id=exam.id, approved=False).limit(25)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\query.py", line 1923, in filter_by
+    for key, value in kwargs.items()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\query.py", line 1923, in <listcomp>
+    for key, value in kwargs.items()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\base.py", line 412, in _entity_descriptor
+    replace_context=err,
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\util\compat.py", line 182, in raise_
+    raise exception
+sqlalchemy.exc.InvalidRequestError: Entity '<class 'app.models.ExamTopics'>' has no property 'approved'
+2020-10-27 22:34:51,173 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 22:34:51,682 ERROR: Exception on /class/2/exam/1/suggested_topics/ [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+Traceback (most recent call last):
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\_compat.py", line 39, in reraise
+    raise value
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
+    return func(*args, **kwargs)
+  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 188, in suggested_topics
+    return render_template('suggested_topics.html', title='Proposed Topics', exam=exam, exam_topic_question_counts=zip(exam_topics, question_count))
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\templating.py", line 140, in render_template
+    ctx.app,
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\templating.py", line 120, in _render
+    rv = template.render(context)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\environment.py", line 1090, in render
+    self.environment.handle_exception()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\environment.py", line 832, in handle_exception
+    reraise(*rewrite_traceback_stack(source=source))
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\_compat.py", line 28, in reraise
+    raise value.with_traceback(tb)
+  File "C:\Users\ponei\github\CrowdQuiz\app\templates\suggested_topics.html", line 1, in top-level template code
+    {% extends "base.html" %}
+  File "C:\Users\ponei\github\CrowdQuiz\app\templates\base.html", line 1, in top-level template code
+    {% extends 'bootstrap_base.html' %}
+  File "C:\Users\ponei\github\CrowdQuiz\app\templates\bootstrap_base.html", line 1, in top-level template code
+    {% block doc -%}
+  File "C:\Users\ponei\github\CrowdQuiz\app\templates\bootstrap_base.html", line 4, in block "doc"
+    {%- block html %}
+  File "C:\Users\ponei\github\CrowdQuiz\app\templates\bootstrap_base.html", line 22, in block "html"
+    {% block body -%}
+  File "C:\Users\ponei\github\CrowdQuiz\app\templates\bootstrap_base.html", line 25, in block "body"
+    {% block content -%}
+  File "C:\Users\ponei\github\CrowdQuiz\app\templates\base.html", line 58, in block "content"
+    {% block app_content %}{% endblock %}
+  File "C:\Users\ponei\github\CrowdQuiz\app\templates\suggested_topics.html", line 34, in block "app_content"
+    {% if unenrolled_topics > 0 %}
+jinja2.exceptions.UndefinedError: 'unenrolled_topics' is undefined
+2020-10-27 22:34:57,858 ERROR: Exception on /class/2/exam/1/suggested_topics/ [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+Traceback (most recent call last):
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\_compat.py", line 39, in reraise
+    raise value
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
+    return func(*args, **kwargs)
+  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 188, in suggested_topics
+    return render_template('suggested_topics.html', title='Proposed Topics', exam=exam, exam_topic_question_counts=zip(exam_topics, question_count))
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\templating.py", line 140, in render_template
+    ctx.app,
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\templating.py", line 120, in _render
+    rv = template.render(context)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\environment.py", line 1090, in render
+    self.environment.handle_exception()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\environment.py", line 832, in handle_exception
+    reraise(*rewrite_traceback_stack(source=source))
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\_compat.py", line 28, in reraise
+    raise value.with_traceback(tb)
+  File "C:\Users\ponei\github\CrowdQuiz\app\templates\suggested_topics.html", line 1, in top-level template code
+    {% extends "base.html" %}
+  File "C:\Users\ponei\github\CrowdQuiz\app\templates\base.html", line 1, in top-level template code
+    {% extends 'bootstrap_base.html' %}
+  File "C:\Users\ponei\github\CrowdQuiz\app\templates\bootstrap_base.html", line 1, in top-level template code
+    {% block doc -%}
+  File "C:\Users\ponei\github\CrowdQuiz\app\templates\bootstrap_base.html", line 4, in block "doc"
+    {%- block html %}
+  File "C:\Users\ponei\github\CrowdQuiz\app\templates\bootstrap_base.html", line 22, in block "html"
+    {% block body -%}
+  File "C:\Users\ponei\github\CrowdQuiz\app\templates\bootstrap_base.html", line 25, in block "body"
+    {% block content -%}
+  File "C:\Users\ponei\github\CrowdQuiz\app\templates\base.html", line 58, in block "content"
+    {% block app_content %}{% endblock %}
+  File "C:\Users\ponei\github\CrowdQuiz\app\templates\suggested_topics.html", line 34, in block "app_content"
+    {% if unenrolled_topics > 0 %}
+jinja2.exceptions.UndefinedError: 'unenrolled_topics' is undefined
+2020-10-27 22:35:22,788 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 22:44:52,016 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 22:44:55,073 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 23:23:29,131 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 23:26:04,859 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]

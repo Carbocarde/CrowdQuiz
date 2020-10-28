@@ -1,0 +1,83 @@
+2020-10-27 21:52:49,318 ERROR: Exception on /exam_structure/1/approve [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+Traceback (most recent call last):
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\_compat.py", line 39, in reraise
+    raise value
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
+    return func(*args, **kwargs)
+  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 253, in approve_exam_structure
+    new_exam = Exam(body="Final Exam", author=structure.author.id, class_id=structure.class_id, exam_number = structure.exam_count + 1, cumulative=structure.final_exam_cumulative)
+  File "<string>", line 4, in __init__
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\state.py", line 433, in _initialize_instance
+    manager.dispatch.init_failure(self, args, kwargs)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\util\langhelpers.py", line 70, in __exit__
+    with_traceback=exc_tb,
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\util\compat.py", line 182, in raise_
+    raise exception
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\state.py", line 430, in _initialize_instance
+    return manager.original_init(*mixed[1:], **kwargs)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\ext\declarative\base.py", line 840, in _declarative_constructor
+    "%r is an invalid keyword argument for %s" % (k, cls_.__name__)
+TypeError: 'author' is an invalid keyword argument for Exam
+2020-10-27 21:53:16,137 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:53:18,770 ERROR: Exception on /exam_structure/1/approve [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+Traceback (most recent call last):
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\_compat.py", line 39, in reraise
+    raise value
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
+    return func(*args, **kwargs)
+  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 253, in approve_exam_structure
+    new_exam = Exam(body="Final Exam", user_id=structure.author.id, class_id=structure.class_id, exam_number = structure.exam_count + 1, cumulative=structure.final_exam_cumulative)
+  File "<string>", line 4, in __init__
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\state.py", line 433, in _initialize_instance
+    manager.dispatch.init_failure(self, args, kwargs)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\util\langhelpers.py", line 70, in __exit__
+    with_traceback=exc_tb,
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\util\compat.py", line 182, in raise_
+    raise exception
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\state.py", line 430, in _initialize_instance
+    return manager.original_init(*mixed[1:], **kwargs)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\ext\declarative\base.py", line 840, in _declarative_constructor
+    "%r is an invalid keyword argument for %s" % (k, cls_.__name__)
+TypeError: 'user_id' is an invalid keyword argument for Exam
+2020-10-27 21:53:45,027 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:53:46,176 ERROR: Exception on /exam_structure/1/approve [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+Traceback (most recent call last):
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\_compat.py", line 39, in reraise
+    raise value
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
+    return func(*args, **kwargs)
+  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 254, in approve_exam_structure
+    db.session.add(new_exan)
+NameError: name 'new_exan' is not defined
+2020-10-27 21:53:58,818 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:55:16,840 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]

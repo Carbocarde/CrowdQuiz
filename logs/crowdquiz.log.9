@@ -1,0 +1,107 @@
+2020-10-27 21:04:54,725 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:06:07,789 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:06:19,326 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:06:50,991 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:07:55,301 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:08:03,622 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:10:44,394 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:10:46,992 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:11:32,531 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:16:16,836 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:20:33,980 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:23:16,982 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:23:25,559 ERROR: Exception on /class/2/suggest_exam_structure/ [POST] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+Traceback (most recent call last):
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\_compat.py", line 39, in reraise
+    raise value
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
+    return func(*args, **kwargs)
+  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 165, in suggested_exam_structure
+    exam_structure = ExamStructureSuggestion(body=form.comment.data, exams=form.exams.data, quizzes=form.quizzes.data, final_exam=form.final_exam.data, final_exam_cumulative=form.final_exam_cumulative.data, user_id=current_user.id, class_id=class_id)
+NameError: name 'ExamStructureSuggestion' is not defined
+2020-10-27 21:23:45,273 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:23:47,199 ERROR: Exception on /class/2/suggest_exam_structure/ [POST] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+Traceback (most recent call last):
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\_compat.py", line 39, in reraise
+    raise value
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
+    return func(*args, **kwargs)
+  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 165, in suggested_exam_structure
+    exam_structure = ExamStructureSuggestion(body=form.comment.data, exams=form.exams.data, quizzes=form.quizzes.data, final_exam=form.final_exam.data, final_exam_cumulative=form.final_exam_cumulative.data, user_id=current_user.id, class_id=class_id)
+  File "<string>", line 4, in __init__
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\state.py", line 433, in _initialize_instance
+    manager.dispatch.init_failure(self, args, kwargs)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\util\langhelpers.py", line 70, in __exit__
+    with_traceback=exc_tb,
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\util\compat.py", line 182, in raise_
+    raise exception
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\state.py", line 430, in _initialize_instance
+    return manager.original_init(*mixed[1:], **kwargs)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\ext\declarative\base.py", line 840, in _declarative_constructor
+    "%r is an invalid keyword argument for %s" % (k, cls_.__name__)
+TypeError: 'exams' is an invalid keyword argument for ExamStructureSuggestion
+2020-10-27 21:24:33,635 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:24:40,207 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:24:44,087 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:24:47,293 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:24:49,327 ERROR: Exception on /class/2/suggest_exam_structure/ [POST] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+Traceback (most recent call last):
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\_compat.py", line 39, in reraise
+    raise value
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
+    return func(*args, **kwargs)
+  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 165, in suggested_exam_structure
+    exam_structure = ExamStructureSuggestion(body=form.comment.data, exams=form.exams.data, quizzes=form.quizzes.data, final_exam=form.final_exam.data, final_exam_cumulative=form.final_exam_cumulative.data, user_id=current_user.id, class_id=class_id)
+  File "<string>", line 4, in __init__
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\state.py", line 433, in _initialize_instance
+    manager.dispatch.init_failure(self, args, kwargs)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\util\langhelpers.py", line 70, in __exit__
+    with_traceback=exc_tb,
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\util\compat.py", line 182, in raise_
+    raise exception
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\state.py", line 430, in _initialize_instance
+    return manager.original_init(*mixed[1:], **kwargs)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\ext\declarative\base.py", line 840, in _declarative_constructor
+    "%r is an invalid keyword argument for %s" % (k, cls_.__name__)
+TypeError: 'exams' is an invalid keyword argument for ExamStructureSuggestion
+2020-10-27 21:25:27,891 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:35:23,330 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:37:18,698 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:42:23,147 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:42:26,865 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:42:29,897 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:42:35,307 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:48:16,623 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:49:06,187 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:52:24,709 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-27 21:52:45,961 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]

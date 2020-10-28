@@ -37,13 +37,21 @@ class EditExamStructureForm(FlaskForm):
     quizzes = DecimalField('Number of Quizzes', validators=[DataRequired("Please enter a number"), NumberRange(min=0, message='Please enter a non-negative number')])
     final_exam = BooleanField('Final Exam?')
     final_exam_cumulative = BooleanField('Final Exam Cumulative?')
+    comment = StringField('Comments? (Optional)', widget=TextArea(), validators=[Length(max=140)])
     #syllabus = FileField('Syllabus Exam Structure Screenshot (optional)')
 
     submit = SubmitField('Submit')
 
 class ProposeClassForm(FlaskForm):
-    title = StringField('Class Name', validators=[DataRequired(), Length(max=40)])
-    description = StringField('Class Description', widget=TextArea(), validators=[DataRequired(), Length(max=140)])
+    body = StringField('Class ID', description="Ex: SOC 1101", validators=[DataRequired(), Length(max=40)])
+    title = StringField('Class Name', description="Ex: Sociology", validators=[DataRequired(), Length(max=40)])
+    description = StringField('Class Description', description="Ex: The study of the development, structure, and functioning of human society.", widget=TextArea(), validators=[DataRequired(), Length(max=140)])
+
+    submit = SubmitField('Submit')
+
+class ProposeTopicForm(FlaskForm):
+    body = StringField('Topic Name', description="Ex: Social Construction of Reality", validators=[DataRequired(), Length(max=40)])
+    description = StringField('Topic Description (optional)', widget=TextArea(), validators=[Length(max=140)])
 
     submit = SubmitField('Submit')
 

@@ -3,8 +3,8 @@ from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from app import app, db
-from app.models import User, Question, Answer, Topic, QuestionTopics, QuestionEval, School, Class, Exam, ExamTopics, Enrollment
-from app.forms import LoginForm, RegistrationForm, EditProfileForm, ResetPasswordRequestForm, ResetPasswordForm, NewQuestionForm, NewTopicForm, DeleteQuestionForm, ReviewQuestionForm, QuizQuestion, NewSubjectForm, EditExamStructureForm, EvaluateQuestionForm, ProposeClassForm
+from app.models import User, Question, Answer, Topic, QuestionTopics, QuestionEval, School, Class, Exam, ExamTopics, Enrollment, ExamStructureSuggestion
+from app.forms import LoginForm, RegistrationForm, EditProfileForm, ResetPasswordRequestForm, ResetPasswordForm, NewQuestionForm, NewTopicForm, DeleteQuestionForm, ReviewQuestionForm, QuizQuestion, NewSubjectForm, EditExamStructureForm, EvaluateQuestionForm, ProposeClassForm, ProposeTopicForm
 from app.email import send_password_reset_email
 from sqlalchemy.sql.expression import func
 from sqlalchemy.sql import except_
@@ -77,6 +77,15 @@ def index():
                 unenrolled_classes.append(class_element)
                 unenrolled_count += 1
 
+        classes = Class.query.filter_by(school_id=current_user.school_id, approved=False).limit(25);
+
+        for class_element in classes:
+            if db.session.query(Enrollment.id).filter_by(class_id=class_element.id, user_id=current_user.id).scalar() is not None:
+                exams.append(Exam.query.filter_by(class_id = class_element.id).limit(9))
+                enrolled.append(True)
+                enrolled_classes.append(class_element)
+                enrolled_count += 1
+
     else:
         classes = Class.query.filter_by(approved=True).limit(25);
 
@@ -133,7 +142,7 @@ def propose_class():
     form = ProposeClassForm()
 
     if form.validate_on_submit():
-        new_class = Class(approved=False, body=form.title.data, description=form.description.data, user_id=current_user.id, school_id=current_user.school_id)
+        new_class = Class(approved=False, body=form.body.data, readable=form.title.data, description=form.description.data, user_id=current_user.id, school_id=current_user.school_id)
         db.session.add(new_class)
         db.session.commit()
 
@@ -162,10 +171,51 @@ def suggested_exam_structure(class_id):
 
     form = EditExamStructureForm();
     if form.validate_on_submit():
+        exam_structure = ExamStructureSuggestion(body=form.comment.data, exam_count=form.exams.data, quiz_count=form.quizzes.data, final_exam=form.final_exam.data, final_exam_cumulative=form.final_exam_cumulative.data, user_id=current_user.id, class_id=class_id, approved=False)
+        db.session.add(exam_structure)
+        db.session.commit()
+
         flash('Your suggestion has been recieved!')
         return redirect(url_for('class_', class_id=class_id))
 
     return render_template('suggest_exam_structure.html', title='Proposed Exams', class_element=class_element, form=form)
+
+@app.route('/class/<class_id>/exam/<exam_id>/suggested_topics/', methods=['GET', 'POST'])
+@login_required
+def suggested_topics(class_id, exam_id):
+
+    exam = Exam.query.filter_by(id = exam_id).first_or_404()
+
+    exam_topics = ExamTopics.query.filter_by(exam_id=exam.id).limit(25)
+
+    unfollowed_topics = 0
+    question_count = []
+    for exam_topic in exam_topics:
+        unfollowed_topics += 1
+        question_count.append(db.session.query(QuestionTopics.query.filter_by(topic_id=exam_topic.topic.id).subquery()).count())
+
+    return render_template('suggested_topics.html', title='Proposed Topics', exam=exam, exam_topic_question_counts=zip(exam_topics, question_count), unfollowed_topics=unfollowed_topics)
+
+@app.route('/class/<class_id>/exam/<exam_id>/suggested_topics/propose_new', methods=['GET', 'POST'])
+@login_required
+def suggest_topic(class_id, exam_id):
+    form = ProposeTopicForm()
+
+    exam = Exam.query.filter_by(id=exam_id).first_or_404()
+
+    if form.validate_on_submit():
+        new_topic = Topic(body=form.body.data, description=form.description.data)
+        db.session.add(new_topic)
+        db.session.commit()
+        db.session.refresh(new_topic)
+
+        new_exam_topics = ExamTopics(exam_id=exam_id, topic_id=new_topic.id)
+        db.session.add(new_exam_topics)
+        db.session.commit()
+
+        return redirect(url_for('suggested_topics', class_id=class_id, exam_id=exam_id))
+
+    return render_template('suggest_topic.html', form=form, exam=exam)
 
 @app.route('/class/<class_id>/enroll/')
 @login_required
@@ -222,13 +272,52 @@ def admin():
     if not current_user.admin:
         return render_template('404.html')
 
+    pending_exam_structures = ExamStructureSuggestion.query.filter_by(approved=False).limit(20)
+    classes = Class.query.filter_by(approved=False).limit(20)
     questions = Question.query.order_by(Question.timestamp).limit(20)
 
     topics = []
     for question in questions:
         topics.append(QuestionTopics.query.filter_by(question_id = question.id))
 
-    return render_template('admin.html', title='Admin Dashboard', question_topics=zip(questions,topics))
+    return render_template('admin.html', title='Admin Dashboard', question_topics=zip(questions,topics), exam_structure_suggestions=pending_exam_structures, classes=classes)
+
+@app.route('/class/<class_id>/approve')
+@login_required
+def approve_class(class_id):
+    if not current_user.admin:
+        return render_template('404.html')
+
+    class_element = Class.query.filter_by(id=class_id).first_or_404()
+    class_element.approved = True
+    db.session.commit()
+
+    flash('Class ' + class_element.body + " Approved!")
+    return redirect(url_for('admin'))
+
+@app.route('/exam_structure/<exam_structure_id>/approve')
+@login_required
+def approve_exam_structure(exam_structure_id):
+    if not current_user.admin:
+        return render_template('404.html')
+
+    structure = ExamStructureSuggestion.query.filter_by(id=exam_structure_id).first_or_404()
+
+    for i in range(1, structure.exam_count):
+        new_exam = Exam(body="Exam " + str(i), class_id=structure.class_id, exam_number = i)
+        db.session.add(new_exam)
+        db.session.commit()
+
+    if structure.final_exam:
+        new_exam = Exam(body="Final Exam", class_id=structure.class_id, exam_number = structure.exam_count + 1, cumulative=structure.final_exam_cumulative)
+        db.session.add(new_exam)
+        db.session.commit()
+
+    structure.approved = True
+    db.session.commit()
+
+    flash('Exam structure added for ' + structure.exam_class.body)
+    return redirect(url_for('admin'))
 
 @app.route('/user/<username>')
 @login_required
