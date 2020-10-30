@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, FieldList, FormField, SelectMultipleField, widgets, DecimalField, FileField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, FieldList, FormField, SelectMultipleField, widgets, DecimalField, FileField, IntegerField, RadioField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Regexp, NumberRange, Length
 from app.models import User, Answer, Question, QuestionTopics, Topic
 from wtforms.ext.sqlalchemy.fields import QuerySelectMultipleField, QuerySelectField
@@ -73,7 +73,23 @@ class NewQuestionSubForm(FlaskForm):
 
 class ContributeForm(FlaskForm):
     evaluate_entries = FieldList(FormField(EvaluateQuestionSubForm), min_entries=2)
-    new_question = FieldList(FormField(NewQuestionSubForm), min_entries=2)
+    submit = SubmitField('Submit')
+
+class NewQuestionForm(FlaskForm):
+    question = StringField('Question', validators=[DataRequired()])
+
+    correct_answer = StringField('Correct Answer', validators=[DataRequired()])
+    argument = StringField('Why is this answer correct? (Optional)', widget=TextArea(), validators=[Length(max=300)])
+
+    question_type = RadioField('Question Type', coerce=int, choices=[('1','Multiple-Choice'),('2','Short-Answer')], validators=[DataRequired()])
+
+    submit = SubmitField('Submit')
+
+    def validate_question(self, question):
+        from flask_login import current_user
+        question = Question.query.filter_by(body=question.data).first()
+        if question is not None and question.author.id == current_user.id:
+            raise ValidationError('Please submit a different question.')
 
 class EditProfileForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
@@ -107,9 +123,9 @@ class AnswerForm(FlaskForm):
     correct_answer = BooleanField("Valid/Correct Answer")
 """
 
-
+"""
 class NewQuestionForm(FlaskForm):
-    """Main question form"""
+    '''Main question form'''
 
     question = StringField('Question', validators=[DataRequired()])
 
@@ -129,7 +145,7 @@ class NewQuestionForm(FlaskForm):
     def validate_question(self, question):
         question = Question.query.filter_by(subject=self.subject).filter_by(body=self.question.data).first()
         if question is not None:
-            raise ValidationError('Identical subject question found! Please try entering a different question')
+            raise ValidationError('Identical subject question found! Please try entering a different question')"""
 
 class NewSubjectForm(FlaskForm):
     subject = StringField('Subject', validators=[DataRequired()])

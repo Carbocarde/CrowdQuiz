@@ -57,7 +57,7 @@ class Question(db.Model):
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
     image_url = db.Column(db.String(64))
-    question_type = db.Column(db.String(1))
+    question_type = db.Column(db.Integer)
 
     question_answer = db.relationship('QuestionAnswer', backref='question', lazy='dynamic')
     question_topic = db.relationship('QuestionTopics', backref='question', lazy='dynamic')
@@ -121,9 +121,9 @@ class QuestionAnswerArgument(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     question_answer_id = db.Column(db.Integer, db.ForeignKey('questionanswer.id'))
 
-    body = db.Column(db.String(140))
+    body = db.Column(db.String(300))
 
-    argument_votes = db.Column(db.Integer)
+    other_explanation_clicks = db.Column(db.Integer)
     argument_evaluations = db.Column(db.Integer)
 
     question_answer_argument_argument_report = db.relationship('QuestionAnswerArgumentReport', backref='argument', lazy='dynamic')

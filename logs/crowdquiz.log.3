@@ -1,4 +1,15 @@
-2020-10-27 22:26:58,076 ERROR: Exception on /class/2/exam/1/suggested_topics/ [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+2020-10-29 22:45:38,151 ERROR: Exception on /class/2/exam/1/topic/1/contribute/question/ [POST] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+Traceback (most recent call last):
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1277, in _execute_context
+    cursor, statement, parameters, context
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\engine\default.py", line 593, in do_execute
+    cursor.execute(statement, parameters)
+psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "question_pkey"
+DETAIL:  Key (id)=(3) already exists.
+
+
+The above exception was the direct cause of the following exception:
+
 Traceback (most recent call last):
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
     response = self.full_dispatch_request()
@@ -14,44 +25,57 @@ Traceback (most recent call last):
     return self.view_functions[rule.endpoint](**req.view_args)
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
     return func(*args, **kwargs)
-  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 215, in suggested_topics
-    return render_template('suggested_topics.html', title='Proposed Topics', class_element = class_element, exam=exam)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\templating.py", line 140, in render_template
-    ctx.app,
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\templating.py", line 120, in _render
-    rv = template.render(context)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\environment.py", line 1090, in render
-    self.environment.handle_exception()
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\environment.py", line 832, in handle_exception
-    reraise(*rewrite_traceback_stack(source=source))
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\_compat.py", line 28, in reraise
-    raise value.with_traceback(tb)
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\suggested_topics.html", line 1, in top-level template code
-    {% extends "base.html" %}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\base.html", line 1, in top-level template code
-    {% extends 'bootstrap_base.html' %}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\bootstrap_base.html", line 1, in top-level template code
-    {% block doc -%}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\bootstrap_base.html", line 4, in block "doc"
-    {%- block html %}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\bootstrap_base.html", line 22, in block "html"
-    {% block body -%}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\bootstrap_base.html", line 25, in block "body"
-    {% block content -%}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\base.html", line 58, in block "content"
-    {% block app_content %}{% endblock %}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\suggested_topics.html", line 16, in block "app_content"
-    <h1 class="display-4">Suggested Topics for {{ class.body }} {{ exam.body }}</h1>
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\environment.py", line 471, in getattr
-    return getattr(obj, attribute)
-jinja2.exceptions.UndefinedError: 'class' is undefined
-2020-10-27 22:27:33,696 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
-2020-10-27 22:27:51,340 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
-2020-10-27 22:28:18,032 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
-2020-10-27 22:28:33,183 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
-2020-10-27 22:28:45,869 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
-2020-10-27 22:32:16,178 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
-2020-10-27 22:32:17,110 ERROR: Exception on /class/2/exam/1/suggested_topics/ [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 341, in contribute_question
+    db.session.commit()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\scoping.py", line 163, in do
+    return getattr(self.registry(), name)(*args, **kwargs)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\session.py", line 1042, in commit
+    self.transaction.commit()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\session.py", line 504, in commit
+    self._prepare_impl()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\session.py", line 483, in _prepare_impl
+    self.session.flush()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\session.py", line 2536, in flush
+    self._flush(objects)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\session.py", line 2678, in _flush
+    transaction.rollback(_capture_exception=True)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\util\langhelpers.py", line 70, in __exit__
+    with_traceback=exc_tb,
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\util\compat.py", line 182, in raise_
+    raise exception
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\session.py", line 2638, in _flush
+    flush_context.execute()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\unitofwork.py", line 422, in execute
+    rec.execute(self)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\unitofwork.py", line 589, in execute
+    uow,
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\persistence.py", line 245, in save_obj
+    insert,
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\persistence.py", line 1136, in _emit_insert_statements
+    statement, params
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1011, in execute
+    return meth(self, multiparams, params)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\sql\elements.py", line 298, in _execute_on_connection
+    return connection._execute_clauseelement(self, multiparams, params)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1130, in _execute_clauseelement
+    distilled_params,
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1317, in _execute_context
+    e, statement, parameters, cursor, context
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1511, in _handle_dbapi_exception
+    sqlalchemy_exception, with_traceback=exc_info[2], from_=e
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\util\compat.py", line 182, in raise_
+    raise exception
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1277, in _execute_context
+    cursor, statement, parameters, context
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\engine\default.py", line 593, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "question_pkey"
+DETAIL:  Key (id)=(3) already exists.
+
+[SQL: INSERT INTO question (user_id, body, timestamp, image_url, question_type) VALUES (%(user_id)s, %(body)s, %(timestamp)s, %(image_url)s, %(question_type)s) RETURNING question.id]
+[parameters: {'user_id': 3, 'body': 'Test', 'timestamp': datetime.datetime(2020, 10, 30, 2, 45, 38, 148629), 'image_url': None, 'question_type': 1}]
+(Background on this error at: http://sqlalche.me/e/13/gkpj)
+2020-10-29 22:45:41,035 ERROR: Exception on /class/2/exam/1/topic/1/contribute/question/ [POST] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
 Traceback (most recent call last):
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
     response = self.full_dispatch_request()
@@ -67,11 +91,11 @@ Traceback (most recent call last):
     return self.view_functions[rule.endpoint](**req.view_args)
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
     return func(*args, **kwargs)
-  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 186, in suggested_topics
-    return render_template('suggested_topics.html', title='Proposed Topics', class_element = class_element, exam=exam, exam_topic_question_counts=zip(exam_topics, question_count))
-NameError: name 'class_element' is not defined
-2020-10-27 22:33:43,268 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
-2020-10-27 22:33:45,224 ERROR: Exception on /class/2/exam/1/suggested_topics/ [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 352, in contribute_question
+    question_answer = QuestionAnswer(question_id=question.id, answer_id=answer.id)
+NameError: name 'QuestionAnswer' is not defined
+2020-10-29 22:46:06,321 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-29 22:46:09,313 ERROR: Exception on /class/2/exam/1/topic/1/contribute/question/ [POST] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
 Traceback (most recent call last):
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
     response = self.full_dispatch_request()
@@ -87,33 +111,18 @@ Traceback (most recent call last):
     return self.view_functions[rule.endpoint](**req.view_args)
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
     return func(*args, **kwargs)
-  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 186, in suggested_topics
-    return render_template('suggested_topics.html', title='Proposed Topics', exam=exam, exam_topic_question_counts=zip(exam_topics, question_count))
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\templating.py", line 140, in render_template
-    ctx.app,
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\templating.py", line 120, in _render
-    rv = template.render(context)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\environment.py", line 1090, in render
-    self.environment.handle_exception()
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\environment.py", line 832, in handle_exception
-    reraise(*rewrite_traceback_stack(source=source))
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\_compat.py", line 28, in reraise
-    raise value.with_traceback(tb)
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\suggested_topics.html", line 1, in top-level template code
-    {% extends "base.html" %}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\base.html", line 1, in top-level template code
-    {% extends 'bootstrap_base.html' %}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\bootstrap_base.html", line 1, in top-level template code
-    {% block doc -%}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\bootstrap_base.html", line 4, in block "doc"
-    {%- block html %}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\bootstrap_base.html", line 22, in block "html"
-    {% block body -%}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\bootstrap_base.html", line 25, in block "body"
-    {% block content -%}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\base.html", line 58, in block "content"
-    {% block app_content %}{% endblock %}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\suggested_topics.html", line 34, in block "app_content"
-    {% if unenrolled_topics > 0 %}
-jinja2.exceptions.UndefinedError: 'unenrolled_topics' is undefined
-2020-10-27 22:34:40,289 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 305, in contribute_question
+    if form.validate_on_submit():
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_wtf\form.py", line 100, in validate_on_submit
+    return self.is_submitted() and self.validate()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\wtforms\form.py", line 318, in validate
+    return super(Form, self).validate(extra)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\wtforms\form.py", line 150, in validate
+    if not field.validate(self, extra):
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\wtforms\fields\core.py", line 226, in validate
+    stop_validation = self._run_validation_chain(form, chain)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\wtforms\fields\core.py", line 246, in _run_validation_chain
+    validator(form, self)
+  File "C:\Users\ponei\github\CrowdQuiz\app\forms.py", line 90, in validate_question
+    if question is not None and question.author.id == current_user.id:
+NameError: name 'current_user' is not defined

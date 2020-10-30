@@ -15,6 +15,7 @@
             <div class="progress-bar bg-secondary" data-toggle="tooltip" data-placement="top" title="Unlock Completion Percentage" role="progressbar" style="{{ 'width: {}%'.format(16) }}"></div>
         </div>
         <p class="card-subtitle text-muted">Topics can be unlocked by contributing 1 question, and evaluating 2 questions from others!</p>
-        <a href="{{ 'topic/%s/contribute/' % exam_topic.topic.id}}" class="btn btn-outline-primary mb-2">Unlock this topic</a>
+        <a href="{{ 'topic/%s/contribute/' % exam_topic.topic.id}}" class="btn btn-outline-primary mb-2">Evaluate Questions (+25%)</a>
+        <a href="{{ 'topic/%s/contribute/question/' % exam_topic.topic.id}}" class="btn btn-outline-primary mb-2">Add Question (+50%)</a>
     </div>
 </div>

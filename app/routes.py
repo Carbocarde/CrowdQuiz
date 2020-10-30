@@ -3,8 +3,8 @@ from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from app import app, db
-from app.models import User, Question, Answer, Topic, QuestionTopics, QuestionEval, School, Class, Exam, ExamTopics, Enrollment, ExamStructureSuggestion
-from app.forms import LoginForm, RegistrationForm, EditProfileForm, ResetPasswordRequestForm, ResetPasswordForm, NewQuestionForm, NewTopicForm, DeleteQuestionForm, ReviewQuestionForm, QuizQuestion, NewSubjectForm, EditExamStructureForm, EvaluateQuestionSubForm, ContributeForm, ProposeClassForm, ProposeTopicForm
+from app.models import User, Question, Answer, Topic, QuestionTopics, QuestionEval, School, Class, Exam, ExamTopics, Enrollment, ExamStructureSuggestion, QuestionAnswer, QuestionAnswerArgument
+from app.forms import LoginForm, RegistrationForm, EditProfileForm, ResetPasswordRequestForm, ResetPasswordForm, NewQuestionForm, NewTopicForm, DeleteQuestionForm, ReviewQuestionForm, QuizQuestion, NewSubjectForm, EditExamStructureForm, EvaluateQuestionSubForm, ContributeForm, ProposeClassForm, ProposeTopicForm, NewQuestionForm
 from app.email import send_password_reset_email
 from sqlalchemy.sql.expression import func
 from sqlalchemy.sql import except_
@@ -242,10 +242,8 @@ def exam(class_id, exam_id):
 
     return render_template('exam.html', title="Exam", exam=exam, exam_topic_question_counts=zip(exam_topics, question_count))
 
-Contribute = namedtuple('Contribute', ['fair', 'accurate_topics'])
-
-@app.route('/class/<class_id>/exam/<exam_id>/contribute/', defaults={'topic_id': None})
-@app.route('/class/<class_id>/exam/<exam_id>/topic/<topic_id>/contribute/')
+@app.route('/class/<class_id>/exam/<exam_id>/contribute/', defaults={'topic_id': None}, methods=['GET', 'POST'])
+@app.route('/class/<class_id>/exam/<exam_id>/topic/<topic_id>/contribute/', methods=['GET', 'POST'])
 @login_required
 def contribute(class_id, exam_id, topic_id):
 
@@ -255,26 +253,135 @@ def contribute(class_id, exam_id, topic_id):
 
     if topic_id is not None:
         topic = Topic.query.filter_by(id=topic_id).first_or_404()
-        question_topics = QuestionTopics.query.filter_by(topic_id=topic_id)
     else:
         topic = ExamTopics.query.filter_by(exam_id=exam_id).first_or_404().topic
 
-    """forms = []
+    question_topics = QuestionTopics.query.filter_by(topic_id=topic.id)
+
+    forms = []
     questions = []
-    topics = []
 
-    contribute = Contribute('My', "text")"""
-
-    form = ContributeForm()
-
-    """for question_topic in question_topics:
-        print("ok")
+    for question_topic in question_topics:
         questions.append(question_topic.question)
-        topics = QuestionTopics.query.filter_by(question_id = question_topic.question.id)
-        forms.append(EvaluateQuestionForm())"""
 
-    #return render_template('contribute.html', title="Contribute", exam=exam, topic=topic, evaluation_forms=zip(forms, questions, topics))
-    return render_template('contribute.html', title="Contribute", exam=exam, topic=topic, form=form)
+    contribute = namedtuple('Contribute', ['fair', 'accurate_topics'])
+
+    form = ContributeForm(obj=contribute)
+
+    evaluation_requests = []
+    evaluate_questions = []
+    evaluate_topics = []
+    i = 0
+    for entry in form.evaluate_entries:
+        evaluate_questions.append(questions[i])
+        evaluate_topics.append(QuestionTopics.query.filter_by(question_id=questions[i].id))
+        i += 1
+
+    results = []
+    if form.validate_on_submit():
+        if form.submit.data:
+            flash('Question Successfully Deleted.')
+            return redirect(url_for('exam', class_id=class_id, exam_id=exam_id))
+    print(form.errors)
+
+    return render_template('contribute.html', title="Contribute", exam=exam, topic=topic, form=form, evaluate_forms=zip(form.evaluate_entries, evaluate_questions, evaluate_topics))
+
+@app.route('/class/<class_id>/exam/<exam_id>/contribute/question/', defaults={'topic_id': None}, methods=['GET', 'POST'])
+@app.route('/class/<class_id>/exam/<exam_id>/topic/<topic_id>/contribute/question/', methods=['GET', 'POST'])
+@login_required
+def contribute_question(class_id, exam_id, topic_id):
+
+    exam = Exam.query.filter_by(id=exam_id).first_or_404()
+
+    topic = None
+
+    if topic_id is not None:
+        topic = Topic.query.filter_by(id=topic_id).first_or_404()
+
+    form = NewQuestionForm();
+    if form.validate_on_submit():
+        question = Question.query.filter_by(body=form.question.data).first()
+
+        found_question_answer = False
+
+        if question is not None:
+            question_answers = QuestionAnswer.query.filter_by(question_id=question.id)
+            for question_answer in question_answers:
+                if question_answer.answer.body == form.correct_answer.data:
+                    found_question_answer = True
+                    if form.argument.data:
+                        question_answer_arguments = QuestionAnswerArgument.query.filter_by(argument=form.argument.data).first()
+                        if question_answer_argument is None:
+                            question_answer_argument = QuestionAnswerArgument(question_answer_id=question_answer.id, body=form.argument.data)
+                            db.session.add(question_answer_argument)
+                    break
+            if not found_question_answer:
+                answer = Answer.query.filter_by(body=form.correct_answer.data).first()
+
+                if not answer:
+                    answer = Answer(body=form.correct_answer.data, user_id=current_user.id)
+                    db.session.add(answer)
+                    db.session.commit()
+                    db.session.refresh(answer)
+
+                question_answer = QuestionAnswer(question_id=question.id, answer_id=answer.id)
+                db.session.add(question_answer)
+                db.session.commit()
+                db.session.refresh(question_answer)
+
+                if form.argument.data:
+                    question_answer_argument = QuestionAnswerArgument(question_answer_id=question_answer.id, body=form.argument.data)
+                    db.session.add(question_answer_argument)
+        else:
+            question = Question(user_id=current_user.id, body=form.question.data, question_type=form.question_type.data)
+            db.session.add(question)
+            db.session.commit()
+            db.session.refresh(question)
+
+            if topic:
+                question_topic = QuestionTopics(question_id=question.id, topic_id=topic.id)
+            else:
+                exam_topic = ExamTopics.query.filter_by(exam_id=exam.id).first()
+                if exam_topic:
+                    question_topic = QuestionTopics(question_id=question.id, topic_id=exam_topic.topic.id)
+                else:
+                    topic = Topic(body="General Questions", description="A place for general questions that fit into this exam")
+                    db.session.add(topic)
+                    db.session.commit()
+                    db.session.refresh(topic)
+
+                    exam_topic = ExamTopics(exam_id=exam.id, topic_id=topic.id)
+                    db.session.add(exam_topic)
+                    db.session.commit()
+
+                    question_topic = QuestionTopics(question_id=question.id, topic_id=topic.id)
+
+            db.session.add(question_topic)
+            db.session.commit()
+
+            answer = Answer.query.filter_by(body=form.correct_answer.data).first()
+
+            if not answer:
+                answer = Answer(body=form.correct_answer.data, user_id=current_user.id)
+                db.session.add(answer)
+                db.session.commit()
+                db.session.refresh(answer)
+
+            question_answer = QuestionAnswer(question_id=question.id, answer_id=answer.id)
+            db.session.add(question_answer)
+            db.session.commit()
+            db.session.refresh(question_answer)
+
+            if form.argument.data:
+                question_answer_argument = QuestionAnswerArgument(question_answer_id=question_answer.id, body=form.argument.data)
+                db.session.add(question_answer_argument)
+
+        db.session.commit()
+        flash('Question Contributed!')
+        return redirect(url_for('contribute_question', class_id=class_id, exam_id=exam_id, topic_id=topic_id))
+
+    return render_template('contribute_question.html', title='Contribute', topic=topic, exam=exam, form=form)
+
 
 @app.route('/admin')
 @login_required

@@ -1,4 +1,4 @@
-2020-10-27 23:26:06,426 ERROR: Exception on /class/2/exam/1/suggested_topics/propose_new [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+2020-10-29 22:51:23,499 ERROR: Exception on /class/2/exam/1/topic/1/contribute/question/ [POST] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
 Traceback (most recent call last):
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
     response = self.full_dispatch_request()
@@ -14,22 +14,11 @@ Traceback (most recent call last):
     return self.view_functions[rule.endpoint](**req.view_args)
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
     return func(*args, **kwargs)
-  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 202, in suggest_topic
-    form = ProposeTopicForm()
-NameError: name 'ProposeTopicForm' is not defined
-2020-10-27 23:26:26,134 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
-2020-10-27 23:27:35,289 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
-2020-10-27 23:28:28,102 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
-2020-10-27 23:28:59,344 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
-2020-10-27 23:29:18,752 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
-2020-10-27 23:31:24,633 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
-2020-10-28 00:02:35,821 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
-2020-10-28 00:05:24,580 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
-2020-10-28 00:05:46,418 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
-2020-10-28 00:07:15,778 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
-2020-10-28 00:07:31,083 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
-2020-10-28 00:08:57,866 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
-2020-10-28 00:08:58,594 ERROR: Exception on /class/2/exam/1/topic/1/contribute/ [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 357, in contribute_question
+    question_answer_argument = QuestionAnswerArgument(question_answer_id=question_answer.id, argument=form.argument.data)
+NameError: name 'QuestionAnswerArgument' is not defined
+2020-10-29 22:52:13,924 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-29 22:57:08,948 ERROR: Exception on /class/2/exam/1/topic/1/contribute/question/ [POST] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
 Traceback (most recent call last):
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
     response = self.full_dispatch_request()
@@ -45,63 +34,11 @@ Traceback (most recent call last):
     return self.view_functions[rule.endpoint](**req.view_args)
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
     return func(*args, **kwargs)
-  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 275, in contribute
-    return render_template('contribute.html', title="Contribute", exam=exam, topic=topic, form=form)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\templating.py", line 140, in render_template
-    ctx.app,
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\templating.py", line 120, in _render
-    rv = template.render(context)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\environment.py", line 1090, in render
-    self.environment.handle_exception()
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\environment.py", line 832, in handle_exception
-    reraise(*rewrite_traceback_stack(source=source))
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\_compat.py", line 28, in reraise
-    raise value.with_traceback(tb)
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\contribute.html", line 2, in top-level template code
-    {% from 'bootstrap/form.html' import render_form, render_field %}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\base.html", line 1, in top-level template code
-    {% extends 'bootstrap_base.html' %}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\bootstrap_base.html", line 1, in top-level template code
-    {% block doc -%}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\bootstrap_base.html", line 4, in block "doc"
-    {%- block html %}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\bootstrap_base.html", line 22, in block "html"
-    {% block body -%}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\bootstrap_base.html", line 25, in block "body"
-    {% block content -%}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\base.html", line 58, in block "content"
-    {% block app_content %}{% endblock %}
-  File "C:\Users\ponei\github\CrowdQuiz\app\templates\contribute.html", line 26, in block "app_content"
-    {{ render_form(form) }}
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\runtime.py", line 679, in _invoke
-    rv = self._func(*arguments)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_bootstrap\templates\bootstrap\form.html", line 277, in template
-    {{ render_field(field,
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\runtime.py", line 679, in _invoke
-    rv = self._func(*arguments)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_bootstrap\templates\bootstrap\form.html", line 133, in template
-    {{ render_field(subfield,
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\runtime.py", line 679, in _invoke
-    rv = self._func(*arguments)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_bootstrap\templates\bootstrap\form.html", line 133, in template
-    {{ render_field(subfield,
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\jinja2\runtime.py", line 679, in _invoke
-    rv = self._func(*arguments)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_bootstrap\templates\bootstrap\form.html", line 198, in template
-    {{ field(class="form-control%s" % extra_classes, **kwargs)|safe }}
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\wtforms\fields\core.py", line 160, in __call__
-    return self.meta.render_field(self, kwargs)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\wtforms\meta.py", line 56, in render_field
-    return field.widget(field, **render_kw)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\wtforms\widgets\core.py", line 300, in __call__
-    for val, label, selected in field.iter_choices():
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\wtforms\ext\sqlalchemy\fields.py", line 172, in iter_choices
-    for pk, obj in self._get_object_list():
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\wtforms\ext\sqlalchemy\fields.py", line 98, in _get_object_list
-    query = self.query or self.query_factory()
-TypeError: 'NoneType' object is not callable
-2020-10-28 00:09:19,584 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
-2020-10-28 00:20:00,405 ERROR: Exception on /class/2/exam/1/contribute/ [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 359, in contribute_question
+    question_answer_argument = QuestionAnswerArgument(question_answer_id=question_answer.id, argument=form.argument.data)
+NameError: name 'QuestionAnswerArgument' is not defined
+2020-10-29 22:57:47,905 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-29 22:57:56,009 ERROR: Exception on /class/2/exam/1/topic/1/contribute/question/ [POST] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
 Traceback (most recent call last):
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
     response = self.full_dispatch_request()
@@ -117,7 +54,40 @@ Traceback (most recent call last):
     return self.view_functions[rule.endpoint](**req.view_args)
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
     return func(*args, **kwargs)
-  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 268, in contribute
-    for question_topic in question_topics:
-UnboundLocalError: local variable 'question_topics' referenced before assignment
-2020-10-28 00:20:39,196 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 359, in contribute_question
+    question_answer_argument = QuestionAnswerArgument(question_answer_id=question_answer.id, argument=form.argument.data)
+  File "<string>", line 4, in __init__
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\state.py", line 433, in _initialize_instance
+    manager.dispatch.init_failure(self, args, kwargs)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\util\langhelpers.py", line 70, in __exit__
+    with_traceback=exc_tb,
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\util\compat.py", line 182, in raise_
+    raise exception
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\state.py", line 430, in _initialize_instance
+    return manager.original_init(*mixed[1:], **kwargs)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\ext\declarative\base.py", line 840, in _declarative_constructor
+    "%r is an invalid keyword argument for %s" % (k, cls_.__name__)
+TypeError: 'argument' is an invalid keyword argument for QuestionAnswerArgument
+2020-10-29 23:02:36,401 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-29 23:04:37,903 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-29 23:04:46,069 ERROR: Exception on /class/2/exam/1/contribute/ [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+Traceback (most recent call last):
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\_compat.py", line 39, in reraise
+    raise value
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
+    return func(*args, **kwargs)
+  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 276, in contribute
+    evaluate_questions.append(questions[i])
+IndexError: list index out of range
+2020-10-29 23:17:48,197 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-29 23:19:17,717 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
