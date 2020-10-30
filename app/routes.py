@@ -10,6 +10,7 @@ from sqlalchemy.sql.expression import func
 from sqlalchemy.sql import except_
 import random
 from collections import namedtuple
+from sqlalchemy.orm import load_only
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -250,41 +251,62 @@ def contribute(class_id, exam_id, topic_id):
     exam = Exam.query.filter_by(id=exam_id).first_or_404()
 
     topic = None
-
     if topic_id is not None:
         topic = Topic.query.filter_by(id=topic_id).first_or_404()
     else:
         topic = ExamTopics.query.filter_by(exam_id=exam_id).first_or_404().topic
 
-    question_topics = QuestionTopics.query.filter_by(topic_id=topic.id)
-
-    forms = []
-    questions = []
-
-    for question_topic in question_topics:
-        questions.append(question_topic.question)
-
     contribute = namedtuple('Contribute', ['fair', 'accurate_topics'])
 
     form = ContributeForm(obj=contribute)
 
+    # Select questions that haven't been evaluated by this user and weren't submitted by them
+    current_user_questions = Question.query.filter_by(user_id=current_user.id).options(load_only(Question.id)).subquery()
+    current_user_evaluated = db.session.query(QuestionEval.question_id).filter_by(user_id=current_user.id, skipped=False).subquery()
+    skippedSubtable = QuestionEval.query.filter_by(user_id=current_user.id).options(load_only(QuestionEval.skipped, QuestionEval.question_id)).subquery()
+
+    question_topics = QuestionTopics.query.filter_by(topic_id=topic.id).filter(QuestionTopics.question_id.notin_(current_user_questions)).filter(QuestionTopics.question_id.notin_(current_user_evaluated)).outerjoin(skippedSubtable, skippedSubtable.c.question_id == QuestionTopics.question_id).order_by(skippedSubtable.c.skipped.desc())
+
+    forms = []
+    questions = []
+
+    max_questions = 4
+    i = 0
+
+    for question_topic in question_topics:
+        if max_questions > i:
+            questions.append(question_topic.question)
+            i += 1
+
     evaluation_requests = []
     evaluate_questions = []
     evaluate_topics = []
-    i = 0
-    for entry in form.evaluate_entries:
-        evaluate_questions.append(questions[i])
-        evaluate_topics.append(QuestionTopics.query.filter_by(question_id=questions[i].id))
-        i += 1
+    if len(form.evaluate_entries) == 0:
+        for i in range(0, len(questions)):
+            form.evaluate_entries.append_entry()
+            evaluate_questions.append(questions[i])
+            evaluate_topics.append(QuestionTopics.query.filter_by(question_id=questions[i].id))
 
     results = []
     if form.validate_on_submit():
         if form.submit.data:
-            flash('Question Successfully Deleted.')
-            return redirect(url_for('exam', class_id=class_id, exam_id=exam_id))
-    print(form.errors)
+            j=0
+            for eval in form.evaluate_entries:
+                if eval.skip.data:
+                    question_eval = QuestionEval(question_id=questions[j].id, user_id=current_user.id, skipped=True)
+                else:
+                    question_eval = QuestionEval(question_id=questions[j].id, user_id=current_user.id, skipped=False, fair=eval.fair.data)
 
-    return render_template('contribute.html', title="Contribute", exam=exam, topic=topic, form=form, evaluate_forms=zip(form.evaluate_entries, evaluate_questions, evaluate_topics))
+                    # TODO: increase connection_score in question_topics
+
+                db.session.add(question_eval)
+                db.session.commit()
+
+                j += 1
+            flash('Question Evaluations Submitted!.')
+            return redirect(url_for('exam', class_id=class_id, exam_id=exam_id))
+
+    return render_template('contribute.html', title="Contribute", exam=exam, topic=topic, form=form, evaluate_forms=zip(form.evaluate_entries, evaluate_questions, evaluate_topics), eval_questions=len(evaluate_questions))
 
 @app.route('/class/<class_id>/exam/<exam_id>/contribute/question/', defaults={'topic_id': None}, methods=['GET', 'POST'])
 @app.route('/class/<class_id>/exam/<exam_id>/topic/<topic_id>/contribute/question/', methods=['GET', 'POST'])
@@ -304,17 +326,25 @@ def contribute_question(class_id, exam_id, topic_id):
 
         found_question_answer = False
 
+        # Check if idential question entry already exists
         if question is not None:
             question_answers = QuestionAnswer.query.filter_by(question_id=question.id)
+
+            # Iterate through to see if the answer/questionanswer relation already exists
             for question_answer in question_answers:
                 if question_answer.answer.body == form.correct_answer.data:
                     found_question_answer = True
+
+                    # Add the new argument to this relation if there is one
                     if form.argument.data:
                         question_answer_arguments = QuestionAnswerArgument.query.filter_by(argument=form.argument.data).first()
                         if question_answer_argument is None:
                             question_answer_argument = QuestionAnswerArgument(question_answer_id=question_answer.id, body=form.argument.data)
                             db.session.add(question_answer_argument)
+                            db.session.commit()
                     break
+
+            # Create the answer entry and questionanswer relation
             if not found_question_answer:
                 answer = Answer.query.filter_by(body=form.correct_answer.data).first()
 
@@ -329,9 +359,13 @@ def contribute_question(class_id, exam_id, topic_id):
                 db.session.commit()
                 db.session.refresh(question_answer)
 
+                # Add argument if there is one
                 if form.argument.data:
                     question_answer_argument = QuestionAnswerArgument(question_answer_id=question_answer.id, body=form.argument.data)
                     db.session.add(question_answer_argument)
+                    db.session.commit()
+
+        # Generate question entry
         else:
             question = Question(user_id=current_user.id, body=form.question.data, question_type=form.question_type.data)
             db.session.add(question)
@@ -375,8 +409,8 @@ def contribute_question(class_id, exam_id, topic_id):
             if form.argument.data:
                 question_answer_argument = QuestionAnswerArgument(question_answer_id=question_answer.id, body=form.argument.data)
                 db.session.add(question_answer_argument)
+                db.session.commit()
 
-        db.session.commit()
         flash('Question Contributed!')
         return redirect(url_for('contribute_question', class_id=class_id, exam_id=exam_id, topic_id=topic_id))
 
@@ -421,13 +455,32 @@ def approve_exam_structure(exam_structure_id):
     structure = ExamStructureSuggestion.query.filter_by(id=exam_structure_id).first_or_404()
 
     for i in range(1, structure.exam_count):
-        new_exam = Exam(body="Exam " + str(i), class_id=structure.class_id, exam_number = i)
-        db.session.add(new_exam)
+        exam = Exam(body="Exam " + str(i), class_id=structure.class_id, exam_number = i)
+        db.session.add(exam)
+        db.session.commit()
+        db.session.refresh(exam)
+
+        topic = Topic(body="General Questions", description="A place for general questions that fit into this exam")
+        db.session.add(topic)
+        db.session.commit()
+        db.session.refresh(topic)
+
+        exam_topic = ExamTopics(exam_id=exam.id, topic_id=topic.id)
+        db.session.add(exam_topic)
         db.session.commit()
 
     if structure.final_exam:
-        new_exam = Exam(body="Final Exam", class_id=structure.class_id, exam_number = structure.exam_count + 1, cumulative=structure.final_exam_cumulative)
-        db.session.add(new_exam)
+        exam = Exam(body="Final Exam", class_id=structure.class_id, exam_number = structure.exam_count + 1, cumulative=structure.final_exam_cumulative)
+        db.session.add(exam)
+        db.session.commit()
+
+        topic = Topic(body="General Questions", description="A place for general questions that fit into the Final Exam")
+        db.session.add(topic)
+        db.session.commit()
+        db.session.refresh(topic)
+
+        exam_topic = ExamTopics(exam_id=exam.id, topic_id=topic.id)
+        db.session.add(exam_topic)
         db.session.commit()
 
     structure.approved = True
@@ -504,45 +557,6 @@ def reset_password(token):
         return redirect(url_for('login'))
     return render_template('reset_password.html', form=form)
 
-@app.route('/subject/<subject_id>/new_question', methods=['GET', 'POST'])
-@login_required
-def new_question(subject_id):
-    form = NewQuestionForm(subject_id)
-
-    form.topics.query = Topic.query.filter_by(subject_id=subject_id).all()
-
-    if form.validate_on_submit():
-        new_question = Question()
-
-        new_question = Question(body=form.question.data, author=current_user, subject_id=subject_id, fairness_score=1, evaluations=1)
-        db.session.add(new_question)
-        db.session.commit()
-        db.session.refresh(new_question)
-
-        for topic in form.topics.data:
-            topic_id = topic.id
-            classification = QuestionTopics(topic_id=topic_id,question_id=new_question.id)
-            db.session.add(classification)
-
-        answers = [None]*4
-        answers[0] = Answer(body=form.correct_answer.data, correct=True, question=new_question)
-        answers[1] = Answer(body=form.incorrect_answer_1.data, correct=False, question=new_question)
-        answers[2] = Answer(body=form.incorrect_answer_2.data, correct=False, question=new_question)
-        answers[3] = Answer(body=form.incorrect_answer_3.data, correct=False, question=new_question)
-
-        for answer in answers:
-            db.session.add(answer)
-
-        db.session.commit()
-
-        return redirect('/question/' + str(new_question.id))
-
-    subject = Subject.query.filter_by(id=subject_id).first()
-
-    return render_template(
-        'new_question.html', form=form, subject_id=subject
-    )
-
 @app.route('/question/<question_id>', methods=['GET'])
 def show_question(question_id):
     """Show the details of a question."""
@@ -556,27 +570,6 @@ def show_question(question_id):
         'question.html',
         question=question,
         answers=answers
-    )
-
-@app.route('/subject/<subject_id>', methods=['GET', 'POST'])
-@login_required
-def subject(subject_id):
-    subject = Subject.query.filter_by(id=subject_id).first_or_404()
-    topics = Topic.query.filter_by(subject_id=subject_id)
-    questions = Question.query.filter_by(subject_id=subject_id)
-
-    form = NewTopicForm()
-    if form.validate_on_submit():
-        newtopic = Topic(body=form.topic.data, subject_id=subject_id)
-        db.session.add(newtopic)
-        db.session.commit()
-
-    return render_template(
-        'subject.html',
-        subject_id=subject,
-        topics=topics,
-        questions=questions,
-        form=form
     )
 
 @app.route('/delete_question/<question_id>', methods=['GET', 'POST'])
@@ -613,29 +606,6 @@ def delete_question(question_id):
         answers=answers,
         form=form
     )
-
-@app.route('/subject/<subject_id>/quiz', methods=['GET', 'POST'])
-@login_required
-def subject_quiz(subject_id):
-    form = QuizQuestion()
-
-    question = Question.query.filter_by(subject_id=subject_id).order_by(func.random()).first()
-
-    # get answers
-    correct_answer = Answer.query.filter_by(question_id=question.id).filter_by(correct=True).order_by(func.random()).limit(1)
-    incorrect_answers = Answer.query.filter_by(question_id=question.id).filter_by(correct=False).order_by(func.random()).limit(3)
-
-    form.answers.query = correct_answer.union(incorrect_answers).order_by(func.random()).all()
-
-    if form.submit.data:
-        print(form.answers.data)
-
-    return render_template(
-        'quiz.html',
-        form=form,
-        question=question
-    )
-
 
 @app.route('/subject/<subject_id>/evaluate', methods=['GET', 'POST'])
 @login_required

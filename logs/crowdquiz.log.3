@@ -1,11 +1,12 @@
-2020-10-29 22:45:38,151 ERROR: Exception on /class/2/exam/1/topic/1/contribute/question/ [POST] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+2020-10-30 17:04:25,192 ERROR: Exception on /class/2/exam/1/topic/1/contribute/ [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
 Traceback (most recent call last):
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1277, in _execute_context
     cursor, statement, parameters, context
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\engine\default.py", line 593, in do_execute
     cursor.execute(statement, parameters)
-psycopg2.errors.UniqueViolation: duplicate key value violates unique constraint "question_pkey"
-DETAIL:  Key (id)=(3) already exists.
+psycopg2.errors.UndefinedTable: missing FROM-clause entry for table "question_eval"
+LINE 4: WHERE question_eval.user_id = 4) AS anon_1 ON question_eval....
+                                                      ^
 
 
 The above exception was the direct cause of the following exception:
@@ -25,34 +26,12 @@ Traceback (most recent call last):
     return self.view_functions[rule.endpoint](**req.view_args)
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
     return func(*args, **kwargs)
-  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 341, in contribute_question
-    db.session.commit()
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\scoping.py", line 163, in do
-    return getattr(self.registry(), name)(*args, **kwargs)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\session.py", line 1042, in commit
-    self.transaction.commit()
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\session.py", line 504, in commit
-    self._prepare_impl()
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\session.py", line 483, in _prepare_impl
-    self.session.flush()
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\session.py", line 2536, in flush
-    self._flush(objects)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\session.py", line 2678, in _flush
-    transaction.rollback(_capture_exception=True)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\util\langhelpers.py", line 70, in __exit__
-    with_traceback=exc_tb,
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\util\compat.py", line 182, in raise_
-    raise exception
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\session.py", line 2638, in _flush
-    flush_context.execute()
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\unitofwork.py", line 422, in execute
-    rec.execute(self)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\unitofwork.py", line 589, in execute
-    uow,
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\persistence.py", line 245, in save_obj
-    insert,
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\persistence.py", line 1136, in _emit_insert_statements
-    statement, params
+  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 268, in contribute
+    for entry in test:
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\query.py", line 3535, in __iter__
+    return self._execute_and_instances(context)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\query.py", line 3560, in _execute_and_instances
+    result = conn.execute(querycontext.statement, self._params)
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1011, in execute
     return meth(self, multiparams, params)
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\sql\elements.py", line 298, in _execute_on_connection
@@ -69,13 +48,30 @@ Traceback (most recent call last):
     cursor, statement, parameters, context
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\engine\default.py", line 593, in do_execute
     cursor.execute(statement, parameters)
-sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) duplicate key value violates unique constraint "question_pkey"
-DETAIL:  Key (id)=(3) already exists.
+sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedTable) missing FROM-clause entry for table "question_eval"
+LINE 4: WHERE question_eval.user_id = 4) AS anon_1 ON question_eval....
+                                                      ^
 
-[SQL: INSERT INTO question (user_id, body, timestamp, image_url, question_type) VALUES (%(user_id)s, %(body)s, %(timestamp)s, %(image_url)s, %(question_type)s) RETURNING question.id]
-[parameters: {'user_id': 3, 'body': 'Test', 'timestamp': datetime.datetime(2020, 10, 30, 2, 45, 38, 148629), 'image_url': None, 'question_type': 1}]
-(Background on this error at: http://sqlalche.me/e/13/gkpj)
-2020-10-29 22:45:41,035 ERROR: Exception on /class/2/exam/1/topic/1/contribute/question/ [POST] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+[SQL: SELECT question_topics.id AS question_topics_id, question_topics.question_id AS question_topics_question_id, question_topics.topic_id AS question_topics_topic_id, question_topics.connection_score AS question_topics_connection_score, question_topics.evaluations AS question_topics_evaluations 
+FROM question_topics LEFT OUTER JOIN (SELECT question_eval.skipped AS skipped, question_eval.question_id AS question_id 
+FROM question_eval 
+WHERE question_eval.user_id = %(user_id_1)s) AS anon_1 ON question_eval.question_id = question_topics.question_id]
+[parameters: {'user_id_1': 4}]
+(Background on this error at: http://sqlalche.me/e/13/f405)
+2020-10-30 17:04:50,338 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-30 17:04:51,779 ERROR: Exception on /class/2/exam/1/topic/1/contribute/ [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+Traceback (most recent call last):
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1277, in _execute_context
+    cursor, statement, parameters, context
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\engine\default.py", line 593, in do_execute
+    cursor.execute(statement, parameters)
+psycopg2.errors.UndefinedTable: missing FROM-clause entry for table "question_eval"
+LINE 4: WHERE question_eval.user_id = 4) AS anon_1 ON question_eval....
+                                                      ^
+
+
+The above exception was the direct cause of the following exception:
+
 Traceback (most recent call last):
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
     response = self.full_dispatch_request()
@@ -91,38 +87,36 @@ Traceback (most recent call last):
     return self.view_functions[rule.endpoint](**req.view_args)
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
     return func(*args, **kwargs)
-  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 352, in contribute_question
-    question_answer = QuestionAnswer(question_id=question.id, answer_id=answer.id)
-NameError: name 'QuestionAnswer' is not defined
-2020-10-29 22:46:06,321 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
-2020-10-29 22:46:09,313 ERROR: Exception on /class/2/exam/1/topic/1/contribute/question/ [POST] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
-Traceback (most recent call last):
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
-    response = self.full_dispatch_request()
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1952, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1821, in handle_user_exception
-    reraise(exc_type, exc_value, tb)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\_compat.py", line 39, in reraise
-    raise value
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1950, in full_dispatch_request
-    rv = self.dispatch_request()
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1936, in dispatch_request
-    return self.view_functions[rule.endpoint](**req.view_args)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
-    return func(*args, **kwargs)
-  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 305, in contribute_question
-    if form.validate_on_submit():
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_wtf\form.py", line 100, in validate_on_submit
-    return self.is_submitted() and self.validate()
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\wtforms\form.py", line 318, in validate
-    return super(Form, self).validate(extra)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\wtforms\form.py", line 150, in validate
-    if not field.validate(self, extra):
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\wtforms\fields\core.py", line 226, in validate
-    stop_validation = self._run_validation_chain(form, chain)
-  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\wtforms\fields\core.py", line 246, in _run_validation_chain
-    validator(form, self)
-  File "C:\Users\ponei\github\CrowdQuiz\app\forms.py", line 90, in validate_question
-    if question is not None and question.author.id == current_user.id:
-NameError: name 'current_user' is not defined
+  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 268, in contribute
+    for entry in test:
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\query.py", line 3535, in __iter__
+    return self._execute_and_instances(context)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\query.py", line 3560, in _execute_and_instances
+    result = conn.execute(querycontext.statement, self._params)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1011, in execute
+    return meth(self, multiparams, params)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\sql\elements.py", line 298, in _execute_on_connection
+    return connection._execute_clauseelement(self, multiparams, params)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1130, in _execute_clauseelement
+    distilled_params,
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1317, in _execute_context
+    e, statement, parameters, cursor, context
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1511, in _handle_dbapi_exception
+    sqlalchemy_exception, with_traceback=exc_info[2], from_=e
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\util\compat.py", line 182, in raise_
+    raise exception
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1277, in _execute_context
+    cursor, statement, parameters, context
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\engine\default.py", line 593, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedTable) missing FROM-clause entry for table "question_eval"
+LINE 4: WHERE question_eval.user_id = 4) AS anon_1 ON question_eval....
+                                                      ^
+
+[SQL: SELECT question_topics.id AS question_topics_id, question_topics.question_id AS question_topics_question_id, question_topics.topic_id AS question_topics_topic_id, question_topics.connection_score AS question_topics_connection_score, question_topics.evaluations AS question_topics_evaluations 
+FROM question_topics LEFT OUTER JOIN (SELECT question_eval.skipped AS skipped, question_eval.question_id AS question_id 
+FROM question_eval 
+WHERE question_eval.user_id = %(user_id_1)s) AS anon_1 ON question_eval.question_id = question_topics.question_id]
+[parameters: {'user_id_1': 4}]
+(Background on this error at: http://sqlalche.me/e/13/f405)
+2020-10-30 17:05:30,384 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]

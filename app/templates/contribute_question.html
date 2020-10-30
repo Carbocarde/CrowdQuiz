@@ -2,9 +2,17 @@
 {% from 'bootstrap/form.html' import render_form, render_field %}
 
 {% block app_content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">{{ exam.exam_class.school.body }}</a></li>
+        <li class="breadcrumb-item"><a href="{{ '/class/%s/' % exam.exam_class.id }}">{{ exam.exam_class.body }}</a></li>
+        <li class="breadcrumb-item"><a href="{{ '/class/{0}/exam/{1}/'.format(exam.exam_class.id, exam.id) }}">{{ exam.body }}</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Evaluate Questions</li>
+    </ol>
+</nav>
     {% if topic %}
     <div class="jumbotron mt-3">
-        <h2 class="display-5">Contributing to topic: {{ topic.body }}!</h2>
+        <h2 class="display-5">Contributing to topic: {{ topic.body }}</h2>
         <h2 class="card-subtitle mb-2 text-muted">
             <span class="badge badge-secondary">{{ exam.exam_class.body }}</span>
             <span class="badge badge-secondary">{{ exam.body }}</span>
@@ -12,7 +20,7 @@
     </div>
     {% else %}
     <div class="jumbotron mt-3">
-        <h2 class="display-5">Contributing to {{ exam.body }}!</h2>
+        <h2 class="display-5">Contributing to {{ exam.body }}</h2>
         <h2 class="card-subtitle mb-2 text-muted">
             <span class="badge badge-secondary">{{ exam.exam_class.body }}</span>
         </h2>

@@ -1,7 +1,7 @@
-<div class="col-sm-6">
+
 <div class="card m-3">
-    <div class="card-body d-flex flex-column"">
-        <h3 class="card-text">Question: {{ question.body }}</h3>
+    <div class="card-body d-flex flex-column">
+        <h3 class="card-text mb-2">Question: {{ question.body }}</h3>
         <h6 class="card-subtitle mb-2 text-muted">
             Topics:
             {% for question_topic in question_topics %}
@@ -13,8 +13,8 @@
             <div class="col">
                 {{ render_field(entry.fair, class="custom-control-input") }}
                 {{ render_field(entry.accurate_topics) }}
+                {{ render_field(entry.skip) }}
             </div>
         </div>
     </div>
-</div>
 </div>

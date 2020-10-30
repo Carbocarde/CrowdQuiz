@@ -5,6 +5,7 @@ from app.models import User, Answer, Question, QuestionTopics, Topic
 from wtforms.ext.sqlalchemy.fields import QuerySelectMultipleField, QuerySelectField
 from functools import partial
 from wtforms.widgets import TextArea
+from wtforms import Form as NoCsrfForm
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
@@ -55,9 +56,11 @@ class ProposeTopicForm(FlaskForm):
 
     submit = SubmitField('Submit')
 
-class EvaluateQuestionSubForm(FlaskForm):
-    fair = BooleanField('Fair Question')
-    accurate_topics = BooleanField('Correct topics')
+# DO NOT DISPLAY AS SOLO FORM, MUST BE SUBFORM
+class EvaluateQuestionSubForm(NoCsrfForm):
+    fair = BooleanField('Fair Question', default=True)
+    accurate_topics = BooleanField('Correct topics', default=True)
+    skip = BooleanField('Skip Question Evaluation', default=True)
 
 class NewQuestionSubForm(FlaskForm):
     """Main question form"""
@@ -72,7 +75,7 @@ class NewQuestionSubForm(FlaskForm):
     #topics = QuerySelectMultipleField()
 
 class ContributeForm(FlaskForm):
-    evaluate_entries = FieldList(FormField(EvaluateQuestionSubForm), min_entries=2)
+    evaluate_entries = FieldList(FormField(EvaluateQuestionSubForm))
     submit = SubmitField('Submit')
 
 class NewQuestionForm(FlaskForm):
