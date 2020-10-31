@@ -35,7 +35,7 @@
 <div class="my-3 p-3 bg-white rounded shadow-sm">
     <h6 class="border-bottom border-gray pb-2 mb-0">Topics:</h6>
     <div class="row">
-    {% for exam_topic, question_count in exam_topic_question_counts %}
+    {% for exam_topic, question_count, unlock_percent, level, level_subtractor, following in exam_topic_question_counts %}
         {% include '_topic.html' %}
     {% endfor %}
     </div>

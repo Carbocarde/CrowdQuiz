@@ -271,3 +271,9 @@ class ExamStructureSuggestion(db.Model):
     body = db.Column(db.String(140))
 
     approved = db.Column(db.Boolean)
+
+class FollowExamTopic(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+
+    exam_topic_id = db.Column(db.Integer, db.ForeignKey('exam_topics.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))

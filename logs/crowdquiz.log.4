@@ -1,13 +1,12 @@
-2020-10-30 17:01:55,408 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
-2020-10-30 17:01:56,635 ERROR: Exception on /class/2/exam/1/topic/1/contribute/ [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+2020-10-31 17:05:36,646 ERROR: Exception on /class/2/exam/1/ [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
 Traceback (most recent call last):
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1277, in _execute_context
     cursor, statement, parameters, context
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\engine\default.py", line 593, in do_execute
     cursor.execute(statement, parameters)
-psycopg2.errors.UndefinedTable: missing FROM-clause entry for table "question_eval"
-LINE 4: WHERE question_eval.user_id = 4) AS anon_1 ON question_eval....
-                                                      ^
+psycopg2.errors.UndefinedTable: missing FROM-clause entry for table "question_topics"
+LINE 7: ....user_id = 10)) AS anon_2 ON anon_2.question_id = question_t...
+                                                             ^
 
 
 The above exception was the direct cause of the following exception:
@@ -27,8 +26,8 @@ Traceback (most recent call last):
     return self.view_functions[rule.endpoint](**req.view_args)
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
     return func(*args, **kwargs)
-  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 272, in contribute
-    for question_topic in question_topics:
+  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 320, in exam
+    for element in test:
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\query.py", line 3535, in __iter__
     return self._execute_and_instances(context)
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\query.py", line 3560, in _execute_and_instances
@@ -49,32 +48,30 @@ Traceback (most recent call last):
     cursor, statement, parameters, context
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\engine\default.py", line 593, in do_execute
     cursor.execute(statement, parameters)
-sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedTable) missing FROM-clause entry for table "question_eval"
-LINE 4: WHERE question_eval.user_id = 4) AS anon_1 ON question_eval....
-                                                      ^
+sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedTable) missing FROM-clause entry for table "question_topics"
+LINE 7: ....user_id = 10)) AS anon_2 ON anon_2.question_id = question_t...
+                                                             ^
 
-[SQL: SELECT question_topics.id AS question_topics_id, question_topics.question_id AS question_topics_question_id, question_topics.topic_id AS question_topics_topic_id, question_topics.connection_score AS question_topics_connection_score, question_topics.evaluations AS question_topics_evaluations 
-FROM question_topics JOIN (SELECT question_eval.skipped AS skipped, question_eval.question_id AS question_id 
-FROM question_eval 
-WHERE question_eval.user_id = %(user_id_1)s) AS anon_1 ON question_eval.question_id = question_topics.question_id 
-WHERE question_topics.topic_id = %(topic_id_1)s AND question_topics.question_id NOT IN (SELECT question.id 
+[SQL: SELECT anon_1.question_id AS anon_1_question_id 
+FROM (SELECT question_eval.question_id AS question_id 
+FROM question_eval LEFT OUTER JOIN (SELECT question_topics.id AS id, question_topics.question_id AS question_id, question_topics.topic_id AS topic_id, question_topics.connection_score AS connection_score, question_topics.evaluations AS evaluations 
+FROM question_topics 
+WHERE question_topics.topic_id = %(topic_id_1)s AND question_topics.question_id IN (SELECT question.id 
 FROM question 
-WHERE question.user_id = %(user_id_2)s) AND question_topics.question_id NOT IN (SELECT question_eval.question_id 
-FROM question_eval 
-WHERE question_eval.user_id = %(user_id_3)s AND question_eval.skipped = false) 
- LIMIT %(param_1)s]
-[parameters: {'user_id_1': 4, 'topic_id_1': 1, 'user_id_2': 4, 'user_id_3': 4, 'param_1': 4}]
+WHERE question.user_id = %(user_id_1)s)) AS anon_2 ON anon_2.question_id = question_topics.question_id 
+WHERE question_eval.user_id = %(user_id_2)s) AS anon_1]
+[parameters: {'topic_id_1': 1, 'user_id_1': 10, 'user_id_2': 10}]
 (Background on this error at: http://sqlalche.me/e/13/f405)
-2020-10-30 17:03:01,860 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
-2020-10-30 17:03:02,668 ERROR: Exception on /class/2/exam/1/topic/1/contribute/ [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+2020-10-31 17:16:25,337 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-31 17:16:27,390 ERROR: Exception on /class/2/exam/1/ [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
 Traceback (most recent call last):
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1277, in _execute_context
     cursor, statement, parameters, context
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\engine\default.py", line 593, in do_execute
     cursor.execute(statement, parameters)
-psycopg2.errors.UndefinedTable: missing FROM-clause entry for table "question_eval"
-LINE 4: WHERE question_eval.user_id = 4) AS anon_1 ON question_eval....
-                                                      ^
+psycopg2.errors.UndefinedTable: missing FROM-clause entry for table "question_topics"
+LINE 6: ....user_id = 10)) AS anon_1 ON anon_1.question_id = question_t...
+                                                             ^
 
 
 The above exception was the direct cause of the following exception:
@@ -94,8 +91,8 @@ Traceback (most recent call last):
     return self.view_functions[rule.endpoint](**req.view_args)
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
     return func(*args, **kwargs)
-  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 268, in contribute
-    for entry in test:
+  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 318, in exam
+    for element in current_user_topic_evaluations:
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\query.py", line 3535, in __iter__
     return self._execute_and_instances(context)
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\orm\query.py", line 3560, in _execute_and_instances
@@ -116,14 +113,17 @@ Traceback (most recent call last):
     cursor, statement, parameters, context
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\engine\default.py", line 593, in do_execute
     cursor.execute(statement, parameters)
-sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedTable) missing FROM-clause entry for table "question_eval"
-LINE 4: WHERE question_eval.user_id = 4) AS anon_1 ON question_eval....
-                                                      ^
+sqlalchemy.exc.ProgrammingError: (psycopg2.errors.UndefinedTable) missing FROM-clause entry for table "question_topics"
+LINE 6: ....user_id = 10)) AS anon_1 ON anon_1.question_id = question_t...
+                                                             ^
 
-[SQL: SELECT question_topics.id AS question_topics_id, question_topics.question_id AS question_topics_question_id, question_topics.topic_id AS question_topics_topic_id, question_topics.connection_score AS question_topics_connection_score, question_topics.evaluations AS question_topics_evaluations 
-FROM question_topics JOIN (SELECT question_eval.skipped AS skipped, question_eval.question_id AS question_id 
-FROM question_eval 
-WHERE question_eval.user_id = %(user_id_1)s) AS anon_1 ON question_eval.question_id = question_topics.question_id]
-[parameters: {'user_id_1': 4}]
+[SQL: SELECT question_eval.question_id AS question_eval_question_id 
+FROM question_eval LEFT OUTER JOIN (SELECT question_topics.id AS id, question_topics.question_id AS question_id, question_topics.topic_id AS topic_id, question_topics.connection_score AS connection_score, question_topics.evaluations AS evaluations 
+FROM question_topics 
+WHERE question_topics.topic_id = %(topic_id_1)s AND question_topics.question_id IN (SELECT question.id 
+FROM question 
+WHERE question.user_id = %(user_id_1)s)) AS anon_1 ON anon_1.question_id = question_topics.question_id 
+WHERE question_eval.user_id = %(user_id_2)s]
+[parameters: {'topic_id_1': 1, 'user_id_1': 10, 'user_id_2': 10}]
 (Background on this error at: http://sqlalche.me/e/13/f405)
-2020-10-30 17:04:22,361 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-31 17:18:18,302 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]

@@ -1,4 +1,11 @@
-2020-10-30 14:53:37,141 ERROR: Exception on /class/2/exam/1/topic/1/contribute/ [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+2020-10-31 16:30:57,484 ERROR: Exception on /class/2/exam/1/ [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+Traceback (most recent call last):
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\util\_collections.py", line 210, in __getattr__
+    return self._data[key]
+KeyError: 'question_id'
+
+During handling of the above exception, another exception occurred:
+
 Traceback (most recent call last):
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
     response = self.full_dispatch_request()
@@ -14,11 +21,20 @@ Traceback (most recent call last):
     return self.view_functions[rule.endpoint](**req.view_args)
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
     return func(*args, **kwargs)
-  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 262, in contribute
-    subquery = Question.query(Question.id).filter(Question.user_id != current_user.id).subquery()
-TypeError: 'BaseQuery' object is not callable
-2020-10-30 14:57:34,387 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
-2020-10-30 14:57:35,871 ERROR: Exception on /class/2/exam/1/topic/1/contribute/ [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 316, in exam
+    current_user_topic_evaluations = user_topic_questions.outerjoin(current_user_questions, current_user_questions.c.question_id == user_topic_questions.question_id).subquery()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\util\_collections.py", line 212, in __getattr__
+    raise AttributeError(key)
+AttributeError: question_id
+2020-10-31 16:31:04,178 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-31 16:31:04,526 ERROR: Exception on /class/2/exam/1/ [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+Traceback (most recent call last):
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\util\_collections.py", line 210, in __getattr__
+    return self._data[key]
+KeyError: 'question_id'
+
+During handling of the above exception, another exception occurred:
+
 Traceback (most recent call last):
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
     response = self.full_dispatch_request()
@@ -34,11 +50,20 @@ Traceback (most recent call last):
     return self.view_functions[rule.endpoint](**req.view_args)
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
     return func(*args, **kwargs)
-  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 262, in contribute
-    subquery = Question.with_entities(Question.id).filter_by(user_id=current_user.id).subquery()
-AttributeError: type object 'Question' has no attribute 'with_entities'
-2020-10-30 14:59:38,034 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
-2020-10-30 14:59:39,831 ERROR: Exception on /class/2/exam/1/topic/1/contribute/ [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 316, in exam
+    current_user_topic_evaluations = user_topic_questions.outerjoin(current_user_questions, current_user_questions.c.question_id == user_topic_questions.c.question_id).subquery()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\util\_collections.py", line 212, in __getattr__
+    raise AttributeError(key)
+AttributeError: question_id
+2020-10-31 16:31:22,437 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-31 16:31:23,376 ERROR: Exception on /class/2/exam/1/ [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+Traceback (most recent call last):
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\util\_collections.py", line 210, in __getattr__
+    return self._data[key]
+KeyError: 'question_id'
+
+During handling of the above exception, another exception occurred:
+
 Traceback (most recent call last):
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
     response = self.full_dispatch_request()
@@ -54,12 +79,20 @@ Traceback (most recent call last):
     return self.view_functions[rule.endpoint](**req.view_args)
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
     return func(*args, **kwargs)
-  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 263, in contribute
-    subquery = Question.filter_by(user_id=current_user.id).options(load_only(Question.id)).subquery()
-AttributeError: type object 'Question' has no attribute 'filter_by'
-2020-10-30 14:59:50,634 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
-2020-10-30 15:01:43,873 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
-2020-10-30 15:01:45,099 ERROR: Exception on /class/2/exam/1/topic/1/contribute/ [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 316, in exam
+    current_user_topic_evaluations = user_topic_questions.outerjoin(current_user_questions, current_user_questions.c.question_id == QuestionTopics.c.question_id).subquery()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\util\_collections.py", line 212, in __getattr__
+    raise AttributeError(key)
+AttributeError: question_id
+2020-10-31 16:31:56,010 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-31 16:31:56,769 ERROR: Exception on /class/2/exam/1/ [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+Traceback (most recent call last):
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\util\_collections.py", line 210, in __getattr__
+    return self._data[key]
+KeyError: 'question_id'
+
+During handling of the above exception, another exception occurred:
+
 Traceback (most recent call last):
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
     response = self.full_dispatch_request()
@@ -75,11 +108,29 @@ Traceback (most recent call last):
     return self.view_functions[rule.endpoint](**req.view_args)
   File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
     return func(*args, **kwargs)
-  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 264, in contribute
-    for element in subquery:
-TypeError: 'Alias' object is not iterable
-2020-10-30 15:04:11,388 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
-2020-10-30 15:06:57,178 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
-2020-10-30 15:07:15,874 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
-2020-10-30 15:18:38,478 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
-2020-10-30 15:19:28,559 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 316, in exam
+    current_user_topic_evaluations = user_topic_questions.outerjoin(current_user_questions, current_user_questions.c.question_id == user_topic_questions.question_id).subquery()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\sqlalchemy\util\_collections.py", line 212, in __getattr__
+    raise AttributeError(key)
+AttributeError: question_id
+2020-10-31 16:32:16,754 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]
+2020-10-31 16:32:17,835 ERROR: Exception on /class/2/exam/1/ [GET] [in c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py:1892]
+Traceback (most recent call last):
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\_compat.py", line 39, in reraise
+    raise value
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask\app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "c:\users\ponei\github\crowdquiz\venv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
+    return func(*args, **kwargs)
+  File "C:\Users\ponei\github\CrowdQuiz\app\routes.py", line 316, in exam
+    current_user_topic_evaluations = user_topic_questions.outerjoin(current_user_questions, current_user_questions.question_id == user_topic_questions.question_id).subquery()
+AttributeError: 'Alias' object has no attribute 'question_id'
+2020-10-31 16:32:25,465 INFO: CrowdQuiz startup [in C:\Users\ponei\github\CrowdQuiz\app\__init__.py:57]

@@ -9,6 +9,11 @@
         <li class="breadcrumb-item active" aria-current="page">{{ class_element.body }}</li>
     </ol>
 </nav>
+{% if enrolled %}
+<a href="{{ 'unenroll/' }}" class="btn btn-secondary float-right m-3 font-weight-bold">Unenroll</a>
+{% else %}
+<a href="{{ 'enroll/' }}" class="btn btn-primary float-right m-3 font-weight-bold">Enroll</a>
+{% endif %}
 <div class="jumbotron">
     <h1 class="display-4">{{ class_element.body }}</h1>
     <p class="lead">{{ class_element.description }}</p>

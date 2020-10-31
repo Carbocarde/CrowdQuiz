@@ -15,8 +15,11 @@
     <div class="my-3 p-3 bg-white rounded shadow-sm">
     <p class="card-subtitle text-muted">Question Set Unlock Percentage:</p>
     <div class="progress mb-2 mt-auto">
-        <div class="progress-bar bg-success" data-toggle="tooltip" data-placement="top" title="Unlock Completion Percentage" role="progressbar" style="{{ 'width: {}%'.format(16) }}"></div>
+        <div class="progress-bar bg-success" data-toggle="tooltip" data-placement="top" title="Unlock Completion Percentage" role="progressbar" style="{{ 'width: {}%'.format(overall_unlock_percent - overall_level_subtractor) }}">{{ '{:.0f}%'.format(overall_unlock_percent - overall_level_subtractor) }}</div>
     </div>
+    <h5 class="card-subtitle mt-2 text-muted">
+        <span class="badge badge-secondary">Unlock Level: <span class="badge badge-light">{{ overall_level }}</span></span>
+    </h5>
     </div>
     <a href="contribute/" class="btn btn-primary mb-2">Unlock this exam</a>
 </div>
@@ -30,7 +33,7 @@
 
 <div class="my-3 p-3 bg-white rounded shadow-sm">
     <h6 class="border-bottom border-gray pb-2 mb-0">Topic-Specific Quizzing:</h6>
-    {% for exam_topic, question_count in exam_topic_question_counts %}
+    {% for exam_topic, question_count, unlock_percent, level, level_subtractor, following in exam_topic_question_counts %}
         {% include '_topic.html' %}
     {% endfor %}
 </div>
