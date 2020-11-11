@@ -6,8 +6,8 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="/">{{ exam.exam_class.school.body }}</a></li>
-        <li class="breadcrumb-item"><a href="{{ '/class/%s/' % exam.exam_class.id }}">{{ exam.exam_class.body }}</a></li>
-        <li class="breadcrumb-item"><a href="{{ '/class/{0}/exam/{1}/'.format(exam.exam_class.id, exam.id) }}">{{ exam.body }}</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('main.class_', class_id=exam.exam_class.id) }}">{{ exam.exam_class.body }}</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('main.exam', class_id=exam.exam_class.id, exam_id=exam.id) }}">{{ exam.body }}</a></li>
         <li class="breadcrumb-item active" aria-current="page">Suggested Topics</li>
     </ol>
 </nav>
@@ -36,7 +36,7 @@
     <h6 class="border-bottom border-gray pb-2 mb-0">Topics:</h6>
     <div class="row">
     {% for exam_topic, question_count, unlock_percent, level, level_subtractor, following in exam_topic_question_counts %}
-        {% include '_topic.html' %}
+        {% include 'main/_topic.html' %}
     {% endfor %}
     </div>
 </div>
@@ -49,7 +49,7 @@
     <div class="card-body">
         <h5 class="card-title">Can't find the topic you're looking for?</h5>
         <p class="card-text">Suggest a new topic</p>
-        <a href="{{ url_for('suggest_topic', class_id=exam.exam_class.id, exam_id=exam.id) }}" class="btn btn-primary">Propose topic</a>
+        <a href="{{ url_for('main.suggest_topic', class_id=exam.exam_class.id, exam_id=exam.id) }}" class="btn btn-primary">Propose topic</a>
     </div>
 </div>
 

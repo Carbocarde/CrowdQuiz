@@ -16,7 +16,7 @@
 <div class="jumbotron mt-3">
     <h1 class="display-4">Hey there!</h1>
     <p class="lead">Let's get you quizzing! Click the button below to start!</p>
-    <a class="btn btn-primary" href="{{ url_for('login') }}"> Log in/Register </a>
+    <a class="btn btn-primary" href="{{ url_for('auth.login') }}"> Log in/Register </a>
 </div>
 {% endif %}
 
@@ -26,7 +26,7 @@
     <div class="row">
     {% for class, exams, enrolled in enrolled_class_exams %}
         {% if enrolled %}
-            {% include '_class.html' %}
+            {% include 'main/_class.html' %}
         {% endif %}
     {% endfor %}
     </div>
@@ -39,7 +39,7 @@
     <div class="row">
     {% for class, exams, enrolled in unenrolled_class_exams %}
         {% if not enrolled %}
-            {% include '_class.html' %}
+            {% include 'main/_class.html' %}
         {% endif %}
     {% endfor %}
     </div>
@@ -53,7 +53,7 @@
     <div class="card-body">
         <h5 class="card-title">Can't find the class you're looking for?</h5>
         <p class="card-text">Browse suggested classes or suggest your own</p>
-        <a href="{{ url_for('suggested_classes') }}" class="btn btn-primary">Browse Proposed Classes</a>
+        <a href="{{ url_for('main.suggested_classes') }}" class="btn btn-primary">Browse Proposed Classes</a>
     </div>
 </div>
 {% endblock app_content %}

@@ -6,7 +6,7 @@
         <p class="lead">You look great today</p>
         {% if user == current_user %}
         <p class="lead">
-            <a class="btn btn-primary btn-lg" href="{{ url_for('edit_profile') }}" role="button">Edit your profile</a>
+            <a class="btn btn-primary btn-lg" href="{{ url_for('main.edit_profile') }}" role="button">Edit your profile</a>
         </p>
         {% endif %}
     </div>
@@ -16,7 +16,7 @@
             <h6 class="border-bottom border-gray pb-2 mb-0">Enrolled Classes:</h6>
             <div class="row">
             {% for class, exams in class_exams %}
-                {% include '_class.html' %}
+                {% include 'main/_class.html' %}
             {% endfor %}
             </div>
         </div>
@@ -27,7 +27,7 @@
             <h6 class="border-bottom border-gray pb-2 mb-0">Waitlisted Classes (pending approval):</h6>
             <div class="row">
             {% for class, exams in unenrolled_class_exams %}
-                {% include '_class.html' %}
+                {% include 'main/_class.html' %}
             {% endfor %}
             </div>
         </div>
@@ -38,7 +38,7 @@
             <h6 class="border-bottom border-gray pb-2 mb-0">Questions you contributed:</h6>
             <div class="row">
             {% for question in questions %}
-                {% include '_question.html' %}
+                {% include 'main/_question.html' %}
             {% endfor %}
             </div>
         </div>

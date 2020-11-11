@@ -59,7 +59,7 @@ def index():
             unenrolled_classes.append(class_element)
             unenrolled_count += 1
 
-    return render_template('index.html', title='Home', enrolled_classes = enrolled_count, unenrolled_classes = unenrolled_count, enrolled_class_exams=zip(enrolled_classes, exams, enrolled), unenrolled_class_exams=zip(unenrolled_classes, unenrolled_exams, unenrolled))
+    return render_template('main/index.html', title='Home', enrolled_classes = enrolled_count, unenrolled_classes = unenrolled_count, enrolled_class_exams=zip(enrolled_classes, exams, enrolled), unenrolled_class_exams=zip(unenrolled_classes, unenrolled_exams, unenrolled))
 
 @bp.route('/suggested_classes/')
 @login_required
@@ -98,7 +98,7 @@ def suggested_classes():
             unenrolled_classes.append(class_element)
             unenrolled_count += 1
 
-    return render_template('suggested_classes.html', title='Proposed Classes', enrolled_classes = enrolled_count, unenrolled_classes = unenrolled_count, enrolled_class_exams=zip(enrolled_classes, exams, enrolled), unenrolled_class_exams=zip(unenrolled_classes, unenrolled_exams, unenrolled))
+    return render_template('main/suggested_classes.html', title='Proposed Classes', enrolled_classes = enrolled_count, unenrolled_classes = unenrolled_count, enrolled_class_exams=zip(enrolled_classes, exams, enrolled), unenrolled_class_exams=zip(unenrolled_classes, unenrolled_exams, unenrolled))
 
 @bp.route('/suggested_classes/propose_class', methods=['GET', 'POST'])
 @login_required
@@ -110,9 +110,9 @@ def propose_class():
         db.session.add(new_class)
         db.session.commit()
 
-        return redirect(url_for('suggested_classes'))
+        return redirect(url_for('main.suggested_classes'))
 
-    return render_template('suggest_class.html', form=form)
+    return render_template('main/suggest_class.html', form=form)
 
 @bp.route('/class/<class_id>/')
 @login_required
@@ -131,7 +131,7 @@ def class_(class_id):
     for exam in exams:
         exam_topics.append(ExamTopics.query.filter_by(exam_id=exam.id).limit(9))
 
-    return render_template('class.html', title=class_element.body, enrolled=enrolled, class_element=class_element, exam_topics_all=zip(exams, exam_topics))
+    return render_template('main/class.html', title=class_element.body, enrolled=enrolled, class_element=class_element, exam_topics_all=zip(exams, exam_topics))
 
 @bp.route('/class/<class_id>/suggest_exam_structure/', methods=['GET', 'POST'])
 @login_required
@@ -146,9 +146,9 @@ def suggested_exam_structure(class_id):
         db.session.commit()
 
         flash('Your suggestion has been recieved!')
-        return redirect(url_for('class_', class_id=class_id))
+        return redirect(url_for('main.class_', class_id=class_id))
 
-    return render_template('suggest_exam_structure.html', title='Proposed Exams', class_element=class_element, form=form)
+    return render_template('main/suggest_exam_structure.html', title='Proposed Exams', class_element=class_element, form=form)
 
 @bp.route('/class/<class_id>/exam/<exam_id>/suggested_topics/', methods=['GET', 'POST'])
 @login_required
@@ -199,7 +199,7 @@ def suggested_topics(class_id, exam_id):
             level_subtractor.append(level_subtractor_element)
             level.append(j + 1)
 
-    return render_template('suggested_topics.html', title='Proposed Topics', exam=exam, exam_topic_question_counts=zip(followed_exam_topics, question_count, unlock_percent, level, level_subtractor, following), unfollowed_topics=unfollowed_topics_count)
+    return render_template('main/suggested_topics.html', title='Proposed Topics', exam=exam, exam_topic_question_counts=zip(followed_exam_topics, question_count, unlock_percent, level, level_subtractor, following), unfollowed_topics=unfollowed_topics_count)
 
 @bp.route('/class/<class_id>/exam/<exam_id>/suggested_topics/propose_new', methods=['GET', 'POST'])
 @login_required
@@ -218,9 +218,9 @@ def suggest_topic(class_id, exam_id):
         db.session.add(new_exam_topics)
         db.session.commit()
 
-        return redirect(url_for('suggested_topics', class_id=class_id, exam_id=exam_id))
+        return redirect(url_for('main.suggested_topics', class_id=class_id, exam_id=exam_id))
 
-    return render_template('suggest_topic.html', form=form, exam=exam)
+    return render_template('main/suggest_topic.html', form=form, exam=exam)
 
 @bp.route('/class/<class_id>/enroll/')
 @login_required
@@ -234,7 +234,7 @@ def enroll(class_id):
         db.session.add(evaluation)
         db.session.commit()
 
-    return redirect(url_for('class_', class_id=class_id))
+    return redirect(url_for('main.class_', class_id=class_id))
 
 @bp.route('/class/<class_id>/unenroll/')
 @login_required
@@ -245,7 +245,7 @@ def unenroll(class_id):
     db.session.delete(evaluation)
     db.session.commit()
 
-    return redirect('/')
+    return redirect(url_for('main.class_', class_id=class_id))
 
 @bp.route('/class/<class_id>/exam/<exam_id>/')
 @login_required
@@ -308,7 +308,7 @@ def exam(class_id, exam_id):
 
     overall_level = j + 1
 
-    return render_template('exam.html', title="Exam", exam=exam, overall_unlock_percent=overall_unlock_percent, overall_level_subtractor=overall_level_subtractor, overall_level=overall_level, exam_topic_question_counts=zip(followed_exam_topics, question_count, unlock_percent, level, level_subtractor, following))
+    return render_template('main/exam.html', title="Exam", exam=exam, overall_unlock_percent=overall_unlock_percent, overall_level_subtractor=overall_level_subtractor, overall_level=overall_level, exam_topic_question_counts=zip(followed_exam_topics, question_count, unlock_percent, level, level_subtractor, following))
 
 @bp.route('/class/<class_id>/exam/<exam_id>/contribute/', defaults={'topic_id': None}, methods=['GET', 'POST'])
 @bp.route('/class/<class_id>/exam/<exam_id>/topic/<topic_id>/contribute/', methods=['GET', 'POST'])
@@ -371,9 +371,9 @@ def contribute(class_id, exam_id, topic_id):
 
                 j += 1
             flash('Question Evaluations Submitted!.')
-            return redirect(url_for('exam', class_id=class_id, exam_id=exam_id))
+            return redirect(url_for('main.exam', class_id=class_id, exam_id=exam_id))
 
-    return render_template('contribute.html', title="Contribute", exam=exam, topic=topic, form=form, evaluate_forms=zip(form.evaluate_entries, evaluate_questions, evaluate_topics), eval_questions=len(evaluate_questions))
+    return render_template('main/contribute_eval.html', title="Contribute", exam=exam, topic=topic, form=form, evaluate_forms=zip(form.evaluate_entries, evaluate_questions, evaluate_topics), eval_questions=len(evaluate_questions))
 
 @bp.route('/class/<class_id>/exam/<exam_id>/contribute/question/', defaults={'topic_id': None}, methods=['GET', 'POST'])
 @bp.route('/class/<class_id>/exam/<exam_id>/topic/<topic_id>/contribute/question/', methods=['GET', 'POST'])
@@ -479,9 +479,9 @@ def contribute_question(class_id, exam_id, topic_id):
                 db.session.commit()
 
         flash('Question Contributed!')
-        return redirect(url_for('contribute_question', class_id=class_id, exam_id=exam_id, topic_id=topic_id))
+        return redirect(url_for('main.contribute_question', class_id=class_id, exam_id=exam_id, topic_id=topic_id))
 
-    return render_template('contribute_question.html', title='Contribute', topic=topic, exam=exam, form=form)
+    return render_template('main/contribute_question.html', title='Contribute', topic=topic, exam=exam, form=form)
 
 @bp.route('/class/<class_id>/exam/<exam_id>/topic/<topic_id>/follow/')
 @login_required
@@ -497,13 +497,13 @@ def follow_topic(class_id, exam_id, topic_id):
         db.session.add(follow_exam_topic)
         db.session.commit()
 
-    return redirect(url_for('exam', class_id=class_id, exam_id=exam_id))
+    return redirect(url_for('main.exam', class_id=class_id, exam_id=exam_id))
 
 @bp.route('/admin')
 @login_required
 def admin():
     if not current_user.admin:
-        return render_template('404.html')
+        return render_template(url_for('errors.404'))
 
     pending_exam_structures = ExamStructureSuggestion.query.filter_by(approved=False).limit(20)
     classes = Class.query.filter_by(approved=False).limit(20)
@@ -513,26 +513,26 @@ def admin():
     for question in questions:
         topics.append(QuestionTopics.query.filter_by(question_id = question.id))
 
-    return render_template('admin.html', title='Admin Dashboard', question_topics=zip(questions,topics), exam_structure_suggestions=pending_exam_structures, classes=classes)
+    return render_template('main/admin.html', title='Admin Dashboard', question_topics=zip(questions,topics), exam_structure_suggestions=pending_exam_structures, classes=classes)
 
 @bp.route('/class/<class_id>/approve')
 @login_required
 def approve_class(class_id):
     if not current_user.admin:
-        return render_template('404.html')
+        return render_template('errors.404')
 
     class_element = Class.query.filter_by(id=class_id).first_or_404()
     class_element.approved = True
     db.session.commit()
 
     flash('Class ' + class_element.body + " Approved!")
-    return redirect(url_for('admin'))
+    return redirect(url_for('main.admin'))
 
 @bp.route('/exam_structure/<exam_structure_id>/approve')
 @login_required
 def approve_exam_structure(exam_structure_id):
     if not current_user.admin:
-        return render_template('404.html')
+        return render_template('errors.404')
 
     structure = ExamStructureSuggestion.query.filter_by(id=exam_structure_id).first_or_404()
 
@@ -569,7 +569,7 @@ def approve_exam_structure(exam_structure_id):
     db.session.commit()
 
     flash('Exam structure added for ' + structure.exam_class.body)
-    return redirect(url_for('admin'))
+    return redirect(url_for('main.admin'))
 
 @bp.route('/user/<username>')
 @login_required
@@ -592,7 +592,7 @@ def user(username):
             unenrolled_exams.append(Exam.query.filter_by(class_id=enrollment.class_id))
 
 
-    return render_template('user.html', user=user, questions=questions, class_exams=zip(classes, exams), enrolled=(len(exams) > 0), unenrolled_class_exams=zip(unenrolled_classes, unenrolled_exams), unenrolled=(len(exams) > 0))
+    return render_template('main/user.html', user=user, questions=questions, class_exams=zip(classes, exams), enrolled=(len(exams) > 0), unenrolled_class_exams=zip(unenrolled_classes, unenrolled_exams), unenrolled=(len(exams) > 0))
 
 @bp.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
@@ -603,27 +603,12 @@ def edit_profile():
         current_user.name = form.name.data
         db.session.commit()
         flash('Your changes have been saved.')
-        return redirect(url_for('user', username=current_user.username))
+        return redirect(url_for('main.user', username=current_user.username))
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.name.data = current_user.name
-    return render_template('edit_profile.html', title='Edit Profile',
+    return render_template('main/edit_profile.html', title='Edit Profile',
                            form=form)
-
-@bp.route('/question/<question_id>', methods=['GET'])
-def show_question(question_id):
-    """Show the details of a question."""
-    question = Question.query.filter_by(id=question_id).first()
-    answers = Answer.query.filter_by(question_id=question_id)
-
-    if (question == None):
-        return render_template('404.html')
-
-    return render_template(
-        'question.html',
-        question=question,
-        answers=answers
-    )
 
 @bp.route('/delete_question/<question_id>', methods=['GET', 'POST'])
 @login_required
@@ -631,7 +616,7 @@ def delete_question(question_id):
     question = Question.query.filter_by(id=question_id).first_or_404()
     if not (current_user.id == question.user_id or current_user.admin):
         flash('You do not have permission for this page')
-        return redirect(url_for('index'))
+        return redirect(url_for('main.index'))
 
     answers = Answer.query.filter_by(question_id=question_id)
     topics = QuestionTopics.query.filter_by(question_id=question_id)
@@ -648,12 +633,12 @@ def delete_question(question_id):
             Answer.query.filter_by(question_id=question_id).delete()
             db.session.commit()
             flash('Question Successfully Deleted.')
-            return redirect(url_for('index'))
+            return redirect(url_for('main.index'))
         if form.cancel.data:
-            return redirect(url_for('index'))
+            return redirect(url_for('main.index'))
 
     return render_template(
-        'delete_question.html',
+        'main/delete_question.html',
         question=question,
         topics=allTopics,
         answers=answers,
@@ -722,7 +707,7 @@ def evaluate_questions(subject_id):
                 db.session.commit()
 
     return render_template(
-        'evaluate_question.html',
+        'main/evaluate_question.html',
         question=question,
         topics=allTopics,
         answers=answers,
