@@ -7,32 +7,6 @@ from functools import partial
 from wtforms.widgets import TextArea
 from wtforms import Form as NoCsrfForm
 
-class LoginForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[DataRequired()])
-    remember_me = BooleanField('Remember Me')
-    submit = SubmitField('Sign In')
-
-class RegistrationForm(FlaskForm):
-    name = StringField('First Name', validators=[DataRequired(), Regexp('^([A-Za-z][A-Za-z\'\-]*)$', message="Names must contain only letters and apostrophes")])
-    username = StringField('Username', validators=[DataRequired()])
-    email = StringField('Email', validators=[DataRequired(), Email()])
-    password = PasswordField('Password', validators=[DataRequired()])
-    password2 = PasswordField(
-        'Repeat Password', validators=[DataRequired(), EqualTo('password')])
-    school = QuerySelectField()
-    submit = SubmitField('Register')
-
-    def validate_username(self, username):
-        user = User.query.filter_by(username=username.data).first()
-        if user is not None:
-            raise ValidationError('Please use a different username.')
-
-    def validate_email(self, email):
-        user = User.query.filter_by(email=email.data).first()
-        if user is not None:
-            raise ValidationError('Please use a different email address.')
-
 class EditExamStructureForm(FlaskForm):
     exams = DecimalField('Number of Exams (Excluding Final Exam)', validators=[DataRequired("Please enter a number"), NumberRange(min=0, message='Please enter a non-negative number')])
     quizzes = DecimalField('Number of Quizzes', validators=[DataRequired("Please enter a number"), NumberRange(min=0, message='Please enter a non-negative number')])
@@ -108,16 +82,6 @@ class EditProfileForm(FlaskForm):
             user = User.query.filter_by(username=self.username.data).first()
             if user is not None:
                 raise ValidationError('Please use a different username.')
-
-class ResetPasswordRequestForm(FlaskForm):
-    email = StringField('Email', validators=[DataRequired(), Email()])
-    submit = SubmitField('Request Password Reset')
-
-class ResetPasswordForm(FlaskForm):
-    password = PasswordField('Password', validators=[DataRequired()])
-    password2 = PasswordField(
-        'Repeat Password', validators=[DataRequired(), EqualTo('password')])
-    submit = SubmitField('Request Password Reset')
 
 """
 class AnswerForm(FlaskForm):

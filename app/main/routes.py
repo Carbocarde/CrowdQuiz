@@ -1,58 +1,20 @@
 from datetime import datetime
-from flask import render_template, flash, redirect, url_for, request
+from flask import render_template, flash, redirect, url_for, request, current_app
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
-from app import app, db
+from app import db
 from app.models import User, Question, Answer, Topic, QuestionTopics, QuestionEval, School, Class, Exam, ExamTopics, Enrollment, ExamStructureSuggestion, QuestionAnswer, QuestionAnswerArgument, FollowExamTopic
-from app.forms import LoginForm, RegistrationForm, EditProfileForm, ResetPasswordRequestForm, ResetPasswordForm, NewQuestionForm, NewTopicForm, DeleteQuestionForm, ReviewQuestionForm, QuizQuestion, NewSubjectForm, EditExamStructureForm, EvaluateQuestionSubForm, ContributeForm, ProposeClassForm, ProposeTopicForm, NewQuestionForm
-from app.email import send_password_reset_email
+from app.main.forms import EditProfileForm, NewQuestionForm, NewTopicForm, DeleteQuestionForm, ReviewQuestionForm, QuizQuestion, NewSubjectForm, EditExamStructureForm, EvaluateQuestionSubForm, ContributeForm, ProposeClassForm, ProposeTopicForm, NewQuestionForm
 from sqlalchemy.sql.expression import func
 from sqlalchemy.sql import except_
 import random
 from collections import namedtuple
 from sqlalchemy.orm import load_only
+from app.main import bp
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if current_user.is_authenticated:
-        return redirect(url_for('index'))
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
-        if user is None or not user.check_password(form.password.data):
-            flash('Invalid username or password')
-            return redirect(url_for('login'))
-        login_user(user, remember=form.remember_me.data)
-        next_page = request.args.get('next')
-        if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('index')
-        return redirect(next_page)
-    return render_template('login.html', title='Sign In', form=form)
-
-@app.route('/logout')
-def logout():
-    logout_user()
-    return redirect(url_for('index'))
-
-@app.route('/register', methods=['GET', 'POST'])
-def register():
-    if current_user.is_authenticated:
-        return redirect(url_for('index'))
-
-    form = RegistrationForm()
-    form.school.query = School.query.all()
-    if form.validate_on_submit():
-        user = User(username=form.username.data, email=form.email.data, name=form.name.data, admin=False, school_id=form.school.data.id)
-        user.set_password(form.password.data)
-        db.session.add(user)
-        db.session.commit()
-        flash('Congratulations, you are now a registered user!')
-        return redirect(url_for('login'))
-    return render_template('register.html', title='Register', form=form)
-
-@app.route('/')
-@app.route('/index')
-@app.route('/home')
+@bp.route('/')
+@bp.route('/index')
+@bp.route('/home')
 def index():
     exams = []
     enrolled = []
@@ -99,7 +61,7 @@ def index():
 
     return render_template('index.html', title='Home', enrolled_classes = enrolled_count, unenrolled_classes = unenrolled_count, enrolled_class_exams=zip(enrolled_classes, exams, enrolled), unenrolled_class_exams=zip(unenrolled_classes, unenrolled_exams, unenrolled))
 
-@app.route('/suggested_classes/')
+@bp.route('/suggested_classes/')
 @login_required
 def suggested_classes():
     exams = []
@@ -138,7 +100,7 @@ def suggested_classes():
 
     return render_template('suggested_classes.html', title='Proposed Classes', enrolled_classes = enrolled_count, unenrolled_classes = unenrolled_count, enrolled_class_exams=zip(enrolled_classes, exams, enrolled), unenrolled_class_exams=zip(unenrolled_classes, unenrolled_exams, unenrolled))
 
-@app.route('/suggested_classes/propose_class', methods=['GET', 'POST'])
+@bp.route('/suggested_classes/propose_class', methods=['GET', 'POST'])
 @login_required
 def propose_class():
     form = ProposeClassForm()
@@ -152,7 +114,7 @@ def propose_class():
 
     return render_template('suggest_class.html', form=form)
 
-@app.route('/class/<class_id>/')
+@bp.route('/class/<class_id>/')
 @login_required
 def class_(class_id):
     class_element = Class.query.filter_by(id=class_id).first_or_404();
@@ -171,7 +133,7 @@ def class_(class_id):
 
     return render_template('class.html', title=class_element.body, enrolled=enrolled, class_element=class_element, exam_topics_all=zip(exams, exam_topics))
 
-@app.route('/class/<class_id>/suggest_exam_structure/', methods=['GET', 'POST'])
+@bp.route('/class/<class_id>/suggest_exam_structure/', methods=['GET', 'POST'])
 @login_required
 def suggested_exam_structure(class_id):
 
@@ -188,7 +150,7 @@ def suggested_exam_structure(class_id):
 
     return render_template('suggest_exam_structure.html', title='Proposed Exams', class_element=class_element, form=form)
 
-@app.route('/class/<class_id>/exam/<exam_id>/suggested_topics/', methods=['GET', 'POST'])
+@bp.route('/class/<class_id>/exam/<exam_id>/suggested_topics/', methods=['GET', 'POST'])
 @login_required
 def suggested_topics(class_id, exam_id):
     exam = Exam.query.filter_by(id = exam_id).first_or_404()
@@ -239,7 +201,7 @@ def suggested_topics(class_id, exam_id):
 
     return render_template('suggested_topics.html', title='Proposed Topics', exam=exam, exam_topic_question_counts=zip(followed_exam_topics, question_count, unlock_percent, level, level_subtractor, following), unfollowed_topics=unfollowed_topics_count)
 
-@app.route('/class/<class_id>/exam/<exam_id>/suggested_topics/propose_new', methods=['GET', 'POST'])
+@bp.route('/class/<class_id>/exam/<exam_id>/suggested_topics/propose_new', methods=['GET', 'POST'])
 @login_required
 def suggest_topic(class_id, exam_id):
     form = ProposeTopicForm()
@@ -260,7 +222,7 @@ def suggest_topic(class_id, exam_id):
 
     return render_template('suggest_topic.html', form=form, exam=exam)
 
-@app.route('/class/<class_id>/enroll/')
+@bp.route('/class/<class_id>/enroll/')
 @login_required
 def enroll(class_id):
     class_element = Class.query.filter_by(id=class_id).first_or_404();
@@ -274,7 +236,7 @@ def enroll(class_id):
 
     return redirect(url_for('class_', class_id=class_id))
 
-@app.route('/class/<class_id>/unenroll/')
+@bp.route('/class/<class_id>/unenroll/')
 @login_required
 def unenroll(class_id):
     class_element = Class.query.filter_by(id=class_id).options(load_only(Class.id)).first_or_404();
@@ -285,7 +247,7 @@ def unenroll(class_id):
 
     return redirect('/')
 
-@app.route('/class/<class_id>/exam/<exam_id>/')
+@bp.route('/class/<class_id>/exam/<exam_id>/')
 @login_required
 def exam(class_id, exam_id):
     exam = Exam.query.filter_by(id = exam_id).first_or_404()
@@ -348,8 +310,8 @@ def exam(class_id, exam_id):
 
     return render_template('exam.html', title="Exam", exam=exam, overall_unlock_percent=overall_unlock_percent, overall_level_subtractor=overall_level_subtractor, overall_level=overall_level, exam_topic_question_counts=zip(followed_exam_topics, question_count, unlock_percent, level, level_subtractor, following))
 
-@app.route('/class/<class_id>/exam/<exam_id>/contribute/', defaults={'topic_id': None}, methods=['GET', 'POST'])
-@app.route('/class/<class_id>/exam/<exam_id>/topic/<topic_id>/contribute/', methods=['GET', 'POST'])
+@bp.route('/class/<class_id>/exam/<exam_id>/contribute/', defaults={'topic_id': None}, methods=['GET', 'POST'])
+@bp.route('/class/<class_id>/exam/<exam_id>/topic/<topic_id>/contribute/', methods=['GET', 'POST'])
 @login_required
 def contribute(class_id, exam_id, topic_id):
 
@@ -413,8 +375,8 @@ def contribute(class_id, exam_id, topic_id):
 
     return render_template('contribute.html', title="Contribute", exam=exam, topic=topic, form=form, evaluate_forms=zip(form.evaluate_entries, evaluate_questions, evaluate_topics), eval_questions=len(evaluate_questions))
 
-@app.route('/class/<class_id>/exam/<exam_id>/contribute/question/', defaults={'topic_id': None}, methods=['GET', 'POST'])
-@app.route('/class/<class_id>/exam/<exam_id>/topic/<topic_id>/contribute/question/', methods=['GET', 'POST'])
+@bp.route('/class/<class_id>/exam/<exam_id>/contribute/question/', defaults={'topic_id': None}, methods=['GET', 'POST'])
+@bp.route('/class/<class_id>/exam/<exam_id>/topic/<topic_id>/contribute/question/', methods=['GET', 'POST'])
 @login_required
 def contribute_question(class_id, exam_id, topic_id):
 
@@ -521,7 +483,7 @@ def contribute_question(class_id, exam_id, topic_id):
 
     return render_template('contribute_question.html', title='Contribute', topic=topic, exam=exam, form=form)
 
-@app.route('/class/<class_id>/exam/<exam_id>/topic/<topic_id>/follow/')
+@bp.route('/class/<class_id>/exam/<exam_id>/topic/<topic_id>/follow/')
 @login_required
 def follow_topic(class_id, exam_id, topic_id):
     class_element = Class.query.filter_by(id=class_id).first_or_404();
@@ -537,7 +499,7 @@ def follow_topic(class_id, exam_id, topic_id):
 
     return redirect(url_for('exam', class_id=class_id, exam_id=exam_id))
 
-@app.route('/admin')
+@bp.route('/admin')
 @login_required
 def admin():
     if not current_user.admin:
@@ -553,7 +515,7 @@ def admin():
 
     return render_template('admin.html', title='Admin Dashboard', question_topics=zip(questions,topics), exam_structure_suggestions=pending_exam_structures, classes=classes)
 
-@app.route('/class/<class_id>/approve')
+@bp.route('/class/<class_id>/approve')
 @login_required
 def approve_class(class_id):
     if not current_user.admin:
@@ -566,7 +528,7 @@ def approve_class(class_id):
     flash('Class ' + class_element.body + " Approved!")
     return redirect(url_for('admin'))
 
-@app.route('/exam_structure/<exam_structure_id>/approve')
+@bp.route('/exam_structure/<exam_structure_id>/approve')
 @login_required
 def approve_exam_structure(exam_structure_id):
     if not current_user.admin:
@@ -609,7 +571,7 @@ def approve_exam_structure(exam_structure_id):
     flash('Exam structure added for ' + structure.exam_class.body)
     return redirect(url_for('admin'))
 
-@app.route('/user/<username>')
+@bp.route('/user/<username>')
 @login_required
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
@@ -632,7 +594,7 @@ def user(username):
 
     return render_template('user.html', user=user, questions=questions, class_exams=zip(classes, exams), enrolled=(len(exams) > 0), unenrolled_class_exams=zip(unenrolled_classes, unenrolled_exams), unenrolled=(len(exams) > 0))
 
-@app.route('/edit_profile', methods=['GET', 'POST'])
+@bp.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
     form = EditProfileForm(current_user.username)
@@ -648,36 +610,7 @@ def edit_profile():
     return render_template('edit_profile.html', title='Edit Profile',
                            form=form)
 
-@app.route('/reset_password_request', methods=['GET', 'POST'])
-def reset_password_request():
-    if current_user.is_authenticated:
-        return redirect(url_for('index'))
-    form = ResetPasswordRequestForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
-        if user:
-            send_password_reset_email(user)
-        flash('Check your email for the instructions to reset your password')
-        return redirect(url_for('login'))
-    return render_template('reset_password_request.html',
-                           title='Reset Password', form=form)
-
-@app.route('/reset_password/<token>', methods=['GET', 'POST'])
-def reset_password(token):
-    if current_user.is_authenticated:
-        return redirect(url_for('index'))
-    user = User.verify_reset_password_token(token)
-    if not user:
-        return redirect(url_for('index'))
-    form = ResetPasswordForm()
-    if form.validate_on_submit():
-        user.set_password(form.password.data)
-        db.session.commit()
-        flash('Your password has been reset.')
-        return redirect(url_for('login'))
-    return render_template('reset_password.html', form=form)
-
-@app.route('/question/<question_id>', methods=['GET'])
+@bp.route('/question/<question_id>', methods=['GET'])
 def show_question(question_id):
     """Show the details of a question."""
     question = Question.query.filter_by(id=question_id).first()
@@ -692,7 +625,7 @@ def show_question(question_id):
         answers=answers
     )
 
-@app.route('/delete_question/<question_id>', methods=['GET', 'POST'])
+@bp.route('/delete_question/<question_id>', methods=['GET', 'POST'])
 @login_required
 def delete_question(question_id):
     question = Question.query.filter_by(id=question_id).first_or_404()
@@ -727,7 +660,7 @@ def delete_question(question_id):
         form=form
     )
 
-@app.route('/subject/<subject_id>/evaluate', methods=['GET', 'POST'])
+@bp.route('/subject/<subject_id>/evaluate', methods=['GET', 'POST'])
 @login_required
 def evaluate_questions(subject_id):
     wasSkipped=False
