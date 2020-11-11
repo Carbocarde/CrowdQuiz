@@ -1,6 +1,6 @@
 <div class="card m-3" style="width: 18rem;">
   <div class="card-body d-flex flex-column">
-    <a href="{{ '/class/%s/' % class.id }}" class="text-dark">
+    <a href="{{ url_for('main.class_', class_id=class.id) }}" class="text-dark">
     <h3 class="card-title">{{ class.body }}</h3></a>
     <h6 class="card-subtitle mb-2 text-muted">
         {% if exams %}

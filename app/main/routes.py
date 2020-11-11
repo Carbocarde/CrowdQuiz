@@ -4,7 +4,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from app import db
 from app.models import User, Question, Answer, Topic, QuestionTopics, QuestionEval, School, Class, Exam, ExamTopics, Enrollment, ExamStructureSuggestion, QuestionAnswer, QuestionAnswerArgument, FollowExamTopic
-from app.main.forms import EditProfileForm, NewQuestionForm, NewTopicForm, DeleteQuestionForm, ReviewQuestionForm, QuizQuestion, NewSubjectForm, EditExamStructureForm, EvaluateQuestionSubForm, ContributeForm, ProposeClassForm, ProposeTopicForm, NewQuestionForm
+from app.main.forms import NewQuestionForm, NewTopicForm, DeleteQuestionForm, ReviewQuestionForm, QuizQuestion, NewSubjectForm, EditExamStructureForm, EvaluateQuestionSubForm, ContributeForm, ProposeClassForm, ProposeTopicForm, NewQuestionForm
 from sqlalchemy.sql.expression import func
 from sqlalchemy.sql import except_
 import random
@@ -250,7 +250,7 @@ def unenroll(class_id):
 @bp.route('/class/<class_id>/exam/<exam_id>/')
 @login_required
 def exam(class_id, exam_id):
-    exam = Exam.query.filter_by(id = exam_id).first_or_404()
+    exam = Exam.query.filter_by(id = exam_id, class_id = class_id).first_or_404()
 
     exam_topics = ExamTopics.query.filter_by(exam_id=exam.id).limit(25)
 
@@ -570,45 +570,6 @@ def approve_exam_structure(exam_structure_id):
 
     flash('Exam structure added for ' + structure.exam_class.body)
     return redirect(url_for('main.admin'))
-
-@bp.route('/user/<username>')
-@login_required
-def user(username):
-    user = User.query.filter_by(username=username).first_or_404()
-    questions = Question.query.filter_by(user_id=user.id).order_by(Question.id.desc()).limit(20)
-    enrollments = Enrollment.query.filter_by(user_id=user.id).limit(20)
-
-    exams = []
-    classes = []
-
-    unenrolled_exams = []
-    unenrolled_classes = []
-    for enrollment in enrollments:
-        if enrollment.enrolled_class.approved:
-            classes.append(enrollment.enrolled_class)
-            exams.append(Exam.query.filter_by(class_id=enrollment.class_id))
-        else:
-            unenrolled_classes.append(enrollment.enrolled_class)
-            unenrolled_exams.append(Exam.query.filter_by(class_id=enrollment.class_id))
-
-
-    return render_template('main/user.html', user=user, questions=questions, class_exams=zip(classes, exams), enrolled=(len(exams) > 0), unenrolled_class_exams=zip(unenrolled_classes, unenrolled_exams), unenrolled=(len(exams) > 0))
-
-@bp.route('/edit_profile', methods=['GET', 'POST'])
-@login_required
-def edit_profile():
-    form = EditProfileForm(current_user.username)
-    if form.validate_on_submit():
-        current_user.username = form.username.data
-        current_user.name = form.name.data
-        db.session.commit()
-        flash('Your changes have been saved.')
-        return redirect(url_for('main.user', username=current_user.username))
-    elif request.method == 'GET':
-        form.username.data = current_user.username
-        form.name.data = current_user.name
-    return render_template('main/edit_profile.html', title='Edit Profile',
-                           form=form)
 
 @bp.route('/delete_question/<question_id>', methods=['GET', 'POST'])
 @login_required

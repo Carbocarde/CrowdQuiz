@@ -6,7 +6,7 @@
         <p class="lead">You look great today</p>
         {% if user == current_user %}
         <p class="lead">
-            <a class="btn btn-primary btn-lg" href="{{ url_for('main.edit_profile') }}" role="button">Edit your profile</a>
+            <a class="btn btn-primary btn-lg" href="{{ url_for('user.edit_profile') }}" role="button">Edit your profile</a>
         </p>
         {% endif %}
     </div>
