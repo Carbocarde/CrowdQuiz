@@ -8,8 +8,8 @@ from wtforms.widgets import TextArea
 from wtforms import Form as NoCsrfForm
 
 class EditExamStructureForm(FlaskForm):
-    exams = DecimalField('Number of Exams (Excluding Final Exam)', validators=[DataRequired("Please enter a number"), NumberRange(min=0, message='Please enter a non-negative number')])
-    quizzes = DecimalField('Number of Quizzes', validators=[DataRequired("Please enter a number"), NumberRange(min=0, message='Please enter a non-negative number')])
+    exams = DecimalField('Number of Exams (Excluding Final Exam)', validators=[NumberRange(min=0, message='Please enter a non-negative number')])
+    quizzes = DecimalField('Number of Quizzes', validators=[NumberRange(min=0, message='Please enter a non-negative number')])
     final_exam = BooleanField('Final Exam?')
     final_exam_cumulative = BooleanField('Final Exam Cumulative?')
     comment = StringField('Comments? (Optional)', widget=TextArea(), validators=[Length(max=140)])
