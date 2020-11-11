@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% from 'bootstrap/form.html' import render_form, render_field %}
+
+{% block app_content %}
+{% if current_user.is_authenticated and current_user.admin %}
+<div class="jumbotron">
+    <h1 class="display-4">Hey Admin {{ current_user.name.capitalize() }}!</h1>
+    <p class="lead">Welcome to the Admin Dashboard!</p>
+</div>
+<br>
+<div class="my-3 p-3 bg-white rounded shadow-sm">
+    <h6 class="border-bottom border-gray pb-2 mb-0">Classes with Pending Exam Structures:</h6>
+    <div class="row">
+        {% for exam_structure_suggestion in exam_structure_suggestions %}
+        <div class="card m-3" style="width: 18rem;">
+            <div class="card-body">
+                <h3 class="card-title">{{ exam_structure_suggestion.exam_class.body }}</h3>
+                <h5 class="card-subtitle">{{ exam_structure_suggestion.author }}</h5>
+                <br>
+                <h5 class="card-text">Exam Count: {{ exam_structure_suggestion.exam_count }}</h5>
+                <h5 class="card-text">Quiz Count: {{ exam_structure_suggestion.quiz_count }}</h5>
+                <h5 class="card-text">Final Exam: {{ exam_structure_suggestion.final_exam }}</h5>
+                <h5 class="card-text">Final Cumulative: {{ exam_structure_suggestion.final_exam_cumulative }}</h5>
+                <h5 class="card-text">Comment: {{ exam_structure_suggestion.comment }}</h5>
+                <br>
+                <a href="{{ '/exam_structure/%s/approve' % exam_structure_suggestion.id }}" class="btn btn-outline-primary stretched-link">Approve Structure</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<div class="my-3 p-3 bg-white rounded shadow-sm">
+    <h6 class="border-bottom border-gray pb-2 mb-0">Classes Pending Approval:</h6>
+    <div class="row">
+        {% for class in classes %}
+        <div class="card m-3" style="width: 18rem;">
+            <div class="card-body">
+                <h3 class="card-title">{{ class.body }}</h3>
+                <h5 class="card-subtitle">{{ class.author }}</h5>
+                <br>
+                <h5 class="card-text">Readable Name: {{ class.readable }}</h5>
+                <h5 class="card-text">Description: {{ class.description }}</h5>
+                <br>
+                <a href="{{ '/class/%s/approve' % class.id }}" class="btn btn-outline-primary stretched-link">Approve Structure</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<div class="my-3 p-3 bg-white rounded shadow-sm">
+    <h6 class="border-bottom border-gray pb-2 mb-0">Recently Added Questions</h6>
+    <div class="row">
+        {% for question, topics in question_topics %}
+        <div class="card m-3" style="width: 18rem;">
+            <div class="card-body">
+                <h3 class="card-title">{{ question.body }}</h3>
+                {% for topic in topics %}
+                <span class="badge badge-secondary">{{ topic.body }}</span>
+                {% endfor %}
+                <h5 class="card-subtitle">{{ question.author }}</h5>
+                <br>
+                <a href="{{ '/question/%s' % question.id }}" class="btn btn-outline-primary stretched-link">View Question</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% else %}
+<div class="jumbotron mt-3">
+    <h1 class="display-4">Hi there!</h1>
+    <p class="lead">I'm not sure how you got here, but you don't have access to this page</p>
+    <a class="btn btn-primary" href="{{ url_for('main.index') }}"> Back </a>
+</div>
+{% endif %}
+{% endblock %}
