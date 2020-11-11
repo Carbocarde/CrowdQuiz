@@ -1,11 +1,9 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, FieldList, FormField, SelectMultipleField, widgets, DecimalField, FileField, IntegerField, RadioField
-from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Regexp, NumberRange, Length
-from app.models import User, Answer, Question, QuestionTopics, Topic
+from wtforms import StringField, PasswordField, BooleanField, SubmitField
+from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Regexp
+from app.models import User
 from wtforms.ext.sqlalchemy.fields import QuerySelectMultipleField, QuerySelectField
-from functools import partial
-from wtforms.widgets import TextArea
-from wtforms import Form as NoCsrfForm
+from sqlalchemy.orm import load_only
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
@@ -24,7 +22,7 @@ class RegistrationForm(FlaskForm):
     submit = SubmitField('Register')
 
     def validate_username(self, username):
-        user = User.query.filter_by(username=username.data).first()
+        user = User.query.filter_by(username=username.data).options(load_only("id")).first()
         if user is not None:
             raise ValidationError('Please use a different username.')
 
