@@ -3,13 +3,8 @@ from flask import render_template, flash, redirect, url_for, request, current_ap
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from app import db
-from app.models import User, Question, Answer, Topic, QuestionTopics, QuestionEval, School, Class, Exam, ExamTopics, Enrollment, ExamStructureSuggestion, QuestionAnswer, QuestionAnswerArgument, FollowExamTopic
+from app.models import User, Question, Topic, QuestionTopics, Class, Exam, ExamTopics, Enrollment, ExamStructureSuggestion
 from app.user.forms import EditProfileForm
-from sqlalchemy.sql.expression import func
-from sqlalchemy.sql import except_
-import random
-from collections import namedtuple
-from sqlalchemy.orm import load_only
 from app.user import bp
 from flask import abort
 
