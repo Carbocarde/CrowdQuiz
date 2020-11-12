@@ -141,7 +141,6 @@ class QuizQuestion(FlaskForm):
         render_kw={"class":"btn btn-primary"})
 
 class ReviewQuestionForm(FlaskForm):
-
     fair = SubmitField('Fair Question')
     unfair = SubmitField('Unfair Question')
     skip = SubmitField('Skip')
