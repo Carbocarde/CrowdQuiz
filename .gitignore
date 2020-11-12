@@ -1,7 +1,8 @@
 .flaskenv
 *.pyc
 *.log
-__pycache__/
+__pycache__
 .DS_Store
 venv/
 env.bat
+logs/
