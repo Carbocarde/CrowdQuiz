@@ -402,15 +402,6 @@ def contribute_question(class_id, exam_id, topic_id):
                 if question_answer.answer.body == form.correct_answer.data:
                     found_question_answer = True
 
-                    # Add the new argument to this relation if there is one
-                    if form.argument.data:
-                        question_answer_arguments = QuestionAnswerArgument.query.filter_by(argument=form.argument.data).first()
-                        if question_answer_argument is None:
-                            question_answer_argument = QuestionAnswerArgument(question_answer_id=question_answer.id, body=form.argument.data)
-                            db.session.add(question_answer_argument)
-                            db.session.commit()
-                    break
-
             # Create the answer entry and questionanswer relation
             if not found_question_answer:
                 answer = Answer.query.filter_by(body=form.correct_answer.data).first()
@@ -425,12 +416,6 @@ def contribute_question(class_id, exam_id, topic_id):
                 db.session.add(question_answer)
                 db.session.commit()
                 db.session.refresh(question_answer)
-
-                # Add argument if there is one
-                if form.argument.data:
-                    question_answer_argument = QuestionAnswerArgument(question_answer_id=question_answer.id, body=form.argument.data)
-                    db.session.add(question_answer_argument)
-                    db.session.commit()
 
         # Generate question entry
         else:
@@ -472,11 +457,6 @@ def contribute_question(class_id, exam_id, topic_id):
             db.session.add(question_answer)
             db.session.commit()
             db.session.refresh(question_answer)
-
-            if form.argument.data:
-                question_answer_argument = QuestionAnswerArgument(question_answer_id=question_answer.id, body=form.argument.data)
-                db.session.add(question_answer_argument)
-                db.session.commit()
 
         flash('Question Contributed!')
         return redirect(url_for('main.contribute_question', class_id=class_id, exam_id=exam_id, topic_id=topic_id))

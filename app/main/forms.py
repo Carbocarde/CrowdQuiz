@@ -55,11 +55,8 @@ class ContributeForm(FlaskForm):
 class NewQuestionForm(FlaskForm):
     question = StringField('Question', validators=[DataRequired()])
 
-    correct_answer = StringField('Correct Answer', validators=[DataRequired()])
-    argument = StringField('Why is this answer correct? (Optional)', widget=TextArea(), validators=[Length(max=300)])
-
-    question_type = RadioField('Question Type', coerce=int, choices=[('1','Multiple-Choice'),('2','Short-Answer')], validators=[DataRequired()])
-
+    correct_answer = StringField('Correct Answer', widget=TextArea(), validators=[DataRequired(), Length(max=140)])
+    
     submit = SubmitField('Submit')
 
     def validate_question(self, question):

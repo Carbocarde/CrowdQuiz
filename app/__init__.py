@@ -15,7 +15,7 @@ login.login_message = 'Please log in to access this page.'
 db = SQLAlchemy()
 migrate = Migrate()
 login = LoginManager()
-login.login_view = 'login'
+login.login_view = 'auth.login'
 mail = Mail()
 bootstrap = Bootstrap()
 
