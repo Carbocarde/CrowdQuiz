@@ -44,6 +44,9 @@ def create_app(config_class=Config):
     from app.exams import bp as exams_bp
     app.register_blueprint(exams_bp)
 
+    from app.topics import bp as topics_bp
+    app.register_blueprint(topics_bp)
+
     if not app.debug and not app.testing:
         if app.config['MAIL_SERVER']:
             auth = None
