@@ -15,7 +15,7 @@ login.login_message = 'Please log in to access this page.'
 db = SQLAlchemy()
 migrate = Migrate()
 login = LoginManager()
-login.login_view = 'login'
+login.login_view = 'auth.login'
 mail = Mail()
 bootstrap = Bootstrap()
 
@@ -40,6 +40,9 @@ def create_app(config_class=Config):
 
     from app.main import bp as main_bp
     app.register_blueprint(main_bp)
+
+    from app.exams import bp as exams_bp
+    app.register_blueprint(exams_bp)
 
     if not app.debug and not app.testing:
         if app.config['MAIL_SERVER']:

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% from 'bootstrap/form.html' import render_form, render_field %}
+
+{% block app_content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">{{ exam.exam_class.school.body }}</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('main.class_', class_id=exam.exam_class.id) }}">{{ exam.exam_class.body }}</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('main.exam', class_id=exam.exam_class.id, exam_id=exam.id) }}">{{ exam.body }}</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Evaluate Questions</li>
+    </ol>
+</nav>
+<div class="p-3 bg-light rounded shadow-sm">
+    <h3 class="border-bottom border-gray pb-2">{{ attempt.question.body }}</h3>
+    <form method="post" action="">
+        {{ form.hidden_tag() }}
+        {{ form.id }}
+        {{ form.name }}
+        <div class="row pr-3 pl-3">
+            <div class="card col-sm mr-2 mt-2">
+                <div class="card-body">
+                    <h2 class="card-title">Your Answer</h2>
+                    {{ attempt.body }}
+                    {{ render_field(form.attemptCorrect) }}
+                </div>
+            </div>
+            <div class="card col-sm ml-2 mt-2">
+                <div class="card-body">
+                    <h2 class="card-title">Correct Answer</h2>
+                    {{ attempt.answer.body }}
+                    {{ render_field(form.selectAnswer, class="btn btn-outline-secondary float-right") }}
+                </div>
+            </div>
+        </div>
+        {{ render_field(form.submit, class="btn btn-primary btn-lg float-right mt-3 mr-3") }}
+        {{ render_field(form.next, class="btn btn-primary btn-lg float-right mt-3 mr-3") }}
+        {{ form.csrf_token }}
+    </form>
+</div>
+{% endblock %}

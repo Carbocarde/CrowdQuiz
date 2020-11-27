@@ -3,7 +3,7 @@ from flask import render_template, flash, redirect, url_for, request, current_ap
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from app import db
-from app.models import User, Question, Topic, QuestionTopics, Class, Exam, ExamTopics, Enrollment, ExamStructureSuggestion
+from app.models import User, Question, Topic, QuestionTopics, Class, Exam, ExamTopics, Enrollment, ExamStructureSuggestion, School
 from app.user.forms import EditProfileForm
 from app.user import bp
 from flask import abort
@@ -50,9 +50,11 @@ def user_profile(username):
 @login_required
 def edit_profile():
     form = EditProfileForm(current_user.username)
+    form.school.query = School.query.all()
     if form.validate_on_submit():
         current_user.username = form.username.data
         current_user.name = form.name.data
+        current_user.school_id = form.school.data.id
         db.session.commit()
         flash('Your changes have been saved.')
         return redirect(url_for('user.user_profile', username=current_user.username))
