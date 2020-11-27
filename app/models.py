@@ -61,6 +61,7 @@ class Question(db.Model):
 
     question_answer = db.relationship('QuestionAnswer', backref='question', lazy='dynamic')
     question_topic = db.relationship('QuestionTopics', backref='question', lazy='dynamic')
+    question_openended_attempt = db.relationship('OpenEndedQuestionAttempt', backref='question', lazy='dynamic')
 
     def __repr__(self):
         return '<Question {}>'.format(self.body)
@@ -101,6 +102,7 @@ class Answer(db.Model):
     answer_presentations = db.Column(db.Integer)
 
     question_answer = db.relationship('QuestionAnswer', backref='answer', lazy='dynamic')
+    answer_openended_attempt = db.relationship('OpenEndedQuestionAttempt', backref='answer', lazy='dynamic')
 
     def __repr__(self):
         return '<Answer {}, Correct: {}>'.format(self.body, self.correct)

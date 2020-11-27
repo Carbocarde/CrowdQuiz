@@ -419,7 +419,7 @@ def contribute_question(class_id, exam_id, topic_id):
 
         # Generate question entry
         else:
-            question = Question(user_id=current_user.id, body=form.question.data, question_type=form.question_type.data)
+            question = Question(user_id=current_user.id, body=form.question.data)
             db.session.add(question)
             db.session.commit()
             db.session.refresh(question)

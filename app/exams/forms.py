@@ -10,3 +10,9 @@ from wtforms import Form as NoCsrfForm
 class ExamShortAnswerQuestion(FlaskForm):
     answer = StringField('Answer', widget=TextArea(), validators=[DataRequired(),Length(max=140)])
     submit = SubmitField("Submit")
+
+class OpenEndedAnswerEval(FlaskForm):
+    attemptCorrect = BooleanField("Correct")
+    selectAnswer = SubmitField("...")
+    submit = SubmitField("Submit")
+    next = SubmitField("Next")
