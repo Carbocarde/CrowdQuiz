@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+
+{% if current_user.is_authenticated %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">{{ current_user.school.body }}</li>
+    </ol>
+</nav>
+<div class="jumbotron">
+    <h1 class="display-4">Hey Professor {{ current_user.name.capitalize() }}!</h1>
+    <p class="lead">Set up new classes or manage your current classes below!</p>
+    <a class="btn btn-primary" href="{{ url_for('main.index') }}">Student View</a>
+</div>
+{% endif %}
+
+{% endblock app_content %}
