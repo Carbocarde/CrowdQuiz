@@ -11,6 +11,17 @@
         {% endif %}
     </div>
 
+    {% if questions %}
+        <div class="my-3 p-3 bg-white rounded shadow-sm">
+            <h6 class="border-bottom border-gray pb-2 mb-0">Recent questions you've contributed:</h6>
+            <div class="row">
+            {% for question in questions %}
+                {% include 'main/_question.html' %}
+            {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+
     {% if enrolled %}
         <div class="my-3 p-3 bg-white rounded shadow-sm">
             <h6 class="border-bottom border-gray pb-2 mb-0">Enrolled Classes:</h6>
@@ -28,17 +39,6 @@
             <div class="row">
             {% for class, exams in unenrolled_class_exams %}
                 {% include 'main/_class.html' %}
-            {% endfor %}
-            </div>
-        </div>
-    {% endif %}
-
-    {% if questions %}
-        <div class="my-3 p-3 bg-white rounded shadow-sm">
-            <h6 class="border-bottom border-gray pb-2 mb-0">Questions you contributed:</h6>
-            <div class="row">
-            {% for question in questions %}
-                {% include 'main/_question.html' %}
             {% endfor %}
             </div>
         </div>
