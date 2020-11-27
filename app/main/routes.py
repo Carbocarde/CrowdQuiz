@@ -262,6 +262,7 @@ def exam(class_id, exam_id):
     followed_exam_topics = []
     for exam_topic in exam_topics:
         follow_exam_topic = FollowExamTopic.query.filter_by(user_id=current_user.id, exam_topic_id=exam_topic.id).first()
+        
         if follow_exam_topic is not None:
             following.append(True)
 

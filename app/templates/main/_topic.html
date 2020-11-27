@@ -17,10 +17,10 @@
         {% endif %}
 
         <div class="progress mb-2 mt-auto">
-            <div class="progress-bar bg-success" data-toggle="tooltip" data-placement="top" title="Unlock Completion Percentage" role="progressbar" style="{{ 'width: {}%'.format(unlock_percent - level_subtractor) }}">{{ '{:.0f}%'.format(unlock_percent - level_subtractor) }}</div>
+            <div class="progress-bar bg-success" data-toggle="tooltip" data-placement="top" title="Contribution Level Percentage" role="progressbar" style="{{ 'width: {}%'.format(unlock_percent - level_subtractor) }}">{{ '{:.0f}%'.format(unlock_percent - level_subtractor) }}</div>
         </div>
         <h5 class="card-subtitle m-2 text-muted">
-            <span class="badge badge-secondary">Unlock Level: <span class="badge badge-light">{{ level }}</span></span>
+            <span class="badge badge-secondary">Contribution Level: <span class="badge badge-light">{{ level }}</span></span>
         </h5>
         <p class="card-subtitle text-muted">Topics can be unlocked by contributing 1 question, and evaluating 2 questions from others!</p>
         <a href="{{ url_for('main.contribute', class_id=exam.exam_class.id, exam_id=exam.id, topic_id=exam_topic.topic_id) }}" class="btn btn-outline-primary mb-2">Evaluate Questions (+5%)</a>
