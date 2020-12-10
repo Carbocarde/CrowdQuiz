@@ -3,7 +3,7 @@ from flask import render_template, flash, redirect, url_for, request, current_ap
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from app import db
-from app.models import User, Question, Answer, Topic, QuestionTopics, QuestionEval, School, Class, Exam, ExamTopics, Enrollment, ExamStructureSuggestion, QuestionAnswer, QuestionAnswerArgument, FollowExamTopic
+from app.models import User, Question, Answer, Topic, QuestionTopics, QuestionEval, School, Class, Exam, ExamTopics, Enrollment, ExamStructureSuggestion, QuestionAnswer, QuestionAnswerArgument, StudySetTerm
 from app.main.forms import NewQuestionForm, NewTopicForm, DeleteQuestionForm, ReviewQuestionForm, QuizQuestion, NewSubjectForm, EditExamStructureForm, EvaluateQuestionSubForm, ContributeForm, ProposeClassForm, ProposeTopicForm, NewQuestionForm
 from sqlalchemy.sql.expression import func
 from sqlalchemy.sql import except_
@@ -150,57 +150,6 @@ def suggested_exam_structure(class_id):
 
     return render_template('main/suggest_exam_structure.html', title='Proposed Exams', class_element=class_element, form=form)
 
-@bp.route('/class/<class_id>/exam/<exam_id>/suggested_topics/', methods=['GET', 'POST'])
-@login_required
-def suggested_topics(class_id, exam_id):
-    exam = Exam.query.filter_by(id = exam_id).first_or_404()
-
-    exam_topics = ExamTopics.query.filter_by(exam_id=exam.id).limit(25)
-
-    question_count = []
-    unlock_percent = []
-    following = []
-    level_subtractor = []
-    level = []
-    followed_exam_topics = []
-    unfollowed_topics_count = 0
-    for exam_topic in exam_topics:
-        follow_exam_topic = FollowExamTopic.query.filter_by(user_id=current_user.id, exam_topic_id=exam_topic.id).first()
-        if follow_exam_topic is None:
-            following.append(False)
-
-            unfollowed_topics_count += 1
-
-            followed_exam_topics.append(exam_topic)
-
-            topic_questions = QuestionTopics.query.filter_by(topic_id=exam_topic.topic.id).subquery()
-
-            # Select questions that have been evaluated by this user
-            current_user_questions = Question.query.filter_by(user_id=current_user.id).options(load_only(Question.id)).subquery()
-            current_user_evaluated = db.session.query(QuestionEval.question_id).filter_by(user_id=current_user.id).subquery()
-
-            # Select questions that user has submitted to this topic
-            user_topic_questions = QuestionTopics.query.filter_by(topic_id=exam_topic.topic_id).filter(QuestionTopics.question_id.in_(current_user_questions)).subquery()
-
-            current_user_topic_evaluations = db.session.query(QuestionEval.question_id).filter_by(user_id=current_user.id).outerjoin(topic_questions, topic_questions.c.question_id == QuestionEval.question_id).filter_by(topic_id=exam_topic.topic_id).subquery()
-
-            unlock_percent_element = db.session.query(current_user_topic_evaluations).count() * 5 + db.session.query(user_topic_questions).count() * 25
-            unlock_percent.append(unlock_percent_element)
-            question_count.append(db.session.query(topic_questions).count())
-
-            level_subtractor_element = 0
-            i = unlock_percent_element - 100
-            j = 0
-            while i > 0:
-                level_subtractor_element += (100 + 5 * j)
-                i = i - (100 + 5 * j)
-                j += 1
-
-            level_subtractor.append(level_subtractor_element)
-            level.append(j + 1)
-
-    return render_template('main/suggested_topics.html', title='Proposed Topics', exam=exam, exam_topic_question_counts=zip(followed_exam_topics, question_count, unlock_percent, level, level_subtractor, following), unfollowed_topics=unfollowed_topics_count)
-
 @bp.route('/class/<class_id>/exam/<exam_id>/suggested_topics/propose_new', methods=['GET', 'POST'])
 @login_required
 def suggest_topic(class_id, exam_id):
@@ -254,62 +203,9 @@ def exam(class_id, exam_id):
 
     exam_topics = ExamTopics.query.filter_by(exam_id=exam.id).limit(25)
 
-    question_count = []
-    unlock_percent = []
-    following = []
-    level_subtractor = []
-    level = []
-    followed_exam_topics = []
-    for exam_topic in exam_topics:
-        follow_exam_topic = FollowExamTopic.query.filter_by(user_id=current_user.id, exam_topic_id=exam_topic.id).first()
-        
-        if follow_exam_topic is not None:
-            following.append(True)
+    set_questions = StudySetTerm.query.filter_by(user_id=current_user.id, exam_id=exam_id)
 
-            followed_exam_topics.append(exam_topic)
-
-            topic_questions = QuestionTopics.query.filter_by(topic_id=exam_topic.topic.id).subquery()
-
-            # Select questions that have been evaluated by this user
-            current_user_questions = Question.query.filter_by(user_id=current_user.id).options(load_only(Question.id)).subquery()
-            current_user_evaluated = db.session.query(QuestionEval.question_id).filter_by(user_id=current_user.id).subquery()
-
-            # Select questions that user has submitted to this topic
-            user_topic_questions = QuestionTopics.query.filter_by(topic_id=exam_topic.topic_id).filter(QuestionTopics.question_id.in_(current_user_questions)).subquery()
-
-            current_user_topic_evaluations = db.session.query(QuestionEval.question_id).filter_by(user_id=current_user.id).outerjoin(topic_questions, topic_questions.c.question_id == QuestionEval.question_id).filter_by(topic_id=exam_topic.topic_id).subquery()
-
-            unlock_percent_element = db.session.query(current_user_topic_evaluations).count() * 5 + db.session.query(user_topic_questions).count() * 25
-            unlock_percent.append(unlock_percent_element)
-            question_count.append(db.session.query(topic_questions).count())
-
-            level_subtractor_element = 0
-            i = unlock_percent_element - 100
-            j = 0
-            while i > 0:
-                level_subtractor_element += (100 + 5 * j)
-                i = i - (100 + 5 * j)
-                j += 1
-
-            level_subtractor.append(level_subtractor_element)
-            level.append(j + 1)
-
-    if (len(unlock_percent) > 0):
-        overall_unlock_percent = sum(unlock_percent)/len(unlock_percent)
-    else:
-        overall_unlock_percent = 0
-
-    overall_level_subtractor = 0
-    i = overall_unlock_percent - 100
-    j = 0
-    while i > 0:
-        overall_level_subtractor += (100 + 5 * j)
-        i = i - (100 + 5 * j)
-        j += 1
-
-    overall_level = j + 1
-
-    return render_template('main/exam.html', title="Exam", exam=exam, overall_unlock_percent=overall_unlock_percent, overall_level_subtractor=overall_level_subtractor, overall_level=overall_level, exam_topic_question_counts=zip(followed_exam_topics, question_count, unlock_percent, level, level_subtractor, following))
+    return render_template('main/exam_study_set.html', title="Exam", exam=exam, exam_topics=exam_topics, set=set_questions)
 
 @bp.route('/class/<class_id>/exam/<exam_id>/contribute/', defaults={'topic_id': None}, methods=['GET', 'POST'])
 @bp.route('/class/<class_id>/exam/<exam_id>/topic/<topic_id>/contribute/', methods=['GET', 'POST'])
@@ -463,22 +359,6 @@ def contribute_question(class_id, exam_id, topic_id):
         return redirect(url_for('main.contribute_question', class_id=class_id, exam_id=exam_id, topic_id=topic_id))
 
     return render_template('main/contribute_question.html', title='Contribute', topic=topic, exam=exam, form=form)
-
-@bp.route('/class/<class_id>/exam/<exam_id>/topic/<topic_id>/follow/')
-@login_required
-def follow_topic(class_id, exam_id, topic_id):
-    class_element = Class.query.filter_by(id=class_id).first_or_404();
-
-    exam_topic = ExamTopics.query.filter_by(topic_id=topic_id, exam_id=exam_id).options(load_only(ExamTopics.id)).first_or_404()
-
-    follow_element = FollowExamTopic.query.filter_by(exam_topic_id=exam_topic.id, user_id=current_user.id).first()
-
-    if follow_element is None:
-        follow_exam_topic = FollowExamTopic(user_id=current_user.id, exam_topic_id=exam_topic.id)
-        db.session.add(follow_exam_topic)
-        db.session.commit()
-
-    return redirect(url_for('main.exam', class_id=class_id, exam_id=exam_id))
 
 @bp.route('/admin')
 @login_required
