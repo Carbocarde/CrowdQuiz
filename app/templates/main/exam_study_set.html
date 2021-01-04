@@ -21,6 +21,13 @@
 {% endif %}
 
 <div class="my-3 p-3 bg-white rounded shadow-sm">
+    <h6 class="border-bottom border-gray pb-2 mb-0">Topics:</h6>
+        {% for exam_topic in exam_topics %}
+            {% include 'main/_set_topic.html' %}
+        {% endfor %}
+</div>
+
+<div class="my-3 p-3 bg-white rounded shadow-sm">
     <h6 class="border-bottom border-gray pb-2 mb-0">Study Set Terms:</h6>
         {% for questionanswer in set %}
             {% include 'main/_set_question.html' %}
