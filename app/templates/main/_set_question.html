@@ -1,0 +1,9 @@
+<div class="input-group mb-3">
+    {% if questionanswer %}
+    <textarea type="text" aria-label="Question" placeholder="Question" class="form-control mr-3 textarea-autosize">{{ questionanswer.question.body }}</textarea>
+    <textarea type="text" aria-label="Answer" placeholder="Answer" class="form-control mr-3 textarea-autosize">{{ questionanswer.answer.body }}</textarea>
+    {% else %}
+    <textarea type="text" aria-label="Question" placeholder="Question" class="form-control mr-3 textarea-autosize"></textarea>
+    <textarea type="text" aria-label="Answer" placeholder="Answer" class="form-control mr-3 textarea-autosize"></textarea>
+    {% endif %}
+</div>

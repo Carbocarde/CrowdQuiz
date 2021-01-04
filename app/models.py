@@ -25,6 +25,7 @@ class User(UserMixin, db.Model):
     answers_user = db.relationship('Answer', backref='author', lazy='dynamic')
     enrollment = db.relationship('Enrollment', backref='author', lazy='dynamic')
     exam_structure_suggestion = db.relationship('ExamStructureSuggestion', backref='author', lazy='dynamic')
+    study_set = db.relationship('StudySetTerm', backref='user', lazy='dynamic')
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -92,6 +93,7 @@ class QuestionAnswer(db.Model):
     correctness_votes = db.Column(db.Integer)
 
     question_answer_argument = db.relationship('QuestionAnswerArgument', backref='question_answer', lazy='dynamic')
+    study_set = db.relationship('StudySetTerm', backref='question_answer', lazy='dynamic')
 
 class Answer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -212,6 +214,7 @@ class Exam(db.Model):
     cumulative = db.Column(db.Boolean)
 
     exam_topic = db.relationship('ExamTopics', backref='exam', lazy='dynamic')
+    study_set = db.relationship('StudySetTerm', backref='exam', lazy='dynamic')
 
 class ExamTopics(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -274,8 +277,9 @@ class ExamStructureSuggestion(db.Model):
 
     approved = db.Column(db.Boolean)
 
-class FollowExamTopic(db.Model):
+class StudySetTerm(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
-    exam_topic_id = db.Column(db.Integer, db.ForeignKey('exam_topics.id'))
+    question_answer_id = db.Column(db.Integer, db.ForeignKey('questionanswer.id'))
+    exam_id = db.Column(db.Integer, db.ForeignKey('exam.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))

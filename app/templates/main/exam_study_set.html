@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+{% if current_user.is_authenticated %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">{{ exam.exam_class.school.body }}</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('main.class_', class_id=exam.exam_class.id) }}">{{ exam.exam_class.body }}</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ exam.body }}</li>
+    </ol>
+</nav>
+<div class="jumbotron">
+    <h1 class="display-4">{{ exam.exam_class.body }} {{ exam.body }}</h1>
+</div>
+{% else %}
+<div class="jumbotron mt-3">
+    <h1 class="display-4">Hey there!</h1>
+    <p class="lead">Let's get you quizzing! Click the button below to start!</p>
+    <a class="btn btn-primary" href="{{ url_for('auth.login') }}"> Log in/Register </a>
+</div>
+{% endif %}
+
+<div class="my-3 p-3 bg-white rounded shadow-sm">
+    <h6 class="border-bottom border-gray pb-2 mb-0">Topics:</h6>
+        {% for exam_topic in exam_topics %}
+            {% include 'main/_set_topic.html' %}
+        {% endfor %}
+</div>
+
+<div class="my-3 p-3 bg-white rounded shadow-sm">
+    <h6 class="border-bottom border-gray pb-2 mb-0">Study Set Terms:</h6>
+        {% for questionanswer in set %}
+            {% include 'main/_set_question.html' %}
+        {% endfor %}
+        {% include 'main/_set_question.html' %}
+    <div id="content">
+    </div>
+    <input type="button" value="+" class="btn btn-primary btn-lg btn-block" onclick="addRow()">
+</div>
+{% endblock app_content %}
+
+{% block scripts %}
+    {{ super() }}
+    <script>
+    function addRow() {
+        document.querySelector('#content').insertAdjacentHTML(
+            'beforeend','<div class="input-group mb-3">\
+                <textarea type="text" aria-label="Question" placeholder="Question" class="form-control mr-3 textarea-autosize"></textarea>\
+                <textarea type="text" aria-label="Answer" placeholder="Answer" class="form-control mr-3 textarea-autosize"></textarea>\
+            </div>')
+    }
+    </script>
+{% endblock %}
