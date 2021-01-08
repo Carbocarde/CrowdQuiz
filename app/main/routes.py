@@ -3,8 +3,8 @@ from flask import render_template, flash, redirect, url_for, request, current_ap
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from app import db
-from app.models import User, Question, Answer, Topic, QuestionTopics, QuestionEval, School, Class, Exam, ExamTopics, Enrollment, ExamStructureSuggestion, QuestionAnswer, QuestionAnswerArgument, StudySetTerm
-from app.main.forms import NewQuestionForm, NewTopicForm, DeleteQuestionForm, ReviewQuestionForm, QuizQuestion, NewSubjectForm, EditExamStructureForm, EvaluateQuestionSubForm, ContributeForm, ProposeClassForm, ProposeTopicForm, NewQuestionForm
+from app.models import User, Question, Answer, Topic, QuestionTopics, QuestionEval, School, Class, Exam, ExamTopics, Enrollment, ExamStructureSuggestion, QuestionAnswer, QuestionAnswerArgument, StudySetTerm, Section
+from app.main.forms import NewQuestionForm, NewTopicForm, DeleteQuestionForm, ReviewQuestionForm, QuizQuestion, NewSubjectForm, EditExamStructureForm, EvaluateQuestionSubForm, ContributeForm, ProposeClassForm, ProposeTopicForm, NewQuestionForm, ProposeSectionForm
 from sqlalchemy.sql.expression import func
 from sqlalchemy.sql import except_
 import random
@@ -16,10 +16,11 @@ from app.main import bp
 @bp.route('/index')
 @bp.route('/home')
 def index():
-    exams = []
+    enrollable_sections = []
+    enrollment_sections = []
     enrolled = []
     enrolled_classes = []
-    unenrolled_exams = []
+    unenrolled_sections = []
     unenrolled = []
     unenrolled_classes = []
 
@@ -30,13 +31,21 @@ def index():
         classes = Class.query.filter_by(school_id=current_user.school_id, approved=True).limit(25);
 
         for class_element in classes:
-            if db.session.query(Enrollment.id).filter_by(class_id=class_element.id, user_id=current_user.id).scalar() is not None:
-                exams.append(Exam.query.filter_by(class_id = class_element.id).limit(9))
+            if db.session.query(Enrollment.id).filter_by(class_id=class_element.id, user_id=current_user.id).first() is not None:
+                enrollable_sections_temp = Section.query.filter_by(class_id = class_element.id).limit(9)
+                enrollable_sections.append(enrollable_sections_temp)
+                enrollment_status = []
+                for section in enrollable_sections_temp:
+                    if Enrollment.query.filter_by(section_id=section.id, user_id=current_user.id).first() is not None:
+                        enrollment_status.append(True)
+                    else:
+                        enrollment_status.append(False)
+                enrollment_sections.append(enrollment_status)
                 enrolled.append(True)
                 enrolled_classes.append(class_element)
                 enrolled_count += 1
             else:
-                unenrolled_exams.append(Exam.query.filter_by(class_id = class_element.id).limit(9))
+                unenrolled_sections.append(Section.query.filter_by(class_id = class_element.id).limit(9))
                 unenrolled.append(False)
                 unenrolled_classes.append(class_element)
                 unenrolled_count += 1
@@ -44,8 +53,16 @@ def index():
         classes = Class.query.filter_by(school_id=current_user.school_id, approved=False).limit(25);
 
         for class_element in classes:
-            if db.session.query(Enrollment.id).filter_by(class_id=class_element.id, user_id=current_user.id).scalar() is not None:
-                exams.append(Exam.query.filter_by(class_id = class_element.id).limit(9))
+            if db.session.query(Enrollment.id).filter_by(class_id=class_element.id, user_id=current_user.id).first() is not None:
+                enrollable_sections_temp = Section.query.filter_by(class_id = class_element.id).limit(9)
+                enrollable_sections.append(enrollable_sections_temp)
+                enrollment_status = []
+                for section in enrollable_sections_temp:
+                    if Enrollment.query.filter_by(section_id=section.id, user_id=current_user.id).first() is not None:
+                        enrollment_status.append(True)
+                    else:
+                        enrollment_status.append(False)
+                enrollment_sections.append(enrollment_status)
                 enrolled.append(True)
                 enrolled_classes.append(class_element)
                 enrolled_count += 1
@@ -54,20 +71,22 @@ def index():
         classes = Class.query.filter_by(approved=True).limit(25);
 
         for class_element in classes:
-            unenrolled_exams.append(Exam.query.filter_by(class_id = class_element.id).limit(9))
+            unenrolled_sections.append(Section.query.filter_by(class_id = class_element.id).limit(9))
             unenrolled.append(False)
             unenrolled_classes.append(class_element)
             unenrolled_count += 1
 
-    return render_template('main/index.html', title='Home', enrolled_classes = enrolled_count, unenrolled_classes = unenrolled_count, enrolled_class_exams=zip(enrolled_classes, exams, enrolled), unenrolled_class_exams=zip(unenrolled_classes, unenrolled_exams, unenrolled))
+    section_pairs = zip(enrollment_sections, enrollable_sections)
+
+    return render_template('main/index.html', title='Home', enrolled_classes = enrolled_count, unenrolled_classes = unenrolled_count, enrolled_class_sections=zip(enrolled_classes, enrollable_sections, enrolled, enrollment_sections), unenrolled_class_sections=zip(unenrolled_classes, unenrolled_sections, unenrolled), zip=zip)
 
 @bp.route('/suggested_classes/')
 @login_required
 def suggested_classes():
-    exams = []
+    enrolled_sections = []
     enrolled = []
     enrolled_classes = []
-    unenrolled_exams = []
+    unenrolled_sections = []
     unenrolled = []
     unenrolled_classes = []
 
@@ -78,27 +97,36 @@ def suggested_classes():
         classes = Class.query.filter_by(school_id=current_user.school_id, approved=False).limit(25);
 
         for class_element in classes:
-            if db.session.query(Enrollment.id).filter_by(class_id=class_element.id, user_id=current_user.id).scalar() is not None:
-                exams.append(Exam.query.filter_by(class_id = class_element.id).limit(9))
+            if db.session.query(Enrollment.id).filter_by(class_id=class_element.id, user_id=current_user.id).first() is not None:
+                enrolled_sections.append(Section.query.filter_by(class_id = class_element.id).limit(9))
                 enrolled.append(True)
                 enrolled_classes.append(class_element)
                 enrolled_count += 1
             else:
-                unenrolled_exams.append(Exam.query.filter_by(class_id = class_element.id).limit(9))
+                unenrolled_sections.append(Section.query.filter_by(class_id = class_element.id).limit(9))
                 unenrolled.append(False)
                 unenrolled_classes.append(class_element)
                 unenrolled_count += 1
+
+        classes = Class.query.filter_by(school_id=current_user.school_id, approved=False).limit(25);
+
+        for class_element in classes:
+            if db.session.query(Enrollment.id).filter_by(class_id=class_element.id, user_id=current_user.id).first() is not None:
+                enrolled_sections.append(Section.query.filter_by(class_id = class_element.id).limit(9))
+                enrolled.append(True)
+                enrolled_classes.append(class_element)
+                enrolled_count += 1
 
     else:
         classes = Class.query.filter_by(approved=False).limit(25);
 
         for class_element in classes:
-            unenrolled_exams.append(Exam.query.filter_by(class_id = class_element.id).limit(9))
+            unenrolled_sections.append(Section.query.filter_by(class_id = class_element.id).limit(9))
             unenrolled.append(False)
             unenrolled_classes.append(class_element)
             unenrolled_count += 1
 
-    return render_template('main/suggested_classes.html', title='Proposed Classes', enrolled_classes = enrolled_count, unenrolled_classes = unenrolled_count, enrolled_class_exams=zip(enrolled_classes, exams, enrolled), unenrolled_class_exams=zip(unenrolled_classes, unenrolled_exams, unenrolled))
+    return render_template('main/suggested_classes.html', title='Proposed Classes', enrolled_classes = enrolled_count, unenrolled_classes = unenrolled_count, enrolled_class_sections=zip(enrolled_classes, enrolled_sections, enrolled), unenrolled_class_sections=zip(unenrolled_classes, unenrolled_sections, unenrolled), zip=zip)
 
 @bp.route('/suggested_classes/propose_class', methods=['GET', 'POST'])
 @login_required
@@ -119,9 +147,27 @@ def propose_class():
 def class_(class_id):
     class_element = Class.query.filter_by(id=class_id).first_or_404();
 
-    exams = Exam.query.filter_by(class_id = class_id)
+    sections = Section.query.filter_by(class_id=class_id)
 
-    enrollment_element = Enrollment.query.filter_by(user_id=current_user.id, class_id=class_id).first()
+    enrollment = []
+    for section in sections:
+        if Enrollment.query.filter_by(section_id=section.id, user_id=current_user.id).first() is not None:
+            enrollment.append(True)
+        else:
+            enrollment.append(False)
+
+    return render_template('main/class.html', title=class_element.body, class_element=class_element, sections_enrollment=zip(sections, enrollment))
+
+@bp.route('/class/<class_id>/section/<section_id>/')
+@login_required
+def section(class_id, section_id):
+    section = Section.query.filter_by(id=section_id).first_or_404();
+
+    class_element = Class.query.filter_by(id=class_id).first_or_404();
+
+    exams = Exam.query.filter_by(section_id = section_id);
+
+    enrollment_element = Enrollment.query.filter_by(user_id=current_user.id, class_id=class_id, section_id=section_id).first()
     if enrollment_element is None:
         enrolled = False
     else:
@@ -131,24 +177,42 @@ def class_(class_id):
     for exam in exams:
         exam_topics.append(ExamTopics.query.filter_by(exam_id=exam.id).limit(9))
 
-    return render_template('main/class.html', title=class_element.body, enrolled=enrolled, class_element=class_element, exam_topics_all=zip(exams, exam_topics))
+    return render_template('main/section.html', title=class_element.body, enrolled=enrolled, class_element=class_element, exam_topics_all=zip(exams, exam_topics), section=section)
 
-@bp.route('/class/<class_id>/suggest_exam_structure/', methods=['GET', 'POST'])
+@bp.route('/class/<class_id>/suggest_class_section/', methods=['GET', 'POST'])
 @login_required
-def suggested_exam_structure(class_id):
+def suggested_class_section(class_id):
 
     class_element = Class.query.filter_by(id=class_id).first_or_404();
 
-    form = EditExamStructureForm();
+    form = ProposeSectionForm();
     if form.validate_on_submit():
-        exam_structure = ExamStructureSuggestion(body=form.comment.data, exam_count=form.exams.data, quiz_count=form.quizzes.data, final_exam=form.final_exam.data, final_exam_cumulative=form.final_exam_cumulative.data, user_id=current_user.id, class_id=class_id, approved=False)
-        db.session.add(exam_structure)
+        section = Section(body=form.body.data, description=form.description.data, approved=False, class_id=class_id)
+        db.session.add(section)
         db.session.commit()
 
         flash('Your suggestion has been recieved!')
         return redirect(url_for('main.class_', class_id=class_id))
 
-    return render_template('main/suggest_exam_structure.html', title='Proposed Exams', class_element=class_element, form=form)
+    return render_template('main/suggest_class_section.html', title='Propose Class Section', class_element=class_element, form=form)
+
+
+@bp.route('/class/<class_id>/section/<section_id>/suggest_exam_structure/', methods=['GET', 'POST'])
+@login_required
+def suggested_exam_structure(class_id, section_id):
+
+    section = Section.query.filter_by(id=section_id).first_or_404();
+
+    form = EditExamStructureForm();
+    if form.validate_on_submit():
+        exam_structure = ExamStructureSuggestion(body=form.comment.data, exam_count=form.exams.data, quiz_count=form.quizzes.data, final_exam=form.final_exam.data, final_exam_cumulative=form.final_exam_cumulative.data, user_id=current_user.id, section_id=section_id, approved=False)
+        db.session.add(exam_structure)
+        db.session.commit()
+
+        flash('Your suggestion has been recieved!')
+        return redirect(url_for('main.section', class_id=class_id, section_id=section_id))
+
+    return render_template('main/suggest_exam_structure.html', title='Proposed Exams', section=section, form=form)
 
 @bp.route('/class/<class_id>/exam/<exam_id>/suggested_topics/propose_new', methods=['GET', 'POST'])
 @login_required
@@ -171,35 +235,35 @@ def suggest_topic(class_id, exam_id):
 
     return render_template('main/suggest_topic.html', form=form, exam=exam)
 
-@bp.route('/class/<class_id>/enroll/')
+@bp.route('/class/<class_id>/section/<section_id>/enroll/')
 @login_required
-def enroll(class_id):
+def enroll(class_id, section_id):
     class_element = Class.query.filter_by(id=class_id).first_or_404();
 
-    enrollment_element = Enrollment.query.filter_by(user_id=current_user.id, class_id=class_id).first();
+    enrollment_element = Enrollment.query.filter_by(user_id=current_user.id, class_id=class_id, section_id=section_id).first();
 
     if enrollment_element is None:
-        evaluation = Enrollment(user_id=current_user.id, class_id=class_id)
+        evaluation = Enrollment(user_id=current_user.id, class_id=class_id, section_id=section_id)
         db.session.add(evaluation)
         db.session.commit()
 
-    return redirect(url_for('main.class_', class_id=class_id))
+    return redirect(url_for('main.section', class_id=class_id, section_id=section_id))
 
-@bp.route('/class/<class_id>/unenroll/')
+@bp.route('/class/<class_id>/section/<section_id>/unenroll/')
 @login_required
-def unenroll(class_id):
+def unenroll(class_id, section_id):
     class_element = Class.query.filter_by(id=class_id).options(load_only(Class.id)).first_or_404();
 
-    evaluation = Enrollment.query.filter_by(user_id=current_user.id, class_id=class_id).first_or_404();
+    evaluation = Enrollment.query.filter_by(user_id=current_user.id, class_id=class_id, section_id=section_id).first_or_404();
     db.session.delete(evaluation)
     db.session.commit()
 
     return redirect(url_for('main.class_', class_id=class_id))
 
-@bp.route('/class/<class_id>/exam/<exam_id>/')
+@bp.route('/section/<section_id>/exam/<exam_id>/')
 @login_required
-def exam(class_id, exam_id):
-    exam = Exam.query.filter_by(id = exam_id, class_id = class_id).first_or_404()
+def exam(section_id, exam_id):
+    exam = Exam.query.filter_by(id = exam_id, section_id = section_id).first_or_404()
 
     exam_topics = ExamTopics.query.filter_by(exam_id=exam.id).limit(25)
 
@@ -398,7 +462,7 @@ def approve_exam_structure(exam_structure_id):
     structure = ExamStructureSuggestion.query.filter_by(id=exam_structure_id).first_or_404()
 
     for i in range(1, structure.exam_count):
-        exam = Exam(body="Exam " + str(i), class_id=structure.class_id, exam_number = i)
+        exam = Exam(body="Exam " + str(i), section_id=structure.section_id, exam_number = i)
         db.session.add(exam)
         db.session.commit()
         db.session.refresh(exam)
@@ -413,7 +477,7 @@ def approve_exam_structure(exam_structure_id):
         db.session.commit()
 
     if structure.final_exam:
-        exam = Exam(body="Final Exam", class_id=structure.class_id, exam_number = structure.exam_count + 1, cumulative=structure.final_exam_cumulative)
+        exam = Exam(body="Final Exam", section_id=structure.section_id, exam_number = structure.exam_count + 1, cumulative=structure.final_exam_cumulative)
         db.session.add(exam)
         db.session.commit()
 
@@ -429,7 +493,7 @@ def approve_exam_structure(exam_structure_id):
     structure.approved = True
     db.session.commit()
 
-    flash('Exam structure added for ' + structure.exam_class.body)
+    flash('Exam structure added for ' + structure.section.body)
     return redirect(url_for('main.admin'))
 
 @bp.route('/delete_question/<question_id>', methods=['GET', 'POST'])

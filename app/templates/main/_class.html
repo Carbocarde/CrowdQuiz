@@ -3,9 +3,9 @@
     <a href="{{ url_for('main.class_', class_id=class.id) }}" class="text-dark">
     <h3 class="card-title">{{ class.body }}</h3></a>
     <h6 class="card-subtitle mb-2 text-muted">
-        {% if exams %}
-            {% for exam in exams %}
-                <span class="badge badge-secondary">{{ exam.body }}</span>
+        {% if all_sections %}
+            {% for section in all_sections %}
+                <span class="badge badge-secondary">{{ section.body }}</span>
             {% endfor %}
         {% else %}
             <span class="badge badge-secondary">{{ class.school.body }}</span>
@@ -17,11 +17,12 @@
         <p class="card-text">{{ class.description }}</p>
     {% endif %}
 
-    {% if not enrolled %}
-        <a href="{{ '/class/%s/enroll/' % class.id }}" class="btn btn-outline-secondary mb-2">Enroll & View</a>
-    {% else %}
-        <a href="{{ '/class/%s/' % class.id }}" class="btn btn-outline-secondary mb-2 stretched-link">View</a>
-    {% endif %}
+    {% for enrolled, section in zip(enrollment, all_sections) %}
+        {% if enrolled %}
+            <a href="{{ url_for('main.section', class_id=class.id, section_id=section.id) }}" class="btn btn-outline-secondary mb-2">Section {{ section.body }}</a>
+        {% endif %}
+    {% endfor %}
+    <a href="{{ '/class/%s/' % class.id }}" class="btn btn-outline-secondary mb-2">View All Sections</a>
 
   </div>
 </div>

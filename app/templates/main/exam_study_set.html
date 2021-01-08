@@ -4,13 +4,13 @@
 {% if current_user.is_authenticated %}
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/">{{ exam.exam_class.school.body }}</a></li>
-        <li class="breadcrumb-item"><a href="{{ url_for('main.class_', class_id=exam.exam_class.id) }}">{{ exam.exam_class.body }}</a></li>
+        <li class="breadcrumb-item"><a href="/">{{ exam.section.class.school.body }}</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('main.class_', class_id=exam.section.class.id) }}">{{ exam.section.class.body }}</a></li>
         <li class="breadcrumb-item active" aria-current="page">{{ exam.body }}</li>
     </ol>
 </nav>
 <div class="jumbotron">
-    <h1 class="display-4">{{ exam.exam_class.body }} {{ exam.body }}</h1>
+    <h1 class="display-4">{{ exam.section.class.body }} {{ exam.body }}</h1>
 </div>
 {% else %}
 <div class="jumbotron mt-3">
@@ -41,6 +41,7 @@
 
 {% block scripts %}
     {{ super() }}
+    <script src="{{url_for('static', filename='js/study_set.js')}}"></script>
     <script>
     function addRow() {
         document.querySelector('#content').insertAdjacentHTML(
