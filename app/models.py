@@ -29,6 +29,7 @@ class User(UserMixin, db.Model):
     enrollment = db.relationship('Enrollment', backref='author', lazy='dynamic')
     exam_structure_suggestion = db.relationship('ExamStructureSuggestion', backref='author', lazy='dynamic')
     study_set = db.relationship('StudySetTerm', backref='user', lazy='dynamic')
+    section = db.relationship('Section', backref='owner', lazy='dynamic')
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -214,7 +215,7 @@ class Exam(db.Model):
     exam_number = db.Column(db.Integer)
     cumulative = db.Column(db.Boolean)
 
-    section = db.Column(db.Integer, db.ForeignKey('section.id'))
+    section_id = db.Column(db.Integer, db.ForeignKey('section.id'))
 
     exam_topic = db.relationship('ExamTopics', backref='exam', lazy='dynamic')
     study_set = db.relationship('StudySetTerm', backref='exam', lazy='dynamic')
@@ -242,7 +243,7 @@ class Class(db.Model):
     description = db.Column(db.String(140))
 
     enrollment = db.relationship('Enrollment', backref='enrolled_class', lazy='dynamic')
-    exam_structure_suggestion = db.relationship('ExamStructureSuggestion', backref='exam_class', lazy='dynamic')
+    section = db.relationship('Section', backref='class', lazy='dynamic')
 
     def __repr__(self):
         return '<Subject: {}>'.format(self.body)
@@ -262,12 +263,13 @@ class Enrollment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
     class_id = db.Column(db.Integer, db.ForeignKey('class.id'))
+    section_id = db.Column(db.Integer, db.ForeignKey('section.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 class ExamStructureSuggestion(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
-    class_id = db.Column(db.Integer, db.ForeignKey('class.id'))
+    section_id = db.Column(db.Integer, db.ForeignKey('section.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     exam_count = db.Column(db.Integer)
@@ -292,12 +294,16 @@ class Section(db.Model):
 
     # Title of section
     body = db.Column(db.String(140))
+    description = db.Column(db.String(140))
+    approved = db.Column(db.Boolean)
 
     class_id = db.Column(db.Integer, db.ForeignKey('class.id'))
     # Teacher/Professor
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     exam = db.relationship('Exam', backref='section', lazy='dynamic')
+    enrollment = db.relationship('Enrollment', backref='section', lazy='dynamic')
+    exam_structure_suggestion = db.relationship('ExamStructureSuggestion', backref='section', lazy='dynamic')
 
 class Assignment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
