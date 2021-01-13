@@ -599,3 +599,32 @@ def evaluate_questions(subject_id):
         answers=answers,
         form=form
     )
+
+@bp.route('/invite/s/<section_id>/', methods=['GET', 'POST'])
+@login_required
+def section_invite(section_id):
+    section = Section.query.filter_by(id=section_id).first_or_404()
+    enrollment = Enrollment.query.filter_by(section_id=section_id, user_id=current_user.id)
+    if enrollment.count() != 0:
+        flash('You were already enrolled in this section!')
+        return redirect(url_for('main.section', class_id=section.class_.id, section_id=section_id))
+
+    new = Enrollment(user_id=current_user.id, class_id=section.class_.id, section_id=section.id)
+    db.session.add(new)
+    db.session.commit()
+
+    flash('You are now enrolled in the invited section ' + str(section.body))
+    return redirect(url_for('main.section', class_id=section.class_.id, section_id=section_id))
+
+@bp.route('/remove_exam/<exam_id>/')
+@login_required
+def remove_exam(exam_id):
+    exam = Exam.query.filter_by(id=exam_id).first_or_404()
+    section = Section.query.filter_by(id=exam.section.id).first_or_404()
+    if not current_user.teacher or not exam.section.user_id or exam.section.user_id != current_user.id:
+        return render_template('errors/404.html')
+
+    db.session.delete(exam)
+    db.session.commit()
+
+    return redirect(request.referrer)

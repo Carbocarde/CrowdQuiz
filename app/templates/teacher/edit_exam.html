@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% from 'bootstrap/form.html' import render_form, render_field %}
+
+{% block app_content %}
+<div class="card">
+    <div class="card-body flex-column">
+        <h3 class="card-title">Edit {{ exam.body }} for {{ section.class_.body }}, Section {{ section.body }}</h3>
+        <br>
+        <div class="row">
+            <div class="col">
+                {{ render_form(form) }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

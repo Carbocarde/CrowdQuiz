@@ -8,6 +8,9 @@
         <li class="breadcrumb-item active" aria-current="page">{{ current_user.school.body }}</li>
     </ol>
 </nav>
+{% if current_user.teacher %}
+<a href="{{ url_for('teacher.index') }}" class="btn btn-secondary float-right m-3 font-weight-bold">Back to Teacher Dashboard</a>
+{% endif %}
 <div class="jumbotron">
     <h1 class="display-4">Hey {{ current_user.name.capitalize() }}!</h1>
     <p class="lead">Let's get quizzing! Get started by clicking one of the subjects below!</p>

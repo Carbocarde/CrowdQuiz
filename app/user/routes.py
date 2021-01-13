@@ -8,7 +8,7 @@ from app.user.forms import EditProfileForm
 from app.user import bp
 from flask import abort
 
-@bp.route('/admin')
+@bp.route('/admin/')
 @login_required
 def admin():
     if not current_user.admin:
@@ -24,10 +24,10 @@ def admin():
 
     return render_template('user/admin.html', title='Admin Dashboard', question_topics=zip(questions,topics), exam_structure_suggestions=pending_exam_structures, classes=classes)
 
-@bp.route('/user/<username>/')
+@bp.route('/profile/')
 @login_required
-def user_profile(username):
-    user = User.query.filter_by(username=username).first_or_404()
+def user_profile():
+    user = current_user
     questions = Question.query.filter_by(user_id=user.id).order_by(Question.id.desc()).limit(20)
     enrollments = Enrollment.query.filter_by(user_id=user.id).limit(20)
 

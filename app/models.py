@@ -212,6 +212,7 @@ class Exam(db.Model):
 
     body = db.Column(db.String(40))
 
+    start_time = db.Column(db.DateTime)
     exam_number = db.Column(db.Integer)
     cumulative = db.Column(db.Boolean)
 
@@ -243,7 +244,7 @@ class Class(db.Model):
     description = db.Column(db.String(140))
 
     enrollment = db.relationship('Enrollment', backref='enrolled_class', lazy='dynamic')
-    section = db.relationship('Section', backref='class', lazy='dynamic')
+    section = db.relationship('Section', backref='class_', lazy='dynamic')
 
     def __repr__(self):
         return '<Subject: {}>'.format(self.body)

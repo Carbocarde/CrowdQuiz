@@ -18,6 +18,12 @@
 <div class="jumbotron">
     <h1 class="display-4">{{ class_element.body }}</h1>
     <p class="lead">{{ class_element.description }}</p>
+    {% if current_user.teacher and not section.user_id %}
+    <a class="btn btn-primary" href="{{ url_for('teacher.claim_section', section_id=section.id) }}"> Claim Section </a>
+    {% endif %}
+    {% if section.user_id == current_user.id %}
+    <a class="btn btn-primary" href="{{ url_for('teacher.manage_section', section_id=section.id) }}"> Manage Section </a>
+    {% endif %}
 </div>
 {% else %}
 <div class="jumbotron mt-3">
