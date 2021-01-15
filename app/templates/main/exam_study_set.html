@@ -29,7 +29,7 @@
 
 <div class="my-3 p-3 bg-white rounded shadow-sm">
     <h6 class="border-bottom border-gray pb-2 mb-0">Study Set Terms:</h6>
-        {% for questionanswer in set %}
+        {% for term in set %}
             {% include 'main/_set_question.html' %}
         {% endfor %}
         {% include 'main/_set_question.html' %}
@@ -43,12 +43,33 @@
     {{ super() }}
     <script src="{{url_for('static', filename='js/study_set.js')}}"></script>
     <script>
+    function save(question, answer, destElem, id) {
+            $(destElem).html('<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>');
+            $.post('/api/v1.0/questionanswer', {
+                qbody: $(question).val(),
+                abody: $(answer).val(),
+                exam_id: {{ exam.id | safe }},
+                prior_id: id
+            }).done(function(response) {
+                if (response['duplicate'] && id != response['id']) {
+                    $(destElem).text('Duplicate Detected')
+                } else {
+                    $(question).prop('id', "#question${qid}".replace('${qid}', response['id']))
+                    $(answer).prop('id', "#answer${aid}".replace('${aid}', response['id']))
+                    $(destElem).html("<a href=\"javascript:save('#question${id}','#answer${id}','#save${id}');\">Save Again</a>".replaceAll('${id}', response['id']))
+                    $(destElem).prop('id', "#id${id}".replace('${id}', response['id']))
+                }
+            }).fail(function() {
+                $(destElem).text("Error: Could not contact server.");
+            });
+        }
+    </script>
+    <script>
+    var newRowCount = 1
     function addRow() {
+        newRowCount += 1;
         document.querySelector('#content').insertAdjacentHTML(
-            'beforeend','<div class="input-group mb-3">\
-                <textarea type="text" aria-label="Question" placeholder="Question" class="form-control mr-3 textarea-autosize"></textarea>\
-                <textarea type="text" aria-label="Answer" placeholder="Answer" class="form-control mr-3 textarea-autosize"></textarea>\
-            </div>')
+            'beforeend',"<textarea id=\"nquestion${count}\" type=\"text\" aria-label=\"Question\" placeholder=\"Question\" class=\"form-control mr-3 textarea-autosize\"></textarea><textarea id=\"nanswer${count}\" type=\"text\" aria-label=\"Answer\" placeholder=\"Answer\" class=\"form-control mr-3 textarea-autosize\"></textarea><span id=\"nsave${count}\"><a href=\"javascript:save('#nquestion${count}','#nanswer${count}','#nsave${count}','-1');\">Save</a></span>".replaceAll('${count}', newRowCount))
     }
     </script>
 {% endblock %}

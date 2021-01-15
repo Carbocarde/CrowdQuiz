@@ -1,9 +1,23 @@
 <div class="input-group mb-3">
-    {% if questionanswer %}
-    <textarea type="text" aria-label="Question" placeholder="Question" class="form-control mr-3 textarea-autosize">{{ questionanswer.question.body }}</textarea>
-    <textarea type="text" aria-label="Answer" placeholder="Answer" class="form-control mr-3 textarea-autosize">{{ questionanswer.answer.body }}</textarea>
+    {% if term %}
+    <textarea id="question{{ term.id }}" type="text" aria-label="Question" placeholder="Question" class="form-control mr-3 textarea-autosize">{{ term.question_answer.question.body }}</textarea>
+    <textarea id="answer{{ term.id }}" type="text" aria-label="Answer" placeholder="Answer" class="form-control mr-3 textarea-autosize">{{ term.question_answer.answer.body }}</textarea>
+    <span id="save{{ term.id }}">
+        <a href="javascript:save(
+                    '#question{{ term.id }}',
+                    '#answer{{ term.id }}',
+                    '#save{{ term.id }}',
+                    '{{ term.id }}');">Save</a>
+    </span>
     {% else %}
-    <textarea type="text" aria-label="Question" placeholder="Question" class="form-control mr-3 textarea-autosize"></textarea>
-    <textarea type="text" aria-label="Answer" placeholder="Answer" class="form-control mr-3 textarea-autosize"></textarea>
+    <textarea id="nquestion0" type="text" aria-label="Question" placeholder="Question" class="form-control mr-3 textarea-autosize"></textarea>
+    <textarea id="nanswer0" type="text" aria-label="Answer" placeholder="Answer" class="form-control mr-3 textarea-autosize"></textarea>
+    <span id="nsave0">
+        <a href="javascript:save(
+                    '#nquestion0',
+                    '#nanswer0',
+                    '#nsave0',
+                    '-1');">Save</a>
+    </span>
     {% endif %}
 </div>
