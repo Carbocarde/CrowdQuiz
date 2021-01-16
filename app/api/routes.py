@@ -13,6 +13,9 @@ def questionanswer():
     exam_id = request.form['exam_id']
     prior_id = request.form['prior_id']
 
+    if (question == ""):
+        return jsonify({'id': -1, 'duplicate': True})
+
     exam = Exam.query.filter_by(id=exam_id).first_or_404()
 
     topic = None

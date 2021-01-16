@@ -20,6 +20,8 @@
 </div>
 {% endif %}
 
+<input id="saveall" type="button" value="Save" class="btn btn-success" onclick="saveall('#saveall')">
+
 <div class="my-3 p-3 bg-white rounded shadow-sm">
     <h6 class="border-bottom border-gray pb-2 mb-0">Topics:</h6>
         {% for exam_topic in exam_topics %}
@@ -41,7 +43,39 @@
 
 {% block scripts %}
     {{ super() }}
-    <script src="{{url_for('static', filename='js/study_set.js')}}"></script>
+    <script>
+    function saveall(destElem) {
+        console.log("saveall pressed")
+        var questions = $('textarea')
+        .filter(function() {
+            return this.id.match(/nquestion\d+|question\d+/);
+        });
+        var answers = $('textarea')
+        .filter(function() {
+            return this.id.match(/nanswer\d+|answer\d+/);
+        });
+        var savebuttons = $('span')
+        .filter(function() {
+            return this.id.match(/nsave\d+|save\d+/);
+        });
+
+        var zipped = [];
+
+        for (var i=0; i<questions.length; i++) {
+            var term_id = $(questions[i]).attr("term_id")
+            var elem = [questions[i], answers[i], savebuttons[i], term_id]
+            zipped.push(elem)
+        }
+
+        for (var i = 0; i < zipped.length; i++) {
+            save(zipped[i][0], zipped[i][1], zipped[i][2], zipped[i][3])
+        }
+
+        console.log(destElem);
+
+        $(destElem).val("Saved");
+    }
+    </script>
     <script>
     function save(question, answer, destElem, id) {
             $(destElem).html('<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>');
@@ -52,12 +86,14 @@
                 prior_id: id
             }).done(function(response) {
                 if (response['duplicate'] && id != response['id']) {
-                    $(destElem).text('Duplicate Detected')
+                    $(destElem).text('Duplicate Term')
+                } else if (response['duplicate']) {
+                    $(destElem).text('Not saved, blank term')
                 } else {
                     $(question).prop('id', "#question${qid}".replace('${qid}', response['id']))
                     $(answer).prop('id', "#answer${aid}".replace('${aid}', response['id']))
-                    $(destElem).html("<a href=\"javascript:save('#question${id}','#answer${id}','#save${id}');\">Save Again</a>".replaceAll('${id}', response['id']))
-                    $(destElem).prop('id', "#id${id}".replace('${id}', response['id']))
+                    $(destElem).html("<a href=\"javascript:save('#question${id}','#answer${id}','#save${id}');\">Saved</a>".replaceAll('${id}', response['id']))
+                    $(destElem).prop('id', "#save${id}".replace('${id}', response['id']))
                 }
             }).fail(function() {
                 $(destElem).text("Error: Could not contact server.");
@@ -65,11 +101,11 @@
         }
     </script>
     <script>
-    var newRowCount = 1
+    var newRowCount = 0
     function addRow() {
         newRowCount += 1;
         document.querySelector('#content').insertAdjacentHTML(
-            'beforeend',"<textarea id=\"nquestion${count}\" type=\"text\" aria-label=\"Question\" placeholder=\"Question\" class=\"form-control mr-3 textarea-autosize\"></textarea><textarea id=\"nanswer${count}\" type=\"text\" aria-label=\"Answer\" placeholder=\"Answer\" class=\"form-control mr-3 textarea-autosize\"></textarea><span id=\"nsave${count}\"><a href=\"javascript:save('#nquestion${count}','#nanswer${count}','#nsave${count}','-1');\">Save</a></span>".replaceAll('${count}', newRowCount))
+            'beforeend',"<div class=\"input-group mb-3\"><textarea id=\"nquestion${count}\" type=\"text\" aria-label=\"Question\" placeholder=\"Question\" class=\"form-control mr-3 textarea-autosize\"></textarea><textarea id=\"nanswer${count}\" type=\"text\" aria-label=\"Answer\" placeholder=\"Answer\" class=\"form-control mr-3 textarea-autosize\"></textarea><span id=\"nsave${count}\"><a href=\"javascript:save('#nquestion${count}','#nanswer${count}','#nsave${count}','-1');\">Save</a></span></div>".replaceAll('${count}', newRowCount))
     }
     </script>
 {% endblock %}
