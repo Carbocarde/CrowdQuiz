@@ -4,8 +4,12 @@
     <h3 class="card-title">{{ class.body }}</h3></a>
     <h6 class="card-subtitle mb-2 text-muted">
         {% if all_sections %}
-            {% for section in all_sections %}
-                <span class="badge badge-secondary">{{ section.body }}</span>
+            {% for enrolled, section in zip(enrollment, all_sections) %}
+                {% if enrolled %}
+                    <span class="badge badge-primary">{{ section.body }}</span>
+                {% else %}
+                    <span class="badge badge-secondary">{{ section.body }}</span>
+                {% endif %}
             {% endfor %}
         {% else %}
             <span class="badge badge-secondary">{{ class.school.body }}</span>
