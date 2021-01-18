@@ -1,23 +1,62 @@
-<div class="input-group mb-3">
+<div class='input-group mb-3'>
     {% if term %}
-    <textarea id="question{{ term.id }}" term_id="{{ term.id }}" type="text" aria-label="Question" placeholder="Question" class="form-control mr-3 textarea-autosize">{{ term.question_answer.question.body }}</textarea>
-    <textarea id="answer{{ term.id }}" type="text" aria-label="Answer" placeholder="Answer" class="form-control mr-3 textarea-autosize">{{ term.question_answer.answer.body }}</textarea>
-    <span id="save{{ term.id }}">
+    <textarea id='question{{ term.id }}' term_id='{{ term.id }}' type='text' aria-label='Question' placeholder='Question' class='form-control mr-3 textarea-autosize'>{{ term.question_answer.question.body }}</textarea>
+    <textarea id='answer{{ term.id }}' type='text' aria-label='Answer' placeholder='Answer' class='form-control mr-3 textarea-autosize'>{{ term.question_answer.answer.body }}</textarea>
+    <span id='save{{ term.id }}'>
         <a href="javascript:save(
                     '#question{{ term.id }}',
                     '#answer{{ term.id }}',
                     '#save{{ term.id }}',
                     '{{ term.id }}');">Save</a>
     </span>
+    <span id='delete{{ term.id }}'>
+        <a href="javascript:deletesaved(
+                    '#question{{ term.id }}',
+                    '#answer{{ term.id }}',
+                    '#save{{ term.id }}',
+                    '#delete{{ term.id }}',
+                    '{{ term.id }}');" type='button' class='btn btn-danger'>
+            {% include 'icons/_trash_icon.html' %}
+        </a>
+    </span>
     {% else %}
-    <textarea id="nquestion0" term_id="-1" type="text" aria-label="Question" placeholder="Question" class="form-control mr-3 textarea-autosize"></textarea>
-    <textarea id="nanswer0" type="text" aria-label="Answer" placeholder="Answer" class="form-control mr-3 textarea-autosize"></textarea>
-    <span id="nsave0">
+    <textarea id='nquestion0' term_id='-1' type='text' aria-label='Question' placeholder='Question' class='form-control mr-3 textarea-autosize'></textarea>
+    <textarea id='nanswer0' type='text' aria-label='Answer' placeholder='Answer' class='form-control mr-3 textarea-autosize'></textarea>
+    <span id='nsave0'>
         <a href="javascript:save(
                     '#nquestion0',
                     '#nanswer0',
                     '#nsave0',
                     '-1');">Save</a>
+    </span>
+    <span id='ndelete0'>
+        <a href="javascript:deletelocal(
+                    '#nquestion0',
+                    '#nanswer0',
+                    '#nsave0',
+                    '#ndelete0');" type='button' class='btn btn-danger'>
+            {% include 'icons/_trash_icon.html' %}
+        </a>
+    </span>
+    {% endif %}
+    {% if js %}
+    <textarea id='nquestion0' term_id='-1' type='text' aria-label='Question' placeholder='Question' class='form-control mr-3 textarea-autosize'></textarea>
+    <textarea id='nanswer0' type='text' aria-label='Answer' placeholder='Answer' class='form-control mr-3 textarea-autosize'></textarea>
+    <span id='nsave0'>
+        <a href=\"javascript:save(
+                    '#nquestion0',
+                    '#nanswer0',
+                    '#nsave0',
+                    '-1');\">Save</a>
+    </span>
+    <span id='ndelete0'>
+        <a href=\"javascript:deletelocal(
+                    '#nquestion0',
+                    '#nanswer0',
+                    '#nsave0',
+                    '#ndelete0');\" type='button' class='btn btn-danger'>
+            {% include 'icons/_trash_icon.html' %}
+        </a>
     </span>
     {% endif %}
 </div>

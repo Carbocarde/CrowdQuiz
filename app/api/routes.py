@@ -13,6 +13,7 @@ def questionanswer():
     exam_id = request.form['exam_id']
     prior_id = request.form['prior_id']
 
+    # Instantly reject empty/invalid terms
     if (question == ""):
         return jsonify({'id': -1, 'duplicate': True})
 
@@ -95,7 +96,7 @@ def questionanswer():
         db.session.commit()
         db.session.refresh(term)
 
-    # Remove prior set item if new term is not a duplicate of the previous
+    # Remove prior set item if new term is not a duplicate of the previous item in that slot
     if not duplicate and prior_id != -1:
         removeterm = StudySetTerm.query.filter_by(id=prior_id).first()
         if removeterm is not None:
@@ -103,6 +104,19 @@ def questionanswer():
             db.session.commit()
 
     return jsonify({'id': term.id, 'duplicate': duplicate})
+
+@bp.route('/api/v1.0/deleteterm', methods=['POST'])
+@login_required
+def deleteterm():
+    term_id = request.form['term_id']
+
+    term = StudySetTerm.query.filter_by(id=term_id).first()
+
+    if term is not None:
+        db.session.delete(term)
+        db.session.commit()
+
+    return jsonify({})
 
 @bp.errorhandler(404)
 def not_found(error):

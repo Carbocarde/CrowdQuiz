@@ -77,6 +77,23 @@
     }
     </script>
     <script>
+    function deletelocal(question, answer, save, deleteButton) {
+        $(question).parent().remove();
+    }
+    </script>
+    <script>
+    function deletesaved(question, answer, save, deleteButton, id) {
+        $(deleteButton).html('<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>');
+        $.post('/api/v1.0/deleteterm', {
+            term_id: id
+        }).done(function(response) {
+            $(question).parent().remove();
+        }).fail(function() {
+            $(deleteButton).text("Error: Could not contact server.");
+        });
+    }
+    </script>
+    <script>
     function save(question, answer, destElem, id) {
             $(destElem).html('<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>');
             $.post('/api/v1.0/questionanswer', {
@@ -92,7 +109,7 @@
                 } else {
                     $(question).prop('id', "#question${qid}".replace('${qid}', response['id']))
                     $(answer).prop('id', "#answer${aid}".replace('${aid}', response['id']))
-                    $(destElem).html("<a href=\"javascript:save('#question${id}','#answer${id}','#save${id}');\">Saved</a>".replaceAll('${id}', response['id']))
+                    $(destElem).html("<a href=\"javascript:save('#question${id}','#answer${id}','#save${id}', '${id}');\">Saved</a>".replaceAll('${id}', response['id']))
                     $(destElem).prop('id', "#save${id}".replace('${id}', response['id']))
                 }
             }).fail(function() {
@@ -105,7 +122,7 @@
     function addRow() {
         newRowCount += 1;
         document.querySelector('#content').insertAdjacentHTML(
-            'beforeend',"<div class=\"input-group mb-3\"><textarea id=\"nquestion${count}\" type=\"text\" aria-label=\"Question\" placeholder=\"Question\" class=\"form-control mr-3 textarea-autosize\"></textarea><textarea id=\"nanswer${count}\" type=\"text\" aria-label=\"Answer\" placeholder=\"Answer\" class=\"form-control mr-3 textarea-autosize\"></textarea><span id=\"nsave${count}\"><a href=\"javascript:save('#nquestion${count}','#nanswer${count}','#nsave${count}','-1');\">Save</a></span></div>".replaceAll('${count}', newRowCount))
+            'beforeend',"<div class=\"input-group mb-3\"><textarea id=\"nquestion${count}\" type=\"text\" aria-label=\"Question\" placeholder=\"Question\" class=\"form-control mr-3 textarea-autosize\"></textarea><textarea id=\"nanswer${count}\" type=\"text\" aria-label=\"Answer\" placeholder=\"Answer\" class=\"form-control mr-3 textarea-autosize\"></textarea><span id=\"nsave${count}\"><a href=\"javascript:save('#nquestion${count}','#nanswer${count}','#nsave${count}','-1');\">Save</a></span><span id=\"ndelete${count}\"><a href=\"javascript:deletelocal('#nquestion${count}','#nanswer${count}','#nsave${count}','#ndelete${count}');\" type=\"button\" class=\"btn btn-danger\"><svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-trash' viewBox='0 0 16 16'><path d='M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z'></path><path fill-rule='evenodd'd='M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z'></path></svg></a></span></div>".replaceAll('${count}', newRowCount))
     }
     </script>
 {% endblock %}
