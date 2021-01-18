@@ -15,10 +15,13 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
     admin = db.Column(db.Boolean)
+    teacher = db.Column(db.Boolean)
+    ta = db.Column(db.Boolean)
     name = db.Column(db.String(64))
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
+
     school_id = db.Column(db.Integer, db.ForeignKey('school.id'))
 
     question_user = db.relationship('Question', backref='author', lazy='dynamic')
@@ -26,6 +29,7 @@ class User(UserMixin, db.Model):
     enrollment = db.relationship('Enrollment', backref='author', lazy='dynamic')
     exam_structure_suggestion = db.relationship('ExamStructureSuggestion', backref='author', lazy='dynamic')
     study_set = db.relationship('StudySetTerm', backref='user', lazy='dynamic')
+    section = db.relationship('Section', backref='owner', lazy='dynamic')
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -206,15 +210,17 @@ class Topic(db.Model):
 class Exam(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
-    class_id = db.Column(db.Integer, db.ForeignKey('class.id'))
-
     body = db.Column(db.String(40))
 
+    start_time = db.Column(db.DateTime)
     exam_number = db.Column(db.Integer)
     cumulative = db.Column(db.Boolean)
 
+    section_id = db.Column(db.Integer, db.ForeignKey('section.id'))
+
     exam_topic = db.relationship('ExamTopics', backref='exam', lazy='dynamic')
     study_set = db.relationship('StudySetTerm', backref='exam', lazy='dynamic')
+    assignment = db.relationship('Assignment', backref='exam', lazy='dynamic')
 
 class ExamTopics(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -238,8 +244,7 @@ class Class(db.Model):
     description = db.Column(db.String(140))
 
     enrollment = db.relationship('Enrollment', backref='enrolled_class', lazy='dynamic')
-    exam = db.relationship('Exam', backref='exam_class', lazy='dynamic')
-    exam_structure_suggestion = db.relationship('ExamStructureSuggestion', backref='exam_class', lazy='dynamic')
+    section = db.relationship('Section', backref='class_', lazy='dynamic')
 
     def __repr__(self):
         return '<Subject: {}>'.format(self.body)
@@ -259,12 +264,13 @@ class Enrollment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
     class_id = db.Column(db.Integer, db.ForeignKey('class.id'))
+    section_id = db.Column(db.Integer, db.ForeignKey('section.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 class ExamStructureSuggestion(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
-    class_id = db.Column(db.Integer, db.ForeignKey('class.id'))
+    section_id = db.Column(db.Integer, db.ForeignKey('section.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     exam_count = db.Column(db.Integer)
@@ -282,4 +288,29 @@ class StudySetTerm(db.Model):
 
     question_answer_id = db.Column(db.Integer, db.ForeignKey('questionanswer.id'))
     exam_id = db.Column(db.Integer, db.ForeignKey('exam.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+class Section(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+
+    # Title of section
+    body = db.Column(db.String(140))
+    description = db.Column(db.String(140))
+    approved = db.Column(db.Boolean)
+
+    class_id = db.Column(db.Integer, db.ForeignKey('class.id'))
+    # Teacher/Professor
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+    exam = db.relationship('Exam', backref='section', lazy='dynamic')
+    enrollment = db.relationship('Enrollment', backref='section', lazy='dynamic')
+    exam_structure_suggestion = db.relationship('ExamStructureSuggestion', backref='section', lazy='dynamic')
+
+class Assignment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+
+    required_terms = db.Column(db.Integer)
+
+    exam_id = db.Column(db.Integer, db.ForeignKey('exam.id'))
+    # Owner
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))

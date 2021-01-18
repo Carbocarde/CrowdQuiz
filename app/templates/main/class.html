@@ -9,11 +9,6 @@
         <li class="breadcrumb-item active" aria-current="page">{{ class_element.body }}</li>
     </ol>
 </nav>
-{% if enrolled %}
-<a href="{{ 'unenroll/' }}" class="btn btn-secondary float-right m-3 font-weight-bold">Unenroll</a>
-{% else %}
-<a href="{{ 'enroll/' }}" class="btn btn-primary float-right m-3 font-weight-bold">Enroll</a>
-{% endif %}
 <div class="jumbotron">
     <h1 class="display-4">{{ class_element.body }}</h1>
     <p class="lead">{{ class_element.description }}</p>
@@ -26,19 +21,19 @@
 </div>
 {% endif %}
 <div class="row">
-    {% for exam, exam_topics in exam_topics_all %}
-        {% include 'main/_exam.html' %}
+    {% for section, enrolled in sections_enrollment %}
+        {% include 'main/_section.html' %}
     {% endfor %}
 </div>
 
 <div class="card mt-3">
     <div class="card-header">
-        Suggest New Exams
+        Suggest New Class Section
     </div>
     <div class="card-body">
-        <h5 class="card-title">Are we missing an exam?</h5>
+        <h5 class="card-title">Are we missing a class section?</h5>
         <p class="card-text">Let us know!</p>
-        <a href="{{ url_for('main.suggested_exam_structure', class_id=class_element.id) }}" class="btn btn-primary">Submit Exam Revision</a>
+        <a href="{{ url_for('main.suggested_class_section', class_id=class_element.id) }}" class="btn btn-primary">Add New Class Section</a>
     </div>
 </div>
 {% endblock app_content %}

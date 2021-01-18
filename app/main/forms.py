@@ -24,6 +24,12 @@ class ProposeClassForm(FlaskForm):
 
     submit = SubmitField('Submit')
 
+class ProposeSectionForm(FlaskForm):
+    body = StringField('Section ID', description="Ex: G07", validators=[DataRequired(), Length(max=40)])
+    description = StringField('Section Description', description="Ex: Taught by Professor O'Neill", widget=TextArea(), validators=[DataRequired(), Length(max=140)])
+
+    submit = SubmitField('Submit')
+
 class ProposeTopicForm(FlaskForm):
     body = StringField('Topic Name', description="Ex: Social Construction of Reality", validators=[DataRequired(), Length(max=40)])
     description = StringField('Topic Description (optional)', widget=TextArea(), validators=[Length(max=140)])
@@ -56,7 +62,7 @@ class NewQuestionForm(FlaskForm):
     question = StringField('Question', validators=[DataRequired()])
 
     correct_answer = StringField('Correct Answer', widget=TextArea(), validators=[DataRequired(), Length(max=140)])
-    
+
     submit = SubmitField('Submit')
 
     def validate_question(self, question):

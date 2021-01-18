@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+
+{% if current_user.is_authenticated %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">{{ class_element.school.body }}</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('main.class_', class_id=class_element.id) }}">{{ class_element.body }}</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ section.body }}</li>
+    </ol>
+</nav>
+{% if enrolled %}
+<a href="{{ url_for('main.unenroll', class_id=class_element.id, section_id=section.id) }}" class="btn btn-secondary float-right m-3 font-weight-bold">Unenroll</a>
+{% else %}
+<a href="{{ url_for('main.enroll', class_id=class_element.id, section_id=section.id) }}" class="btn btn-primary float-right m-3 font-weight-bold">Enroll</a>
+{% endif %}
+<div class="jumbotron">
+    <h1 class="display-4">{{ class_element.body }}</h1>
+    <p class="lead">{{ class_element.description }}</p>
+    {% if current_user.teacher and not section.user_id %}
+    <a class="btn btn-primary" href="{{ url_for('teacher.claim_section', section_id=section.id) }}"> Claim Section </a>
+    {% endif %}
+    {% if section.user_id == current_user.id %}
+    <a class="btn btn-primary" href="{{ url_for('teacher.manage_section', section_id=section.id) }}"> Manage Section </a>
+    {% endif %}
+</div>
+{% else %}
+<div class="jumbotron mt-3">
+    <h1 class="display-4">Hey there!</h1>
+    <p class="lead">Let's get you quizzing! Click the button below to start!</p>
+    <a class="btn btn-primary" href="{{ url_for('auth.login') }}"> Log in/Register </a>
+</div>
+{% endif %}
+<div class="row">
+    {% for exam, exam_topics in exam_topics_all %}
+        {% include 'main/_exam.html' %}
+    {% endfor %}
+</div>
+
+<div class="card mt-3">
+    <div class="card-header">
+        Suggest New Exams
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">Are we missing an exam?</h5>
+        <p class="card-text">Let us know!</p>
+        <a href="{{ url_for('main.suggested_exam_structure', class_id=class_element.id, section_id=section.id) }}" class="btn btn-primary">Submit Exam Revision</a>
+    </div>
+</div>
+{% endblock app_content %}

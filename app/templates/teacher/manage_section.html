@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">{{ section.class_.school.body }}</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('main.class_', class_id=section.class_.id) }}">{{ section.class_.body }}</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ section.body }}</li>
+    </ol>
+</nav>
+<div class="jumbotron">
+    <h1 class="display-4">{{ section.class_.body }}</h1>
+    <p class="lead">{{ section.class_.description }}</p>
+    {% if current_user.id == section.user_id %}
+    <a class="btn btn-primary" href="#"> You own this section </a>
+    <br>
+    <h3>Class Section Invite Link (students): <span class="badge badge-secondary">127.0.0.1:5000{{ invite_link }}</span></h3>
+    {% endif %}
+</div>
+
+<div class="row">
+    {% for exam, exam_topics in exam_topics %}
+        {% include 'teacher/_manage_exam.html' %}
+    {% endfor %}
+</div>
+
+<div class="card mt-3">
+    <div class="card-header">
+        Add Exams
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">Want to add or remove exams?</h5>
+        <p class="card-text">Students will create study sets specific to each exam, so make sure the exam structure matches your class' exam structure!</p>
+        <a href="{{ url_for('teacher.add_exam', section_id=section.id) }}" class="btn btn-primary">Add exam</a>
+    </div>
+</div>
+{% endblock app_content %}

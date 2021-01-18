@@ -15,4 +15,8 @@
 </div>
 {% endif %}
 
+{% for section, exams in section_exams %}
+    {% include 'user/_class.html' %}
+{% endfor %}
+
 {% endblock app_content %}
