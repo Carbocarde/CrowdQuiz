@@ -214,6 +214,7 @@ def suggested_exam_structure(class_id, section_id):
 
     return render_template('main/suggest_exam_structure.html', title='Proposed Exams', section=section, form=form)
 
+"""
 @bp.route('/class/<class_id>/exam/<exam_id>/suggested_topics/propose_new', methods=['GET', 'POST'])
 @login_required
 def suggest_topic(class_id, exam_id):
@@ -234,6 +235,7 @@ def suggest_topic(class_id, exam_id):
         return redirect(url_for('main.suggested_topics', class_id=class_id, exam_id=exam_id))
 
     return render_template('main/suggest_topic.html', form=form, exam=exam)
+"""
 
 @bp.route('/class/<class_id>/section/<section_id>/enroll/')
 @login_required
@@ -271,6 +273,7 @@ def exam(section_id, exam_id):
 
     return render_template('main/exam_study_set.html', title="Exam", exam=exam, exam_topics=exam_topics, set=set_questions)
 
+"""
 @bp.route('/class/<class_id>/exam/<exam_id>/contribute/', defaults={'topic_id': None}, methods=['GET', 'POST'])
 @bp.route('/class/<class_id>/exam/<exam_id>/topic/<topic_id>/contribute/', methods=['GET', 'POST'])
 @login_required
@@ -335,7 +338,9 @@ def contribute(class_id, exam_id, topic_id):
             return redirect(url_for('main.exam', class_id=class_id, exam_id=exam_id))
 
     return render_template('main/contribute_eval.html', title="Contribute", exam=exam, topic=topic, form=form, evaluate_forms=zip(form.evaluate_entries, evaluate_questions, evaluate_topics), eval_questions=len(evaluate_questions))
+"""
 
+"""
 @bp.route('/class/<class_id>/exam/<exam_id>/contribute/question/', defaults={'topic_id': None}, methods=['GET', 'POST'])
 @bp.route('/class/<class_id>/exam/<exam_id>/topic/<topic_id>/contribute/question/', methods=['GET', 'POST'])
 @login_required
@@ -423,6 +428,7 @@ def contribute_question(class_id, exam_id, topic_id):
         return redirect(url_for('main.contribute_question', class_id=class_id, exam_id=exam_id, topic_id=topic_id))
 
     return render_template('main/contribute_question.html', title='Contribute', topic=topic, exam=exam, form=form)
+"""
 
 @bp.route('/admin')
 @login_required
@@ -496,6 +502,7 @@ def approve_exam_structure(exam_structure_id):
     flash('Exam structure added for ' + structure.section.body)
     return redirect(url_for('main.admin'))
 
+"""
 @bp.route('/delete_question/<question_id>', methods=['GET', 'POST'])
 @login_required
 def delete_question(question_id):
@@ -530,7 +537,9 @@ def delete_question(question_id):
         answers=answers,
         form=form
     )
+"""
 
+"""
 @bp.route('/subject/<subject_id>/evaluate', methods=['GET', 'POST'])
 @login_required
 def evaluate_questions(subject_id):
@@ -599,6 +608,7 @@ def evaluate_questions(subject_id):
         answers=answers,
         form=form
     )
+"""
 
 @bp.route('/invite/s/<section_id>/', methods=['GET', 'POST'])
 @login_required
