@@ -70,6 +70,8 @@ def add_exam(section_id):
     if not current_user.teacher or not section.user_id or section.user_id != current_user.id:
         return render_template('errors/404.html')
 
+    exams_count = Exam.query.count()
+
     form = AddExamForm()
     if form.validate_on_submit():
         exam = Exam(body=form.exam_title.data, exam_number=form.exam_number.data, cumulative=form.cumulative.data, section_id=section_id)
@@ -78,8 +80,8 @@ def add_exam(section_id):
         flash('Your exam has been saved.')
         return redirect(url_for('teacher.manage_section', section_id=section_id))
     elif request.method == 'GET':
-        form.exam_number.data = exams.count() + 1
-        form.exam_title.data = 'Exam ' + str(exams.count() + 1)
+        form.exam_number.data = exams_count + 1
+        form.exam_title.data = 'Exam ' + str(exams_count + 1)
 
     return render_template('teacher/add_exam.html', section=section, form=form)
 
