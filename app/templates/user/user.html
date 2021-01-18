@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 
 {% block app_content %}
+    <div class="alert alert-info" role="alert">If you are a teacher, please Contact Us to get your account upgraded</div>
+
     <div class="jumbotron mt-3">
         <h1 class="display-4">Hey {{ current_user.name.capitalize() }}!</h1>
         <p class="lead">You look great today</p>
@@ -13,7 +15,7 @@
 
     {% if questions %}
         <div class="my-3 p-3 bg-white rounded shadow-sm">
-            <h6 class="border-bottom border-gray pb-2 mb-0">Recent questions you've contributed:</h6>
+            <h6 class="border-bottom border-gray pb-2 mb-0">Recent questions you've added:</h6>
             <div class="row">
             {% for question in questions %}
                 {% include 'main/_question.html' %}
@@ -22,25 +24,13 @@
         </div>
     {% endif %}
 
-    {% if enrolled %}
-        <div class="my-3 p-3 bg-white rounded shadow-sm">
-            <h6 class="border-bottom border-gray pb-2 mb-0">Enrolled Classes:</h6>
-            <div class="row">
-            {% for class, exams in class_exams %}
-                {% include 'main/_class.html' %}
-            {% endfor %}
-            </div>
+    <div class="my-3 p-3 bg-white rounded shadow-sm">
+        <h6 class="border-bottom border-gray pb-2 mb-0">Enrolled Classes:</h6>
+        <div class="row">
+        {% for section, exams in section_exams %}
+            {% include 'user/_class.html' %}
+        {% endfor %}
         </div>
-    {% endif %}
+    </div>
 
-    {% if unenrolled %}
-        <div class="my-3 p-3 bg-white rounded shadow-sm">
-            <h6 class="border-bottom border-gray pb-2 mb-0">Waitlisted Classes (pending approval):</h6>
-            <div class="row">
-            {% for class, exams in unenrolled_class_exams %}
-                {% include 'main/_class.html' %}
-            {% endfor %}
-            </div>
-        </div>
-    {% endif %}
 {% endblock %}

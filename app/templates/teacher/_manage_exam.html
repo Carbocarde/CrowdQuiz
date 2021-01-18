@@ -12,9 +12,8 @@
             <p class="card-text">{{ exam.description }}</p>
         {% endif %}
 
-        <div class="progress mb-2 mt-auto">
-            <div class="progress-bar bg-secondary" data-toggle="tooltip" data-placement="top" title="Question Completion Percentage" role="progressbar" style="{{ 'width: {}%'.format(16) }}"></div>
-        </div>
-        <a href="{{ url_for('main.exam', exam_id=exam.id, section_id=exam.section.id) }}" class="btn btn-outline-secondary mb-2">Work on your study set!</a>
+        <a href="{{ url_for('teacher.edit_exam', exam_id=exam.id) }}" class="btn btn-outline-secondary mb-2">Edit Exam Properties</a>
+        <a href="{{ url_for('main.exam', exam_id=exam.id, section_id=exam.section.id) }}" class="btn btn-outline-secondary mb-2">Add Associated Assignment</a>
+        <a href="{{ url_for('main.remove_exam', exam_id=exam.id) }}" class="btn btn-outline-danger mb-2">Delete Exam</a>
     </div>
 </div>

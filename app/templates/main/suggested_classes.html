@@ -33,7 +33,7 @@
 <div class="my-3 p-3 bg-white rounded shadow-sm">
     <h6 class="border-bottom border-gray pb-2 mb-0">Enrolled Classes:</h6>
     <div class="row">
-    {% for class, exams, enrolled in enrolled_class_exams %}
+    {% for class, sections, enrolled in enrolled_class_exams %}
         {% if enrolled %}
             {% include 'main/_class.html' %}
         {% endif %}
@@ -46,7 +46,7 @@
 <div class="my-3 p-3 bg-white rounded shadow-sm">
     <h6 class="border-bottom border-gray pb-2 mb-0">Other Classes:</h6>
     <div class="row">
-    {% for class, exams, enrolled in unenrolled_class_exams %}
+    {% for class, sections, enrolled in unenrolled_class_sections %}
         {% if not enrolled %}
             {% include 'main/_class.html' %}
         {% endif %}

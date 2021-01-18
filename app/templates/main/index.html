@@ -8,6 +8,9 @@
         <li class="breadcrumb-item active" aria-current="page">{{ current_user.school.body }}</li>
     </ol>
 </nav>
+{% if current_user.teacher %}
+<a href="{{ url_for('teacher.index') }}" class="btn btn-secondary float-right m-3 font-weight-bold">Back to Teacher Dashboard</a>
+{% endif %}
 <div class="jumbotron">
     <h1 class="display-4">Hey {{ current_user.name.capitalize() }}!</h1>
     <p class="lead">Let's get quizzing! Get started by clicking one of the subjects below!</p>
@@ -24,7 +27,7 @@
 <div class="my-3 p-3 bg-white rounded shadow-sm">
     <h6 class="border-bottom border-gray pb-2 mb-0">Enrolled Classes:</h6>
     <div class="row">
-    {% for class, exams, enrolled in enrolled_class_exams %}
+    {% for class, all_sections, enrolled, enrollment in enrolled_class_sections %}
         {% if enrolled %}
             {% include 'main/_class.html' %}
         {% endif %}
@@ -37,7 +40,7 @@
 <div class="my-3 p-3 bg-white rounded shadow-sm">
     <h6 class="border-bottom border-gray pb-2 mb-0">Other Classes:</h6>
     <div class="row">
-    {% for class, exams, enrolled in unenrolled_class_exams %}
+    {% for class, sections, enrolled in unenrolled_class_sections %}
         {% if not enrolled %}
             {% include 'main/_class.html' %}
         {% endif %}

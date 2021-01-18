@@ -8,7 +8,7 @@ from app.user.forms import EditProfileForm
 from app.user import bp
 from flask import abort
 
-@bp.route('/admin')
+@bp.route('/admin/')
 @login_required
 def admin():
     if not current_user.admin:
@@ -24,27 +24,20 @@ def admin():
 
     return render_template('user/admin.html', title='Admin Dashboard', question_topics=zip(questions,topics), exam_structure_suggestions=pending_exam_structures, classes=classes)
 
-@bp.route('/user/<username>/')
+@bp.route('/profile/')
 @login_required
-def user_profile(username):
-    user = User.query.filter_by(username=username).first_or_404()
+def user_profile():
+    user = current_user
     questions = Question.query.filter_by(user_id=user.id).order_by(Question.id.desc()).limit(20)
     enrollments = Enrollment.query.filter_by(user_id=user.id).limit(20)
 
+    sections = []
     exams = []
-    classes = []
-
-    unenrolled_exams = []
-    unenrolled_classes = []
     for enrollment in enrollments:
-        if enrollment.enrolled_class.approved:
-            classes.append(enrollment.enrolled_class)
-            exams.append(Exam.query.filter_by(class_id=enrollment.class_id))
-        else:
-            unenrolled_classes.append(enrollment.enrolled_class)
-            unenrolled_exams.append(Exam.query.filter_by(class_id=enrollment.class_id))
+        sections.append(enrollment.section)
+        exams.append(Exam.query.filter_by(section_id=enrollment.section_id))
 
-    return render_template('user/user.html', user=user, questions=questions, class_exams=zip(classes, exams), enrolled=(len(exams) > 0), unenrolled_class_exams=zip(unenrolled_classes, unenrolled_exams), unenrolled=(len(exams) > 0))
+    return render_template('user/user.html', user=user, questions=questions, section_exams=zip(sections, exams))
 
 @bp.route('/edit_profile/', methods=['GET', 'POST'])
 @login_required
