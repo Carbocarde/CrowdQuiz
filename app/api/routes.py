@@ -14,7 +14,7 @@ def questionanswer():
     prior_id = request.form['prior_id']
 
     # Instantly reject empty/invalid terms
-    if (question == ""):
+    if (question is None or question == ""):
         return jsonify({'empty': True})
 
     exam = Exam.query.filter_by(id=exam_id).first_or_404()
@@ -103,7 +103,7 @@ def questionanswer():
             db.session.delete(removeterm)
             db.session.commit()
 
-    return jsonify({'id': term.id, 'duplicate': duplicate})
+    return jsonify({'id': term.id, 'duplicate': duplicate, 'empty': False})
 
 @bp.route('/api/v1.0/deleteterm', methods=['POST'])
 @login_required
