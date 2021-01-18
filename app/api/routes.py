@@ -15,7 +15,7 @@ def questionanswer():
 
     # Instantly reject empty/invalid terms
     if (question == ""):
-        return jsonify({'id': -1, 'duplicate': True})
+        return jsonify({'empty': True})
 
     exam = Exam.query.filter_by(id=exam_id).first_or_404()
 
