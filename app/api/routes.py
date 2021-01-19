@@ -115,9 +115,16 @@ def deleteterm():
 
     term = StudySetTerm.query.filter_by(id=term_id).first()
 
+    term_sets = StudySetTerm.query.filter_by(question_answer_id=term.question_answer.id).count()
+
+    # if this is the only reference to the question/answer relation
+    if term_sets == 1:
+        db.session.delete(term.question_answer)
+
     if term is not None:
         db.session.delete(term)
-        db.session.commit()
+
+    db.session.commit()
 
     return jsonify({})
 
