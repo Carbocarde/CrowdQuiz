@@ -1,66 +1,46 @@
-<div class='input-group mb-3'>
+<div class='input-group mb-2 mt-2'>
     {% if term %}
-    <textarea id='question{{ term.id }}' term_id='{{ term.id }}' type='text' aria-label='Question' placeholder='Question' class='form-control mr-3 textarea-autosize'>{{ term.question_answer.question.body }}</textarea>
-    <textarea id='answer{{ term.id }}' type='text' aria-label='Answer' placeholder='Answer' class='form-control mr-3 textarea-autosize'>{{ term.question_answer.answer.body }}</textarea>
-    <span id='save{{ term.id }}'>
+    <textarea id='question{{ term.id }}' qterm_id='{{ term.id }}' type='text' aria-label='Question' placeholder='Question' class='form-control mr-3 textarea-autosize'>{{ term.question_answer.question.body }}</textarea>
+    <textarea id='answer{{ term.id }}' aterm_id='{{ term.id }}' type='text' aria-label='Answer' placeholder='Answer' class='form-control mr-3 textarea-autosize'>{{ term.question_answer.answer.body }}</textarea>
+    <span id='altans{{ term.id }}' altans_id='{{ term.id }}'>
+        <a href="javascript:altans(
+                    {{ term.id }});" type='button' class='btn btn-primary'>
+            <i class="bi bi-chevron-down"></i>
+        </a>
+    </span>
+    <span id='save{{ term.id }}' save_id='{{ term.id }}'>
         <a href="javascript:save(
-                    '#question{{ term.id }}',
-                    '#answer{{ term.id }}',
-                    '#save{{ term.id }}',
                     '{{ term.id }}');" type='button' class='btn btn-success'>
             <i class="bi bi-cloud"></i>
         </a>
     </span>
-    <span id='delete{{ term.id }}'>
+    <span id='delete{{ term.id }}' dterm_id='{{ term.id }}'>
         <a href="javascript:deletesaved(
-                    '#question{{ term.id }}',
-                    '#answer{{ term.id }}',
-                    '#save{{ term.id }}',
-                    '#delete{{ term.id }}',
                     '{{ term.id }}');" type='button' class='btn btn-danger'>
             {% include 'icons/_trash_icon.html' %}
         </a>
     </span>
+</div>
+<div id="altansbtns{{ term.id }}" altansbtns_id='{{ term.id }}' style="display: none"></div>
     {% else %}
-    <textarea id='nquestion0' term_id='-1' type='text' aria-label='Question' placeholder='Question' class='form-control mr-3 textarea-autosize'></textarea>
-    <textarea id='nanswer0' type='text' aria-label='Answer' placeholder='Answer' class='form-control mr-3 textarea-autosize'></textarea>
-    <span id='nsave0'>
-        <a href="javascript:save(
-                    '#nquestion0',
-                    '#nanswer0',
-                    '#nsave0',
-                    '-1');" type='button' class='btn btn-success'>
+    <textarea id='nquestion0' qterm_id='-1' type='text' aria-label='Question' placeholder='Question' class='form-control mr-3 textarea-autosize'></textarea>
+    <textarea id='nanswer0' aterm_id='-1' type='text' aria-label='Answer' placeholder='Answer' class='form-control mr-3 textarea-autosize'></textarea>
+    <span id='altans0' altans_id='-1'>
+        <a href="javascript:altans(
+                    '-1');" type='button' class='btn btn-secondary'>
+            <i class="bi bi-chevron-down"></i>
+        </a>
+    </span>
+    <span id='nsave0' save_id='-1'>
+        <a href="javascript:save('-1');" type='button' class='btn btn-success'>
             <i class="bi bi-cloud"></i>
         </a>
     </span>
-    <span id='ndelete0'>
-        <a href="javascript:deletelocal(
-                    '#nquestion0',
-                    '#nanswer0',
-                    '#nsave0',
-                    '#ndelete0');" type='button' class='btn btn-danger'>
+    <span id='ndelete0' dterm_id='-1'>
+        <a href="javascript:deletelocal('#ndelete0');" type='button' class='btn btn-danger'>
             {% include 'icons/_trash_icon.html' %}
         </a>
     </span>
-    {% endif %}
-    {% if js %}
-    <textarea id='nquestion0' term_id='-1' type='text' aria-label='Question' placeholder='Question' class='form-control mr-3 textarea-autosize'></textarea>
-    <textarea id='nanswer0' type='text' aria-label='Answer' placeholder='Answer' class='form-control mr-3 textarea-autosize'></textarea>
-    <span id='nsave0'>
-        <a href=\"javascript:save(
-                    '#nquestion0',
-                    '#nanswer0',
-                    '#nsave0',
-                    '-1');\">Save</a>
-    </span>
-    <span id='ndelete0'>
-        <a href=\"javascript:deletelocal(
-                    '#nquestion0',
-                    '#nanswer0',
-                    '#nsave0',
-                    '#ndelete0');\" type='button' class='btn btn-danger'>
-            {% include 'icons/_trash_icon.html' %}
-        </a>
-    </span>
-    {% endif %}
 </div>
+<div id="altansbtns-1" altansbtns_id='-1' style="display: none"></div>
+    {% endif %}

@@ -13,8 +13,11 @@ def questionanswer():
     exam_id = request.form['exam_id']
     prior_id = request.form['prior_id']
 
+    question_text = question.strip()
+    answer_text = answer.strip()
+
     # Instantly reject empty/invalid terms
-    if (question is None or question == ""):
+    if (question is None or question_text == "" or answer is None or answer_text == ""):
         return jsonify({'empty': True})
 
     exam = Exam.query.filter_by(id=exam_id).first_or_404()
@@ -24,10 +27,10 @@ def questionanswer():
     duplicate = False
 
     # Check if idential question entry already exists
-    question = Question.query.filter_by(body=request.form['qbody']).first()
+    question = Question.query.filter_by(body=question_text).first()
 
     # Check if identical answer entry already exists
-    answer = Answer.query.filter_by(body=request.form['abody']).first()
+    answer = Answer.query.filter_by(body=answer_text).first()
 
     # Generate a question entry if one was not found prior
     if question is None:
@@ -47,7 +50,7 @@ def questionanswer():
             db.session.commit()
 
         # Create Question
-        question = Question(user_id=current_user.id, body=request.form['qbody'])
+        question = Question(user_id=current_user.id, body=question_text)
         db.session.add(question)
         db.session.commit()
         db.session.refresh(question)
@@ -59,7 +62,7 @@ def questionanswer():
 
     # Generate an answer entry if one was not found prior
     if answer is None:
-        answer = Answer(user_id=current_user.id, body=request.form['abody'])
+        answer = Answer(user_id=current_user.id, body=answer_text)
         db.session.add(answer)
         db.session.commit()
         db.session.refresh(answer)
@@ -117,6 +120,23 @@ def deleteterm():
         db.session.commit()
 
     return jsonify({})
+
+@bp.route('/api/v1.0/altans', methods=['POST'])
+@login_required
+def altans():
+    term_id = request.form['term_id']
+
+    term = StudySetTerm.query.filter_by(id=term_id).first()
+    question_id = term.question_answer.question.id
+    answers = QuestionAnswer.query.filter_by(question_id=question_id)
+
+    body = []
+    id = []
+    for answer in answers:
+        body.append(answer.answer.body)
+        id.append(answer.answer.id)
+
+    return jsonify({ 'ids' : id, 'bodys' : body })
 
 @bp.errorhandler(404)
 def not_found(error):
