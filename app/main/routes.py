@@ -209,7 +209,7 @@ def suggested_exam_structure(class_id, section_id):
         db.session.add(structure)
         db.session.commit()
 
-        if ExamStructureSuggestion.query.filter_by(section_id=section_id).count() == 1:
+        if ExamStructureSuggestion.query.filter_by(section_id=section_id).count() == 1 and Exam.query.filter_by(section_id=section_id).count() == 0:
             for i in range(1, structure.exam_count + 1):
                 exam = Exam(body="Exam " + str(i), section_id=structure.section_id, exam_number = i)
                 db.session.add(exam)
