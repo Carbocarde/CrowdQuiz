@@ -205,9 +205,42 @@ def suggested_exam_structure(class_id, section_id):
 
     form = EditExamStructureForm();
     if form.validate_on_submit():
-        exam_structure = ExamStructureSuggestion(body=form.comment.data, exam_count=form.exams.data, quiz_count=form.quizzes.data, final_exam=form.final_exam.data, final_exam_cumulative=form.final_exam_cumulative.data, user_id=current_user.id, section_id=section_id, approved=False)
-        db.session.add(exam_structure)
+        structure = ExamStructureSuggestion(body=form.comment.data, exam_count=form.exams.data, final_exam=form.final_exam.data, final_exam_cumulative=form.final_exam_cumulative.data, user_id=current_user.id, section_id=section_id, approved=False)
+        db.session.add(structure)
         db.session.commit()
+
+        if ExamStructureSuggestion.query.filter_by(section_id=section_id).count() == 1:
+            for i in range(1, structure.exam_count):
+                exam = Exam(body="Exam " + str(i), section_id=structure.section_id, exam_number = i)
+                db.session.add(exam)
+                db.session.commit()
+                db.session.refresh(exam)
+
+                topic = Topic(body="All", description="A place for all questions that fit into this exam")
+                db.session.add(topic)
+                db.session.commit()
+                db.session.refresh(topic)
+
+                exam_topic = ExamTopics(exam_id=exam.id, topic_id=topic.id)
+                db.session.add(exam_topic)
+                db.session.commit()
+
+            if structure.final_exam:
+                exam = Exam(body="Final Exam", section_id=structure.section_id, exam_number = structure.exam_count + 1, cumulative=structure.final_exam_cumulative)
+                db.session.add(exam)
+                db.session.commit()
+
+                topic = Topic(body="All", description="A place for all questions that fit into this exam")
+                db.session.add(topic)
+                db.session.commit()
+                db.session.refresh(topic)
+
+                exam_topic = ExamTopics(exam_id=exam.id, topic_id=topic.id)
+                db.session.add(exam_topic)
+                db.session.commit()
+
+            structure.approved = True
+            db.session.commit()
 
         flash('Your suggestion has been recieved!')
         return redirect(url_for('main.section', class_id=class_id, section_id=section_id))
@@ -473,7 +506,7 @@ def approve_exam_structure(exam_structure_id):
         db.session.commit()
         db.session.refresh(exam)
 
-        topic = Topic(body="General Questions", description="A place for general questions that fit into this exam")
+        topic = Topic(body="All", description="A place for all questions that fit into this exam")
         db.session.add(topic)
         db.session.commit()
         db.session.refresh(topic)
@@ -487,7 +520,7 @@ def approve_exam_structure(exam_structure_id):
         db.session.add(exam)
         db.session.commit()
 
-        topic = Topic(body="General Questions", description="A place for general questions that fit into the Final Exam")
+        topic = Topic(body="All", description="A place for all questions that fit into the Final Exam")
         db.session.add(topic)
         db.session.commit()
         db.session.refresh(topic)

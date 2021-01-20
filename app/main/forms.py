@@ -9,7 +9,6 @@ from wtforms import Form as NoCsrfForm
 
 class EditExamStructureForm(FlaskForm):
     exams = IntegerField('Number of Exams (Excluding Final Exam)', validators=[NumberRange(min=0, message='Please enter a non-negative number')])
-    quizzes = IntegerField('Number of Quizzes', validators=[NumberRange(min=0, message='Please enter a non-negative number')])
     final_exam = BooleanField('Final Exam?')
     final_exam_cumulative = BooleanField('Final Exam Cumulative?')
     comment = StringField('Comments? (Optional)', widget=TextArea(), validators=[Length(max=140)])
