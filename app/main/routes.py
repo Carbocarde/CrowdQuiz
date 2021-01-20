@@ -210,7 +210,7 @@ def suggested_exam_structure(class_id, section_id):
         db.session.commit()
 
         if ExamStructureSuggestion.query.filter_by(section_id=section_id).count() == 1:
-            for i in range(1, structure.exam_count):
+            for i in range(1, structure.exam_count + 1):
                 exam = Exam(body="Exam " + str(i), section_id=structure.section_id, exam_number = i)
                 db.session.add(exam)
                 db.session.commit()
@@ -500,7 +500,7 @@ def approve_exam_structure(exam_structure_id):
 
     structure = ExamStructureSuggestion.query.filter_by(id=exam_structure_id).first_or_404()
 
-    for i in range(1, structure.exam_count):
+    for i in range(1, structure.exam_count + 1):
         exam = Exam(body="Exam " + str(i), section_id=structure.section_id, exam_number = i)
         db.session.add(exam)
         db.session.commit()
