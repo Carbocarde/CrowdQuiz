@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 1dd140dd5a3e
+Revision ID: b9d5ee147c7f
 Revises: 
-Create Date: 2020-10-27 20:35:55.981916
+Create Date: 2021-03-10 21:30:22.446719
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '1dd140dd5a3e'
+revision = 'b9d5ee147c7f'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -32,6 +32,8 @@ def upgrade():
     op.create_table('user',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('admin', sa.Boolean(), nullable=True),
+    sa.Column('teacher', sa.Boolean(), nullable=True),
+    sa.Column('ta', sa.Boolean(), nullable=True),
     sa.Column('name', sa.String(length=64), nullable=True),
     sa.Column('username', sa.String(length=64), nullable=True),
     sa.Column('email', sa.String(length=120), nullable=True),
@@ -57,6 +59,7 @@ def upgrade():
     sa.Column('user_id', sa.Integer(), nullable=True),
     sa.Column('approved', sa.Boolean(), nullable=True),
     sa.Column('body', sa.String(length=64), nullable=True),
+    sa.Column('readable', sa.String(length=64), nullable=True),
     sa.Column('description', sa.String(length=140), nullable=True),
     sa.ForeignKeyConstraint(['school_id'], ['school.id'], ),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
@@ -68,7 +71,7 @@ def upgrade():
     sa.Column('body', sa.String(length=140), nullable=True),
     sa.Column('timestamp', sa.DateTime(), nullable=True),
     sa.Column('image_url', sa.String(length=64), nullable=True),
-    sa.Column('question_type', sa.String(length=1), nullable=True),
+    sa.Column('question_type', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
@@ -78,21 +81,6 @@ def upgrade():
     sa.Column('user_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['answer_id'], ['answer.id'], ),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_table('enrollment',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('class_id', sa.Integer(), nullable=True),
-    sa.Column('user_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['class_id'], ['class.id'], ),
-    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_table('exam',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('class_id', sa.Integer(), nullable=True),
-    sa.Column('body', sa.String(length=40), nullable=True),
-    sa.ForeignKeyConstraint(['class_id'], ['class.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('mcquestionattempt',
@@ -147,6 +135,17 @@ def upgrade():
     sa.ForeignKeyConstraint(['question_id'], ['question.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
+    op.create_table('section',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('body', sa.String(length=140), nullable=True),
+    sa.Column('description', sa.String(length=140), nullable=True),
+    sa.Column('approved', sa.Boolean(), nullable=True),
+    sa.Column('class_id', sa.Integer(), nullable=True),
+    sa.Column('user_id', sa.Integer(), nullable=True),
+    sa.ForeignKeyConstraint(['class_id'], ['class.id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
     op.create_table('tf_question_attempt',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('question_id', sa.Integer(), nullable=True),
@@ -157,14 +156,38 @@ def upgrade():
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('exam_topics',
+    op.create_table('enrollment',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('exam_id', sa.Integer(), nullable=True),
-    sa.Column('topic_id', sa.Integer(), nullable=True),
-    sa.Column('connection_score', sa.Integer(), nullable=True),
-    sa.Column('evaluations', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['exam_id'], ['exam.id'], ),
-    sa.ForeignKeyConstraint(['topic_id'], ['topic.id'], ),
+    sa.Column('class_id', sa.Integer(), nullable=True),
+    sa.Column('section_id', sa.Integer(), nullable=True),
+    sa.Column('user_id', sa.Integer(), nullable=True),
+    sa.ForeignKeyConstraint(['class_id'], ['class.id'], ),
+    sa.ForeignKeyConstraint(['section_id'], ['section.id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('exam',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('body', sa.String(length=40), nullable=True),
+    sa.Column('start_time', sa.DateTime(), nullable=True),
+    sa.Column('exam_number', sa.Integer(), nullable=True),
+    sa.Column('cumulative', sa.Boolean(), nullable=True),
+    sa.Column('section_id', sa.Integer(), nullable=True),
+    sa.ForeignKeyConstraint(['section_id'], ['section.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('exam_structure_suggestion',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('section_id', sa.Integer(), nullable=True),
+    sa.Column('user_id', sa.Integer(), nullable=True),
+    sa.Column('exam_count', sa.Integer(), nullable=True),
+    sa.Column('quiz_count', sa.Integer(), nullable=True),
+    sa.Column('final_exam', sa.Boolean(), nullable=True),
+    sa.Column('final_exam_cumulative', sa.Boolean(), nullable=True),
+    sa.Column('body', sa.String(length=140), nullable=True),
+    sa.Column('approved', sa.Boolean(), nullable=True),
+    sa.ForeignKeyConstraint(['section_id'], ['section.id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('mc_question_choice',
@@ -180,11 +203,30 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=True),
     sa.Column('question_answer_id', sa.Integer(), nullable=True),
-    sa.Column('body', sa.String(length=140), nullable=True),
-    sa.Column('argument_votes', sa.Integer(), nullable=True),
+    sa.Column('body', sa.String(length=300), nullable=True),
+    sa.Column('other_explanation_clicks', sa.Integer(), nullable=True),
     sa.Column('argument_evaluations', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['question_answer_id'], ['questionanswer.id'], ),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('assignment',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('required_terms', sa.Integer(), nullable=True),
+    sa.Column('exam_id', sa.Integer(), nullable=True),
+    sa.Column('user_id', sa.Integer(), nullable=True),
+    sa.ForeignKeyConstraint(['exam_id'], ['exam.id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('exam_topics',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('exam_id', sa.Integer(), nullable=True),
+    sa.Column('topic_id', sa.Integer(), nullable=True),
+    sa.Column('connection_score', sa.Integer(), nullable=True),
+    sa.Column('evaluations', sa.Integer(), nullable=True),
+    sa.ForeignKeyConstraint(['exam_id'], ['exam.id'], ),
+    sa.ForeignKeyConstraint(['topic_id'], ['topic.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('questionanswerargumentreport',
@@ -195,23 +237,39 @@ def upgrade():
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
+    op.create_table('study_set_term',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('question_answer_id', sa.Integer(), nullable=True),
+    sa.Column('exam_id', sa.Integer(), nullable=True),
+    sa.Column('user_id', sa.Integer(), nullable=True),
+    sa.Column('saved_status', sa.Integer(), nullable=True),
+    sa.Column('interaction_count', sa.Integer(), nullable=True),
+    sa.ForeignKeyConstraint(['exam_id'], ['exam.id'], ),
+    sa.ForeignKeyConstraint(['question_answer_id'], ['questionanswer.id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
     # ### end Alembic commands ###
 
 
 def downgrade():
     # ### commands auto generated by Alembic - please adjust! ###
+    op.drop_table('study_set_term')
     op.drop_table('questionanswerargumentreport')
+    op.drop_table('exam_topics')
+    op.drop_table('assignment')
     op.drop_table('questionanswerargument')
     op.drop_table('mc_question_choice')
-    op.drop_table('exam_topics')
+    op.drop_table('exam_structure_suggestion')
+    op.drop_table('exam')
+    op.drop_table('enrollment')
     op.drop_table('tf_question_attempt')
+    op.drop_table('section')
     op.drop_table('questionanswer')
     op.drop_table('question_topics')
     op.drop_table('question_eval')
     op.drop_table('open_ended_question_attempt')
     op.drop_table('mcquestionattempt')
-    op.drop_table('exam')
-    op.drop_table('enrollment')
     op.drop_table('answer_report')
     op.drop_table('question')
     op.drop_table('class')
