@@ -143,7 +143,34 @@ def altans():
         body.append(answer.answer.body)
         id.append(answer.answer.id)
 
+    db.session.commit()
+
     return jsonify({ 'ids' : id, 'bodys' : body })
+
+@bp.route('/api/v1.0/flashcards/save_progress', methods=['POST'])
+@login_required
+def studyset():
+    exam_id = request.form['exam_id']
+    term_ids = request.form.getlist('term_ids[]')
+    term_status = request.form.getlist('term_status[]')
+    term_interactions = request.form.getlist('term_interactions[]')
+
+    terms = zip(term_ids, term_status, term_interactions)
+
+    for term in terms:
+        term_entry = StudySetTerm.query.filter_by(id=term[0]).first()
+
+        status = int(term[1])
+        if (status >= -1 and status <= 3):
+            term_entry.saved_status = status
+
+        interactions = int(term[2])
+        if (interactions >= 0):
+            term_entry.interaction_count += interactions
+
+    db.session.commit()
+
+    return jsonify({})
 
 @bp.errorhandler(404)
 def not_found(error):

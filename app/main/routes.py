@@ -304,7 +304,44 @@ def exam(section_id, exam_id):
 
     set_questions = StudySetTerm.query.filter_by(user_id=current_user.id, exam_id=exam_id)
 
-    return render_template('main/exam_study_set.html', title="Exam", exam=exam, exam_topics=exam_topics, set=set_questions)
+    progress = [0,0,0,0,0] # Skipped, Unseen, Unlearned, Partial, Learned
+    width = [0,100,0,0,0]
+
+    for term in set_questions:
+        if term.saved_status is not None:
+            progress[term.saved_status + 1] += 1
+        else:
+            progress[1] += 1
+
+    for i in range(0,5):
+        if (sum(progress) != 0):
+            width[i] = progress[i] / sum(progress) * 100
+
+    return render_template('main/exam_study_set.html', title="Exam", exam=exam, exam_topics=exam_topics, set=set_questions, progress=progress, width=width)
+
+@bp.route('/section/<section_id>/exam/<exam_id>/flashcards/')
+@login_required
+def flashcards(section_id, exam_id):
+    exam = Exam.query.filter_by(id = exam_id, section_id = section_id).first_or_404()
+
+    exam_topics = ExamTopics.query.filter_by(exam_id=exam.id).limit(25)
+
+    set_questions = StudySetTerm.query.filter_by(user_id=current_user.id, exam_id=exam_id)
+
+    progress = [0,0,0,0,0] # Skipped, Unseen, Unlearned, Partial, Learned
+    width = [0,100,0,0,0]
+
+    for term in set_questions:
+        if term.saved_status is not None:
+            progress[term.saved_status + 1] += 1
+        else:
+            progress[1] += 1
+
+    for i in range(0,5):
+        if (sum(progress) != 0):
+            width[i] = progress[i] / sum(progress) * 100
+
+    return render_template('main/flashcards.html', title="Flashcards", exam=exam, exam_topics=exam_topics, set=set_questions, progress=progress, width=width)
 
 """
 @bp.route('/class/<class_id>/exam/<exam_id>/contribute/', defaults={'topic_id': None}, methods=['GET', 'POST'])

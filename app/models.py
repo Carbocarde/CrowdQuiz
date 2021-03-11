@@ -290,6 +290,9 @@ class StudySetTerm(db.Model):
     exam_id = db.Column(db.Integer, db.ForeignKey('exam.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
+    saved_status = db.Column(db.Integer, default=0)
+    interaction_count = db.Column(db.Integer, default=0)
+
 class Section(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
