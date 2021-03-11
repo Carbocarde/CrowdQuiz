@@ -1,0 +1,437 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">{{ exam.section.class_.school.body }}</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('main.section', section_id=exam.section.id, class_id=exam.section.class_.id) }}">{{ exam.section.class_.body }}</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('main.exam', section_id=exam.section.id, exam_id=exam.id) }}">{{ exam.body }}</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Flashcards</li>
+    </ol>
+</nav>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+
+{% if set.count() == 0 %}
+<div class="jumbotron mt-3">
+    <h1 class="display-4">We aren't ready yet!</h1>
+    <p class="lead">Let's start by building your study set! Click the button below to start!</p>
+    <a class="btn btn-primary" href="{{ url_for('main.exam', section_id=exam.section.id, exam_id=exam.id) }}">Study Set</a>
+</div>
+{% else %}
+<button class="btn btn-success" id="save_session" type="button" onclick="savesession('#save_session')">Save Progress <i class="bi bi-cloud"></i></button>
+
+<div class="row align-items-center">
+    <div class="col-md-auto">
+        <a href="{{ url_for('main.exam', section_id=exam.section.id, exam_id=exam.id) }}" class="btn btn-primary">< Back</a>
+    </div>
+    <div class="col">
+    <div class="my-3 p-3 bg-white rounded shadow-sm">
+        <h6 class="border-bottom border-gray pb-2 mb-0">Progress:</h6>
+            <div class="progress mt-3">
+              <div class="progress-bar bg-success" id="learned" role="progressbar" style="width: {{ width[4] }}%" aria-valuenow={{ progress[4] }} aria-valuemin="0" aria-valuemax={{ set.count() }}></div>
+              <div class="progress-bar bg-info" id="partial" role="progressbar" style="width: {{ width[3] }}%" aria-valuenow={{ progress[3] }} aria-valuemin="0" aria-valuemax={{ set.count() }}></div>
+              <div class="progress-bar" id="unlearned" role="progressbar" style="width: {{ width[2] }}%" aria-valuenow={{ progress[2] }} aria-valuemin="0" aria-valuemax={{ set.count() }}></div>
+              <div class="progress-bar bg-warning" id="repeat" role="progressbar" style="width: {{ width[0] }}%" aria-valuenow={{ progress[0] }} aria-valuemin="0" aria-valuemax={{ set.count() }}></div>
+            </div>
+    </div>
+    </div>
+</div>
+
+<div class="row justify-content-md-center mt-3">
+    <div class="row">
+        <input type="button" value="<" class="btn btn-primary btn-lg" onclick="prior()" style="height: 250px">
+        <div class="col-md-auto">
+            <div id="card_highlight" class="card bg-light pb-1">
+            <div class="card" onclick="flip()">
+                <div class="card-body overflow-auto bg-light" style="height: 249px; width: 400px">
+                    <h1 id="question" >{{ set[0].question_answer.question.body }}</h1>
+                    <h1 id="answer" style="display: none" interacted=''>{{ set[0].question_answer.answer.body }}</h1>
+                </div>
+            </div>
+            </div>
+        </div>
+        <input type="button" value=">" class="btn btn-primary btn-lg" onclick="next()" style="height: 250px">
+    </div>
+</div>
+
+<div class="row justify-content-md-center mt-3">
+    <div class="row">
+        <div class="col">
+            <input type="button" value="Again" class="btn btn-warning btn-lg" onclick="repeat()">
+        </div>
+        <div class="col">
+            <input type="button" value="Skip" class="btn btn-primary btn-lg" onclick="skip()">
+        </div>
+        <div class="col">
+            <input type="button" value="Good" class="btn btn-success btn-lg" onclick="good()">
+        </div>
+    </div>
+</div>
+
+{% for term in set %}
+    <input type="hidden" id="{{ loop.index0 }}" term_id="{{ term.id }}" interaction_count="0" update="" question="{{ term.question_answer.question.body }}" answer="{{ term.question_answer.answer.body }}" status="{{ term.saved_status }}">
+{% endfor %}
+
+<!-- Modal -->
+<div class="modal fade" id="learnedModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Set Complete!</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Study the set again or return to the set
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="savesession('#save_session')">Save & Close</button>
+        <button type="button" class="btn btn-primary" onclick="resetsession()">Save & Restart</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endif %}
+{% endblock app_content %}
+
+{% block scripts %}
+    {{ super() }}
+    <script>
+        function flip() {
+            if ($("#answer").attr("style") == "") {
+                $("#question").attr("style", "");
+                $("#answer").attr("style", "display: none");
+            } else {
+                $("#question").attr("style", "display: none");
+                $("#answer").attr("style", "");
+
+                console.log($("#answer").attr("interacted"))
+                console.log(!!($("#answer").attr("interacted")))
+
+                if (!Boolean($("#answer").attr("interacted"))) {
+                    $("input[id=" + index + "]").attr("interaction_count", Number($("input[id=" + index + "]").attr("interaction_count")) + 1)
+                    $("#answer").attr("interacted", '1')
+                    $("input[id=" + index + "]").attr("update", "True")
+                }
+            }
+        }
+    </script>
+    <script>
+        var index = 0;
+        function prior() {
+            var i = 0
+            var max = $("div[id=repeat]").attr("aria-valuemax")
+            max = Number(max)
+            index -= 1
+
+            while(i < max) {
+                if ($("input[id=" + index + "]").length) {
+                    if ($("input[id=" + index + "]").attr("status") == "3") {
+                        index -= 1
+                    } else {
+                        break;
+                    }
+                } else {
+                    index = Number($("div[id=repeat]").attr("aria-valuemax")) - 1
+                }
+                i += 1
+            }
+
+            if ($("input[id=" + index + "]").length) {
+                var term_element = $("input[id=" + index + "]")
+            } else {
+                var term_element = $("input[id=" + $("div[id=repeat]").attr("aria-valuemax") + "]")
+                index = 0
+            }
+            $("#question").attr("style", "");
+            $("#answer").attr("style", "display: none");
+            $("#answer").attr("interacted", '')
+            $("#question").text(term_element.attr("question"))
+            $("#answer").text(term_element.attr("answer"))
+            updatehighlight()
+        }
+        function next() {
+            var i = 0
+            var max = $("div[id=repeat]").attr("aria-valuemax")
+            max = Number(max)
+            index += 1
+
+            while(i < max) {
+                if ($("input[id=" + index + "]").length) {
+                    if ($("input[id=" + index + "]").attr("status") == "3") {
+                        index += 1
+                    } else {
+                        break;
+                    }
+                } else {
+                    index = 0
+                }
+                i += 1
+            }
+
+            if ($("input[id=" + index + "]").length) {
+                var term_element = $("input[id=" + index + "]")
+            } else {
+                var term_element = $("input[id=0]")
+                index = 0
+            }
+            $("#question").attr("style", "");
+            $("#answer").attr("style", "display: none");
+            $("#answer").attr("interacted", '')
+            $("#question").text(term_element.attr("question"))
+            $("#answer").text(term_element.attr("answer"))
+            updatehighlight()
+        };
+        function updatehighlight() {
+            var value = $("input[id=" + index + "]").attr("status")
+
+            switch (value) {
+                case "-1":
+                    $("#card_highlight").attr("class", "card bg-warning pb-1")
+                break;
+                case "0":
+                    $("#card_highlight").attr("class", "card bg-light pb-1")
+                break;
+                case "1":
+                    $("#card_highlight").attr("class", "card bg-primary pb-1")
+                break;
+                case "2":
+                    $("#card_highlight").attr("class", "card bg-info pb-1")
+                break;
+                case "3":
+                    $("#card_highlight").attr("class", "card bg-success pb-1")
+                break;
+            }
+        }
+        function skip() {
+            var prev_value = $("input[id=" + index + "]").attr("status")
+
+            switch (prev_value) {
+                case "-1":
+                    var prior = $("div[id=repeat]").attr("aria-valuenow")
+                    var new_value = Number(prior) - 1
+                    $("div[id=repeat]").attr("aria-valuenow", new_value)
+                    var total = $("div[id=repeat]").attr("aria-valuemax")
+                    var percent = new_value / total * 100
+                    $("div[id=repeat]").attr("style", "width: " + percent + "%")
+                break;
+                case "2":
+                    var prior = $("div[id=partial]").attr("aria-valuenow")
+                    var new_value = Number(prior) - 1
+                    $("div[id=partial]").attr("aria-valuenow", new_value)
+                    var total = $("div[id=partial]").attr("aria-valuemax")
+                    var percent = new_value / total * 100
+                    $("div[id=partial]").attr("style", "width: " + percent + "%")
+                break;
+            }
+
+            if (prev_value != "1" && prev_value != "3") {
+                unlearned = $("div[id=unlearned]").attr("aria-valuenow")
+                new_value = Number(unlearned) + 1
+                $("div[id=unlearned]").attr("aria-valuenow", new_value)
+                total = $("div[id=unlearned]").attr("aria-valuemax")
+                percent = new_value / total * 100
+                $("div[id=unlearned]").attr("style", "width: " + percent + "%")
+                $("input[id=" + index + "]").attr("status", "1")
+                $("input[id=" + index + "]").attr("update", "True")
+            }
+            next()
+        };
+        function repeat() {
+            var prev_value = $("input[id=" + index + "]").attr("status")
+
+            switch (prev_value) {
+                case "0":
+                    new_value = Number($("div[id=repeat]").attr("aria-valuenow")) + 1
+                    $("div[id=repeat]").attr("aria-valuenow", new_value)
+                    total = $("div[id=repeat]").attr("aria-valuemax")
+                    percent = new_value / total * 100
+                    $("div[id=repeat]").attr("style", "width: " + percent + "%")
+                    $("input[id=" + index + "]").attr("status", "-1")
+                    $("input[id=" + index + "]").attr("update", "True")
+                break;
+                case "1":
+                    var unlearned = $("div[id=unlearned]").attr("aria-valuenow")
+                    var new_value = Number(unlearned) - 1
+                    $("div[id=unlearned]").attr("aria-valuenow", new_value)
+                    var total = $("div[id=unlearned]").attr("aria-valuemax")
+                    var percent = new_value / total * 100
+                    $("div[id=unlearned]").attr("style", "width: " + percent + "%")
+
+                    new_value = Number($("div[id=repeat]").attr("aria-valuenow")) + 1
+                    $("div[id=repeat]").attr("aria-valuenow", new_value)
+                    total = $("div[id=repeat]").attr("aria-valuemax")
+                    percent = new_value / total * 100
+                    $("div[id=repeat]").attr("style", "width: " + percent + "%")
+                    $("input[id=" + index + "]").attr("status", "-1")
+                    $("input[id=" + index + "]").attr("update", "True")
+                break;
+                case "2":
+                    var partial = $("div[id=partial]").attr("aria-valuenow")
+                    var new_value = Number(partial) - 1
+                    $("div[id=partial]").attr("aria-valuenow", new_value)
+                    var total = $("div[id=partial]").attr("aria-valuemax")
+                    var percent = new_value / total * 100
+                    $("div[id=partial]").attr("style", "width: " + percent + "%")
+
+                    new_value = Number($("div[id=repeat]").attr("aria-valuenow")) + 1
+                    $("div[id=repeat]").attr("aria-valuenow", new_value)
+                    total = $("div[id=repeat]").attr("aria-valuemax")
+                    percent = new_value / total * 100
+                    $("div[id=repeat]").attr("style", "width: " + percent + "%")
+                    $("input[id=" + index + "]").attr("status", "-1")
+                    $("input[id=" + index + "]").attr("update", "True")
+                break;
+            }
+
+            next()
+        };
+        function good() {
+            var prev_value = $("input[id=" + index + "]").attr("status")
+
+            switch (prev_value) {
+                case "-1":
+                    var repeat = $("div[id=repeat]").attr("aria-valuenow")
+                    var new_value = Number(repeat) - 1
+                    $("div[id=repeat]").attr("aria-valuenow", new_value)
+                    var total = $("div[id=repeat]").attr("aria-valuemax")
+                    var percent = new_value / total * 100
+                    $("div[id=repeat]").attr("style", "width: " + percent + "%")
+
+                    learned = $("div[id=unlearned]").attr("aria-valuenow")
+                    new_value = Number(learned) + 1
+                    $("div[id=unlearned]").attr("aria-valuenow", new_value)
+                    total = $("div[id=unlearned]").attr("aria-valuemax")
+                    percent = new_value / total * 100
+                    $("div[id=unlearned]").attr("style", "width: " + percent + "%")
+                    $("input[id=" + index + "]").attr("status", "1")
+                    $("input[id=" + index + "]").attr("update", "True")
+                    break;
+                case "0":
+                    unlearned = $("div[id=unlearned]").attr("aria-valuenow")
+                    new_value = Number(unlearned) + 1
+                    $("div[id=unlearned]").attr("aria-valuenow", new_value)
+                    total = $("div[id=unlearned]").attr("aria-valuemax")
+                    percent = new_value / total * 100
+                    $("div[id=unlearned]").attr("style", "width: " + percent + "%")
+                    $("input[id=" + index + "]").attr("status", "1")
+                    $("input[id=" + index + "]").attr("update", "True")
+                case "1":
+                    var unlearned = $("div[id=unlearned]").attr("aria-valuenow")
+                    var new_value = Number(unlearned) - 1
+                    $("div[id=unlearned]").attr("aria-valuenow", new_value)
+                    var total = $("div[id=unlearned]").attr("aria-valuemax")
+                    var percent = new_value / total * 100
+                    $("div[id=unlearned]").attr("style", "width: " + percent + "%")
+
+                    partial = $("div[id=partial]").attr("aria-valuenow")
+                    new_value = Number(partial) + 1
+                    $("div[id=partial]").attr("aria-valuenow", new_value)
+                    total = $("div[id=partial]").attr("aria-valuemax")
+                    percent = new_value / total * 100
+                    $("div[id=partial]").attr("style", "width: " + percent + "%")
+                    $("input[id=" + index + "]").attr("status", "2")
+                    $("input[id=" + index + "]").attr("update", "True")
+                    break;
+                case "2":
+                    var partial = $("div[id=partial]").attr("aria-valuenow")
+                    var new_value = Number(partial) - 1
+                    $("div[id=partial]").attr("aria-valuenow", new_value)
+                    var total = $("div[id=partial]").attr("aria-valuemax")
+                    var percent = new_value / total * 100
+                    $("div[id=partial]").attr("style", "width: " + percent + "%")
+
+                    learned = $("div[id=learned]").attr("aria-valuenow")
+                    new_value = Number(learned) + 1
+                    $("div[id=learned]").attr("aria-valuenow", new_value)
+                    total = $("div[id=learned]").attr("aria-valuemax")
+                    percent = new_value / total * 100
+                    $("div[id=learned]").attr("style", "width: " + percent + "%")
+                    $("input[id=" + index + "]").attr("status", "3")
+                    $("input[id=" + index + "]").attr("update", "True")
+                    break;
+            }
+            if ($("div[id=learned]").attr("aria-valuenow") == $("div[id=learned]").attr("aria-valuemax")) {
+                $('#learnedModal').modal('show')
+            }
+            next()
+        };
+    </script>
+    <script>
+        function resetsession() {
+            var index = 0
+            var max = $("div[id=repeat]").attr("aria-valuemax")
+            max = Number(max)
+
+            while(index < max) {
+                $("input[id=" + index + "]").attr("update", "True")
+                $("input[id=" + index + "]").attr("status", "0")
+
+                $("div[id=skipped]").attr("aria-valuenow", 0)
+                $("div[id=skipped]").attr("style", "width: 0%")
+                $("div[id=unlearned]").attr("aria-valuenow", 0)
+                $("div[id=unlearned]").attr("style", "width: 0%")
+                $("div[id=partial]").attr("aria-valuenow", 0)
+                $("div[id=partial]").attr("style", "width: 0%")
+                $("div[id=learned]").attr("aria-valuenow", 0)
+                $("div[id=learned]").attr("style", "width: 0%")
+
+                index += 1
+            }
+            savesession('#save_session')
+        }
+    </script>
+    <script>
+        function savesession(destElem) {
+            $(destElem).html('<div class="spinner-border btn-success" role="status"><span class="sr-only">Saving...</span></div>');
+
+            var max = $("div[id=repeat]").attr("aria-valuemax")
+            max = Number(max)
+            var index = 0
+
+            var term_ids = []
+            var term_status = []
+            var term_interactions = []
+
+            while(index < max) {
+                var update = $("input[id=" + index + "]").attr("update")
+
+                if (update) {
+                    var status = $("input[id=" + index + "]").attr("status")
+                    var interactions = $("input[id=" + index + "]").attr("interaction_count")
+                    var term_id = $("input[id=" + index + "]").attr("term_id")
+
+                    term_ids.push(term_id)
+                    term_status.push(status)
+                    term_interactions.push(interactions)
+                }
+
+                index += 1
+            }
+
+            if (term_ids.length > 0) {
+                $.post('/api/v1.0/flashcards/save_progress', {
+                    term_ids: term_ids,
+                    term_status: term_status,
+                    term_interactions: term_interactions,
+                    exam_id: {{ exam.id | safe }}
+                }).done(function(response) {
+                    $(destElem).html('Saved All <i class="bi bi-cloud-check"></i>');
+
+                    index = 0
+                    while(index < max) {
+                        var interactions = $("input[id=" + index + "]").attr("interaction_count", "0")
+                        index += 1
+                    }
+                }).fail(function() {
+                    $(destElem).html("Error: Could not contact server.");
+                });
+            }
+
+
+        }
+    </script>
+{% endblock %}
