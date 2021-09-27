@@ -8,6 +8,7 @@ New Tech: (for me!)
 - [X] Flask (Python server development in general too!)
    - [X] Blueprint Project Structure
 - [X] SQLAlchemy
+   - [X] Postgres
 - [X] Bootstrap
 - [X] Basic API concepts (Saving questions without reloading page)
 - [X] Vanilla JS and JQuery (Saving/Adding questions to a set)
