@@ -12,6 +12,7 @@ New Tech: (for me!)
 - [X] Bootstrap
 - [X] Basic API concepts (Saving questions without reloading page)
 - [X] Vanilla JS and JQuery (Saving/Adding questions to a set)
+- [X] Heroku Web Deployments
 
 
 Notes:
